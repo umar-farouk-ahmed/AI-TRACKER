@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Knowledge Vault</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Marked.js for rendering AI Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            bgDark: '#0E1117',
+            panelDark: '#161B22',
+            borderDark: '#30363D',
+            brandGpt: '#10A37F',
+            brandClaude: '#D97757',
+            brandGemini: '#8A2BE2',
+            brandSynth: '#3B82F6'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body { transition: background-color 0.3s, color 0.3s; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-thumb { background: #4b5563; }
+    
+    /* Markdown rendering styles */
+    .prose pre { background: #1f2937; color: #f3f4f6; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; margin-top: 1rem; margin-bottom: 1rem; }
+    .prose code { font-family: 'JetBrains Mono', monospace; background: rgba(128,128,128,0.2); padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; }
+    .prose p { margin-bottom: 1rem; line-height: 1.7; }
+    .prose ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+    .prose ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
+    .prose h1, .prose h2, .prose h3 { font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .prose h2 { font-size: 1.5rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.3rem; }
+    .dark .prose h2 { border-bottom-color: #374151; }
+    .prose a { color: #3B82F6; text-decoration: underline; }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-bgDark text-slate-800 dark:text-slate-200 h-screen flex flex-col overflow-hidden">
+
+  <!-- Header -->
+  <header class="shrink-0 border-b border-slate-200 dark:border-borderDark bg-white dark:bg-panelDark px-6 py-3 flex items-center justify-between z-10 relative">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded bg-brandSynth flex items-center justify-center text-white font-bold shadow-sm">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+      </div>
+      <h1 class="font-semibold text-lg tracking-tight">AI Knowledge Vault</h1>
+    </div>
+    <div class="flex items-center gap-4">
+      <button id="themeToggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+        <span id="themeIcon">🌓</span>
+      </button>
+      <button id="btnNew" class="bg-brandSynth hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
+        <span>+</span> New Entry
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- Sidebar / List -->
+    <aside class="w-full md:w-80 shrink-0 border-r border-slate-200 dark:border-borderDark bg-white dark:bg-panelDark flex flex-col h-full absolute md:relative z-20 md:z-auto transition-transform duration-300" id="sidebar">
+      <div class="p-4 border-b border-slate-200 dark:border-borderDark">
+        <div class="relative">
+          <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"></path></svg>
+          <input type="text" id="searchInput" placeholder="Search topics..." class="w-full pl-9 pr-4 py-2 bg-slate-100 dark:bg-bgDark border-none rounded-lg text-sm focus:ring-2 focus:ring-brandSynth focus:outline-none dark:text-white placeholder:text-slate-500">
+        </div>
+      </div>
+      <ul id="vaultList" class="flex-1 overflow-y-auto p-2 space-y-1">
+        <!-- List items injected here -->
+      </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full relative bg-slate-50 dark:bg-bgDark w-full">
+      
+      <!-- Empty State -->
+      <div id="emptyState" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hidden">
+        <svg class="w-16 h-16 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+        <p class="text-lg font-medium">Select an entry or create a new one</p>
+      </div>
+
+      <!-- Editor / Viewer State -->
+      <div id="editorView" class="flex-1 flex flex-col overflow-hidden hidden">
+        
+        <!-- Document Header -->
+        <div class="px-6 py-4 border-b border-slate-200 dark:border-borderDark bg-white dark:bg-panelDark shrink-0">
+          <button id="btnBackMobile" class="md:hidden mb-4 text-sm text-brandSynth flex items-center gap-1 font-medium">
+            &larr; Back to list
+          </button>
+          
+          <input type="text" id="docTitle" placeholder="Title (e.g. Setting up Server-Side Tracking)" class="w-full text-2xl font-bold bg-transparent border-none focus:outline-none focus:ring-0 placeholder:text-slate-300 dark:placeholder:text-slate-600 mb-2">
+          
+          <div class="flex gap-2">
+            <span class="text-xs font-mono text-slate-500 uppercase tracking-wider font-semibold mt-2">The Prompt</span>
+          </div>
+          <textarea id="docPrompt" rows="2" placeholder="What did you ask the AI?" class="w-full mt-1 text-sm bg-slate-100 dark:bg-bgDark border border-slate-200 dark:border-borderDark rounded-lg p-3 focus:outline-none focus:border-brandSynth resize-y font-mono"></textarea>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex px-6 border-b border-slate-200 dark:border-borderDark bg-white dark:bg-panelDark shrink-0 overflow-x-auto hide-scrollbar">
+          <button class="tab-btn active px-4 py-3 text-sm font-medium border-b-2 border-brandGpt text-brandGpt transition-colors whitespace-nowrap" data-tab="chatgpt">ChatGPT</button>
+          <button class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors whitespace-nowrap" data-tab="claude">Claude</button>
+          <button class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors whitespace-nowrap" data-tab="gemini">Gemini</button>
+          <button class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors whitespace-nowrap" data-tab="synthesis">My Synthesis</button>
+        </div>
+
+        <!-- Content Area (Split into Edit and View mode) -->
+        <div class="flex-1 overflow-y-auto p-6 bg-slate-50 dark:bg-bgDark relative">
+          
+          <!-- Mode Toggle -->
+          <div class="absolute top-4 right-6 flex bg-slate-200 dark:bg-borderDark p-1 rounded-lg z-10">
+            <button id="btnModeView" class="px-3 py-1 text-xs font-medium rounded-md bg-white dark:bg-panelDark shadow-sm text-slate-800 dark:text-white">Read</button>
+            <button id="btnModeEdit" class="px-3 py-1 text-xs font-medium rounded-md text-slate-500 hover:text-slate-800 dark:hover:text-white">Edit</button>
+          </div>
+
+          <!-- Edit Mode Textareas -->
+          <div id="editContainer" class="hidden h-full mt-8">
+            <textarea id="input-chatgpt" class="content-input w-full h-full bg-white dark:bg-panelDark border border-slate-200 dark:border-borderDark rounded-lg p-4 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-brandGpt resize-none" placeholder="Paste ChatGPT's response here..."></textarea>
+            <textarea id="input-claude" class="content-input w-full h-full bg-white dark:bg-panelDark border border-slate-200 dark:border-borderDark rounded-lg p-4 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-brandClaude resize-none hidden" placeholder="Paste Claude's response here..."></textarea>
+            <textarea id="input-gemini" class="content-input w-full h-full bg-white dark:bg-panelDark border border-slate-200 dark:border-borderDark rounded-lg p-4 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-brandGemini resize-none hidden" placeholder="Paste Gemini's response here..."></textarea>
+            <textarea id="input-synthesis" class="content-input w-full h-full bg-white dark:bg-panelDark border border-slate-200 dark:border-borderDark rounded-lg p-4 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-brandSynth resize-none hidden" placeholder="Write your synthesized solution or final code here..."></textarea>
+          </div>
+
+          <!-- Read Mode Rendered Markdown -->
+          <div id="readContainer" class="h-full mt-8">
+            <div id="render-chatgpt" class="content-render prose dark:prose-invert max-w-none pb-12"></div>
+            <div id="render-claude" class="content-render prose dark:prose-invert max-w-none pb-12 hidden"></div>
+            <div id="render-gemini" class="content-render prose dark:prose-invert max-w-none pb-12 hidden"></div>
+            <div id="render-synthesis" class="content-render prose dark:prose-invert max-w-none pb-12 hidden"></div>
+          </div>
+
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="px-6 py-3 border-t border-slate-200 dark:border-borderDark bg-white dark:bg-panelDark flex justify-between shrink-0">
+          <button id="btnDelete" class="text-sm font-medium text-red-500 hover:text-red-600 transition-colors px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-500/10 hidden">Delete Entry</button>
+          <div class="ml-auto flex gap-3">
+            <button id="btnSave" class="bg-slate-900 dark:bg-slate-200 text-white dark:text-slate-900 px-6 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">Save Changes</button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
+    // ADDED: Firestore SDK imports required for reading and writing database documents
+    import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, updateDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA7bRP5Hca8lmfMr43C4a8L41wTH3tI7uo",
+      authDomain: "ai-suggestion-tracker.firebaseapp.com",
+      projectId: "ai-suggestion-tracker",
+      storageBucket: "ai-suggestion-tracker.firebasestorage.app",
+      messagingSenderId: "29642483521",
+      appId: "1:29642483521:web:0dfe7b762ba307da41a3c0",
+      measurementId: "G-G8YEMPYTSN"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    // ADDED: Initialize Firestore database
+    const db = getFirestore(app);
+
+    // --- State Management ---
+    let vaultItems = [];
+    let currentItemId = null;
+    let activeTab = 'chatgpt';
+    let editMode = false;
+    let searchTerm = '';
+
+    // --- DOM Elements ---
+    const sidebar = document.getElementById('sidebar');
+    const vaultList = document.getElementById('vaultList');
+    const searchInput = document.getElementById('searchInput');
+    const emptyState = document.getElementById('emptyState');
+    const editorView = document.getElementById('editorView');
+    
+    // Editor Inputs
+    const docTitle = document.getElementById('docTitle');
+    const docPrompt = document.getElementById('docPrompt');
+    const textareas = {
+      chatgpt: document.getElementById('input-chatgpt'),
+      claude: document.getElementById('input-claude'),
+      gemini: document.getElementById('input-gemini'),
+      synthesis: document.getElementById('input-synthesis')
+    };
+    
+    // Renderers
+    const renderers = {
+      chatgpt: document.getElementById('render-chatgpt'),
+      claude: document.getElementById('render-claude'),
+      gemini: document.getElementById('render-gemini'),
+      synthesis: document.getElementById('render-synthesis')
+    };
+
+    // Buttons
+    const btnNew = document.getElementById('btnNew');
+    const btnSave = document.getElementById('btnSave');
+    const btnDelete = document.getElementById('btnDelete');
+    const btnModeView = document.getElementById('btnModeView');
+    const btnModeEdit = document.getElementById('btnModeEdit');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const btnBackMobile = document.getElementById('btnBackMobile');
+
+    // --- Theme Setup ---
+    const html = document.documentElement;
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.classList.add('dark');
+      themeIcon.textContent = '☀️';
+    } else {
+      html.classList.remove('dark');
+      themeIcon.textContent = '🌙';
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      const isDark = html.classList.contains('dark');
+      localStorage.theme = isDark ? 'dark' : 'light';
+      themeIcon.textContent = isDark ? '☀️' : '🌙';
+    });
+
+    // --- Data Fetching ---
+    const q = query(collection(db, 'ai_insights'), orderBy('createdAt', 'desc'));
+    onSnapshot(q, (snapshot) => {
+      vaultItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      renderList();
+    });
+
+    // --- UI Logic ---
+    function renderList() {
+      vaultList.innerHTML = '';
+      const filtered = vaultItems.filter(item => 
+        (item.title || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
+        (item.prompt || '').toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      filtered.forEach(item => {
+        const li = document.createElement('li');
+        const isActive = item.id === currentItemId;
+        li.className = `p-3 rounded-lg cursor-pointer transition-colors ${isActive ? 'bg-slate-200 dark:bg-borderDark border-l-4 border-brandSynth' : 'hover:bg-slate-100 dark:hover:bg-bgDark border-l-4 border-transparent'}`;
+        
+        li.innerHTML = `
+          <h3 class="font-medium text-sm text-slate-900 dark:text-slate-200 truncate">${escapeHtml(item.title || 'Untitled Entry')}</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 truncate mt-1">${escapeHtml(item.prompt || 'No prompt...')}</p>
+        `;
+        
+        li.addEventListener('click', () => openItem(item.id));
+        vaultList.appendChild(li);
+      });
+    }
+
+    function openItem(id) {
+      currentItemId = id;
+      const item = vaultItems.find(i => i.id === id);
+      if (!item) return;
+
+      // Populate fields
+      docTitle.value = item.title || '';
+      docPrompt.value = item.prompt || '';
+      
+      textareas.chatgpt.value = item.chatgpt || '';
+      textareas.claude.value = item.claude || '';
+      textareas.gemini.value = item.gemini || '';
+      textareas.synthesis.value = item.synthesis || '';
+
+      updateMarkdownRenderers();
+
+      // UI Swaps
+      emptyState.classList.add('hidden');
+      editorView.classList.remove('hidden');
+      btnDelete.classList.remove('hidden');
+      
+      // On mobile, hide sidebar when opening an item
+      if(window.innerWidth < 768) {
+        sidebar.classList.add('-translate-x-full');
+      }
+
+      renderList();
+      setMode('view');
+    }
+
+    function createNew() {
+      currentItemId = null;
+      docTitle.value = '';
+      docPrompt.value = '';
+      Object.values(textareas).forEach(t => t.value = '');
+      
+      emptyState.classList.add('hidden');
+      editorView.classList.remove('hidden');
+      btnDelete.classList.add('hidden');
+      
+      if(window.innerWidth < 768) {
+        sidebar.classList.add('-translate-x-full');
+      }
+      
+      renderList();
+      setMode('edit');
+      docTitle.focus();
+    }
+
+    async function saveItem() {
+      const data = {
+        title: docTitle.value.trim(),
+        prompt: docPrompt.value.trim(),
+        chatgpt: textareas.chatgpt.value,
+        claude: textareas.claude.value,
+        gemini: textareas.gemini.value,
+        synthesis: textareas.synthesis.value,
+        updatedAt: serverTimestamp()
+      };
+
+      try {
+        btnSave.textContent = 'Saving...';
+        if (currentItemId) {
+          await updateDoc(doc(db, 'ai_insights', currentItemId), data);
+        } else {
+          data.createdAt = serverTimestamp();
+          const docRef = await addDoc(collection(db, 'ai_insights'), data);
+          currentItemId = docRef.id;
+        }
+        updateMarkdownRenderers();
+        setMode('view');
+      } catch (e) {
+        alert("Error saving: " + e.message);
+      } finally {
+        btnSave.textContent = 'Save Changes';
+      }
+    }
+
+    async function deleteItem() {
+      if (!currentItemId) return;
+      if (confirm('Delete this entry permanently?')) {
+        await deleteDoc(doc(db, 'ai_insights', currentItemId));
+        currentItemId = null;
+        editorView.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        
+        if(window.innerWidth < 768) {
+          sidebar.classList.remove('-translate-x-full');
+        }
+      }
+    }
+
+    // --- Tabs & Modes Logic ---
+    function switchTab(tabId) {
+      activeTab = tabId;
+      
+      // Update Tab Buttons styling
+      tabBtns.forEach(btn => {
+        const isTarget = btn.dataset.tab === tabId;
+        const colorClass = getBrandColorBorder(btn.dataset.tab);
+        
+        if (isTarget) {
+          btn.classList.add('border-b-2', colorClass, getBrandColorText(tabId));
+          btn.classList.remove('border-transparent', 'text-slate-500');
+        } else {
+          btn.className = `tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors whitespace-nowrap`;
+        }
+      });
+
+      // Show/Hide Content Areas
+      Object.keys(textareas).forEach(key => {
+        textareas[key].classList.toggle('hidden', key !== tabId);
+        renderers[key].classList.toggle('hidden', key !== tabId);
+      });
+    }
+
+    function setMode(mode) {
+      editMode = mode === 'edit';
+      const readContainer = document.getElementById('readContainer');
+      const editContainer = document.getElementById('editContainer');
+      
+      if (editMode) {
+        btnModeEdit.className = 'px-3 py-1 text-xs font-medium rounded-md bg-white dark:bg-panelDark shadow-sm text-slate-800 dark:text-white';
+        btnModeView.className = 'px-3 py-1 text-xs font-medium rounded-md text-slate-500 hover:text-slate-800 dark:hover:text-white';
+        readContainer.classList.add('hidden');
+        editContainer.classList.remove('hidden');
+      } else {
+        btnModeView.className = 'px-3 py-1 text-xs font-medium rounded-md bg-white dark:bg-panelDark shadow-sm text-slate-800 dark:text-white';
+        btnModeEdit.className = 'px-3 py-1 text-xs font-medium rounded-md text-slate-500 hover:text-slate-800 dark:hover:text-white';
+        readContainer.classList.remove('hidden');
+        editContainer.classList.add('hidden');
+        updateMarkdownRenderers(); // Parse markdown when switching to read view
+      }
+    }
+
+    function updateMarkdownRenderers() {
+      // Setup marked options for safe-ish rendering without an extra library
+      marked.use({ breaks: true, gfm: true });
+      
+      Object.keys(textareas).forEach(key => {
+        const rawText = textareas[key].value || `*No content added for ${key} yet.*`;
+        renderers[key].innerHTML = marked.parse(rawText);
+      });
+    }
+
+    // --- Helpers & Event Listeners ---
+    function escapeHtml(unsafe) {
+      return (unsafe || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    function getBrandColorBorder(tab) {
+      const map = { chatgpt: 'border-brandGpt', claude: 'border-brandClaude', gemini: 'border-brandGemini', synthesis: 'border-brandSynth' };
+      return map[tab] || 'border-brandSynth';
+    }
+    
+    function getBrandColorText(tab) {
+      const map = { chatgpt: 'text-brandGpt', claude: 'text-brandClaude', gemini: 'text-brandGemini', synthesis: 'text-brandSynth' };
+      return map[tab] || 'text-brandSynth';
+    }
+
+    btnNew.addEventListener('click', createNew);
+    btnSave.addEventListener('click', saveItem);
+    btnDelete.addEventListener('click', deleteItem);
+    btnModeView.addEventListener('click', () => setMode('view'));
+    btnModeEdit.addEventListener('click', () => setMode('edit'));
+    searchInput.addEventListener('input', (e) => { searchTerm = e.target.value; renderList(); });
+    
+    btnBackMobile.addEventListener('click', () => {
+      sidebar.classList.remove('-translate-x-full');
+    });
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    // Auto-save on Ctrl+S
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        if (!editorView.classList.contains('hidden')) saveItem();
+      }
+    });
+
+    // Initialize UI
+    switchTab('chatgpt');
+    
+    // Add default blank state check
+    setTimeout(() => {
+      if(vaultItems.length === 0) emptyState.classList.remove('hidden');
+    }, 500);
+
+  </script>
+</body>
+</html>
