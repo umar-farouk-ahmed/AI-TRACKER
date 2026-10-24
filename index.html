@@ -1,41 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" class="antialiased">
+<html lang="en" class="dark antialiased">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Knowledge Vault</title>
+  <title>Live Class Routine</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
-          colors: {
-            appBg: '#09090b', // Zinc 950
-            panelDark: '#18181b', // Zinc 900
-            borderDark: '#27272a', // Zinc 800
-            brandGpt: '#10a37f',
-            brandClaude: '#d97757',
-            brandGemini: '#8a2be2',
-            brandSynth: '#3b82f6',
-            brandSynthHover: '#2563eb'
-          },
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['Outfit', 'Inter', 'sans-serif'],
           },
-          boxShadow: {
-            'glow-gpt': '0 0 20px -5px rgba(16, 163, 127, 0.3)',
-            'glow-claude': '0 0 20px -5px rgba(217, 119, 87, 0.3)',
-            'glow-gemini': '0 0 20px -5px rgba(138, 43, 226, 0.3)',
-            'glow-synth': '0 0 20px -5px rgba(59, 130, 246, 0.3)',
+          colors: {
+            bgPure: '#000000',
+            cardHighlight: '#1c1c1e',
+            borderSubtle: '#1f1f22',
           }
         }
       }
@@ -43,433 +30,508 @@
   </script>
 
   <style>
-    body { transition: background-color 0.3s ease, color 0.3s ease; }
+    body {
+      background-color: #000000;
+      color: #f4f4f5;
+      overflow-x: hidden;
+    }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-    .dark ::-webkit-scrollbar-thumb { background: #3f3f46; }
-    .dark ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+    ::-webkit-scrollbar-track { background: #000000; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-row {
+      animation: fadeSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
     
-    /* Elegant Markdown Rendering */
-    .prose pre { background: #18181b; color: #e4e4e7; padding: 1.25rem; border-radius: 0.75rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; margin: 1.5rem 0; border: 1px solid #27272a; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-    .prose code { font-family: 'JetBrains Mono', monospace; background: rgba(161, 161, 170, 0.15); padding: 0.2rem 0.4rem; border-radius: 0.375rem; font-size: 0.875em; color: #ec4899; }
-    .dark .prose code { color: #f472b6; }
-    .prose p { margin-bottom: 1.25rem; line-height: 1.75; color: #3f3f46; }
-    .dark .prose p { color: #a1a1aa; }
-    .prose ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; }
-    .prose ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1.25rem; }
-    .prose h1, .prose h2, .prose h3, .prose h4 { font-weight: 600; margin-top: 2rem; margin-bottom: 1rem; color: #18181b; }
-    .dark .prose h1, .dark .prose h2, .dark .prose h3, .dark .prose h4 { color: #f4f4f5; }
-    .prose h2 { font-size: 1.5rem; }
-    .prose a { color: #3b82f6; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
-    .prose a:hover { border-bottom-color: #3b82f6; }
-
-    /* Custom Hide Scrollbar for Tabs */
-    .hide-scrollbar::-webkit-scrollbar { display: none; }
-    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-    /* Transitions */
-    .fade-enter { opacity: 0; transform: translateY(10px); }
-    .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 300ms, transform 300ms; }
+    [contenteditable="true"] {
+      outline: 1px dashed rgba(59, 130, 246, 0.6);
+      border-radius: 4px;
+      padding: 1px 6px;
+      background: rgba(59, 130, 246, 0.08);
+      transition: all 0.2s ease;
+    }
+    [contenteditable="true"]:focus {
+      outline: 1px solid #3b82f6;
+      background: rgba(59, 130, 246, 0.15);
+    }
   </style>
 </head>
-<body class="bg-slate-50 dark:bg-appBg text-slate-900 dark:text-slate-100 h-screen flex flex-col overflow-hidden font-sans">
+<body class="min-h-screen flex flex-col selection:bg-blue-500/30 selection:text-blue-200">
 
-  <!-- Glassmorphism Header -->
-  <header class="shrink-0 border-b border-slate-200/80 dark:border-borderDark/80 bg-white/70 dark:bg-appBg/70 backdrop-blur-md px-6 py-4 flex items-center justify-between z-30 relative">
-    <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brandSynth to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-      </div>
-      <h1 class="font-semibold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400">AI Knowledge Vault</h1>
-    </div>
-    <div class="flex items-center gap-4">
-      <button id="themeToggle" class="p-2.5 rounded-full bg-slate-100 dark:bg-panelDark text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-borderDark transition-all" aria-label="Toggle theme">
-        <span id="themeIcon">🌓</span>
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-30 bg-black/85 backdrop-blur-md border-b border-borderSubtle px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-3 sm:gap-5">
+      <button id="btnToday" class="px-4 py-1.5 rounded-lg border border-zinc-700/80 text-zinc-200 text-sm font-medium hover:bg-zinc-900 hover:border-zinc-500 active:scale-95 transition-all">
+        Today
       </button>
-      <button id="btnNew" class="bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 px-4 py-2.5 rounded-full text-sm font-semibold transition-all shadow-md flex items-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
-        New Entry
+      
+      <div class="flex items-center gap-1">
+        <button id="btnPrevWeek" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors" title="Previous Week">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <button id="btnNextWeek" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors" title="Next Week">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <h1 id="weekRangeTitle" class="text-base sm:text-lg font-semibold tracking-tight text-white">
+        Loading dates...
+      </h1>
+
+      <span id="liveClockBadge" class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-950/60 text-emerald-400 border border-emerald-800/50">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+        <span id="liveClockText"></span>
+      </span>
+    </div>
+
+    <!-- Action Controls -->
+    <div class="flex items-center gap-2.5">
+      <button id="btnToggleEdit" class="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-zinc-800 bg-zinc-900/80 text-zinc-300 hover:text-white hover:border-zinc-700 transition-all flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+        <span id="editBtnText">Edit Routine</span>
+      </button>
+
+      <button id="btnAddClass" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-blue-600 hover:bg-blue-500 text-white transition-all flex items-center gap-1.5 shadow-lg shadow-blue-600/20">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+        Add Class
       </button>
     </div>
   </header>
 
-  <!-- Main Layout -->
-  <div class="flex-1 flex overflow-hidden relative">
-    
-    <!-- Modern Sidebar -->
-    <aside class="w-full md:w-80 shrink-0 border-r border-slate-200/80 dark:border-borderDark bg-slate-50/50 dark:bg-appBg flex flex-col h-full absolute md:relative z-20 md:z-auto transition-transform duration-300" id="sidebar">
-      <div class="p-5 border-b border-slate-200/80 dark:border-borderDark">
-        <div class="relative group">
-          <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brandSynth transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"></path></svg>
-          <input type="text" id="searchInput" placeholder="Search insights..." class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-panelDark border border-slate-200 dark:border-borderDark rounded-xl text-sm focus:ring-2 focus:ring-brandSynth/50 focus:border-brandSynth focus:outline-none dark:text-white placeholder:text-slate-500 transition-all shadow-sm">
-        </div>
+  <!-- Courses Filter Bar -->
+  <section class="border-b border-borderSubtle bg-black px-4 sm:px-8 py-3 flex items-center gap-3 overflow-x-auto">
+    <span class="text-[11px] font-semibold uppercase tracking-widest text-zinc-500 shrink-0">COURSES</span>
+    <div id="coursePillsContainer" class="flex items-center gap-2"></div>
+    <button id="btnClearFilter" class="hidden text-xs text-zinc-400 hover:text-white underline ml-2 shrink-0">Show All</button>
+  </section>
+
+  <!-- Main Schedule List -->
+  <main id="scheduleContainer" class="flex-1 divide-y divide-borderSubtle max-w-6xl w-full mx-auto">
+    <!-- Dynamically populated by JS -->
+  </main>
+
+  <!-- Add / Edit Class Modal -->
+  <div id="classModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="bg-zinc-950 border border-zinc-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 id="modalTitle" class="text-lg font-semibold text-white">Add Class Slot</h3>
+        <button id="btnCloseModal" class="text-zinc-500 hover:text-zinc-300">✕</button>
       </div>
-      <div class="px-3 pt-4 pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Your Vault</div>
-      <ul id="vaultList" class="flex-1 overflow-y-auto px-3 pb-4 space-y-1">
-        <!-- List items injected here -->
-      </ul>
-    </aside>
-
-    <!-- Main Workspace -->
-    <main class="flex-1 flex flex-col h-full relative bg-white dark:bg-[#0c0c0e] w-full">
-      
-      <!-- Stunning Empty State -->
-      <div id="emptyState" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hidden bg-gradient-to-b from-transparent to-slate-50 dark:to-appBg">
-        <div class="w-24 h-24 mb-6 rounded-full bg-gradient-to-tr from-brandSynth/20 to-brandGemini/20 flex items-center justify-center backdrop-blur-xl border border-white/10 shadow-2xl">
-          <svg class="w-10 h-10 text-brandSynth opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+      <form id="classForm" class="space-y-4">
+        <input type="hidden" id="formClassId">
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1">Day of Week</label>
+          <select id="formDayCode" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+            <option value="2">Tuesday (TUE)</option>
+            <option value="3">Wednesday (WED)</option>
+            <option value="4">Thursday (THU)</option>
+            <option value="5">Friday (FRI)</option>
+            <option value="6">Saturday (SAT)</option>
+            <option value="0">Sunday (SUN)</option>
+            <option value="1">Monday (MON)</option>
+          </select>
         </div>
-        <h2 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Knowledge is Power</h2>
-        <p class="text-sm font-medium opacity-80 mb-6 text-center max-w-xs">Select an insight from the sidebar or synthesize a new solution.</p>
-        <button onclick="createNew()" class="px-6 py-2.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-medium text-sm hover:scale-105 transition-transform shadow-lg">Create Entry</button>
-      </div>
-
-      <!-- Active Editor/Viewer -->
-      <div id="editorView" class="flex-1 flex flex-col overflow-hidden hidden">
-        
-        <!-- Workspace Header -->
-        <div class="px-8 pt-8 pb-6 bg-white dark:bg-[#0c0c0e] shrink-0 border-b border-slate-100 dark:border-borderDark/50">
-          <button id="btnBackMobile" class="md:hidden mb-6 text-sm text-brandSynth flex items-center gap-1.5 font-medium hover:text-brandSynthHover">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-            Back to list
-          </button>
-          
-          <input type="text" id="docTitle" placeholder="Title your insight..." class="w-full text-3xl font-bold bg-transparent border-none focus:outline-none focus:ring-0 placeholder:text-slate-300 dark:placeholder:text-slate-700 text-slate-900 dark:text-white mb-4">
-          
-          <div class="relative group">
-            <div class="absolute -inset-0.5 bg-gradient-to-r from-brandSynth to-brandGemini rounded-xl blur opacity-10 group-focus-within:opacity-25 transition duration-500"></div>
-            <textarea id="docPrompt" rows="2" placeholder="What prompt generated these answers?" class="relative w-full text-sm bg-slate-50 dark:bg-panelDark border border-slate-200 dark:border-borderDark rounded-xl p-4 focus:outline-none focus:border-brandSynth/50 resize-y font-mono text-slate-700 dark:text-slate-300 shadow-sm"></textarea>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Course Code</label>
+            <select id="formCourseCode" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"></select>
+          </div>
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Time Slot</label>
+            <input type="text" id="formTime" placeholder="8:30 AM - 11 AM" required class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
           </div>
         </div>
-
-        <!-- Pill-Style Tabs -->
-        <div class="px-8 py-3 bg-slate-50/50 dark:bg-[#0c0c0e] shrink-0 flex items-center justify-between border-b border-slate-100 dark:border-borderDark/50">
-          <div class="flex gap-2 overflow-x-auto hide-scrollbar p-1 bg-slate-200/50 dark:bg-panelDark/50 rounded-lg">
-            <button class="tab-btn active px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 transition-all bg-white dark:bg-borderDark text-brandGpt shadow-sm" data-tab="chatgpt">
-              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.073zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.8956zm16.0993 3.8558L12.5973 8.3829l2.0343-1.178a.0804.0804 0 0 1 .0757 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.3927-.6713zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L8.8092 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg>
-              ChatGPT
-            </button>
-            <button class="tab-btn px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 transition-all text-slate-500 hover:text-slate-800 dark:hover:text-slate-200" data-tab="claude">
-              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 14H7.5v-2h9v2zm0-4H7.5v-2h9v2z"/></svg>
-              Claude
-            </button>
-            <button class="tab-btn px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 transition-all text-slate-500 hover:text-slate-800 dark:hover:text-slate-200" data-tab="gemini">
-              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16.5c-2.35 0-4.5-1.95-4.5-4.5s2.15-4.5 4.5-4.5c.28 0 .55.05.82.12C20.69 4.09 17.65 1.5 14 1.5 9.58 1.5 6 5.08 6 9.5c0 4.42 3.58 8 8 8 3.65 0 6.69-2.59 7.82-6.12-.27.07-.54.12-.82.12zM13 15V9h2v6h-2z"/></svg>
-              Gemini
-            </button>
-            <button class="tab-btn px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 transition-all text-slate-500 hover:text-slate-800 dark:hover:text-slate-200" data-tab="synthesis">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-              Synthesis
-            </button>
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1">Course Title</label>
+          <input type="text" id="formTitle" placeholder="System Analysis and Design" required class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Room / Lab</label>
+            <input type="text" id="formRoom" placeholder="424 - Computer Lab" required class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
           </div>
-          
-          <!-- Mode Toggle -->
-          <div class="flex bg-slate-200/50 dark:bg-panelDark/50 p-1 rounded-lg">
-            <button id="btnModeView" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-white dark:bg-borderDark shadow-sm text-slate-800 dark:text-white transition-all">Read</button>
-            <button id="btnModeEdit" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-500 hover:text-slate-800 dark:hover:text-white transition-all">Edit</button>
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Initials</label>
+            <input type="text" id="formInitials" placeholder="SS" maxlength="3" required class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Instructor</label>
+            <input type="text" id="formTeacher" placeholder="Sayem Shahad" required class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
           </div>
         </div>
-
-        <!-- Content Area -->
-        <div class="flex-1 overflow-y-auto px-8 py-6 bg-white dark:bg-[#0c0c0e]">
-          
-          <!-- Edit Mode -->
-          <div id="editContainer" class="hidden h-full">
-            <textarea id="input-chatgpt" class="content-input w-full h-full bg-transparent border-0 p-0 font-mono text-sm focus:ring-0 resize-none text-slate-800 dark:text-slate-200" placeholder="Paste ChatGPT's insight here..."></textarea>
-            <textarea id="input-claude" class="content-input w-full h-full bg-transparent border-0 p-0 font-mono text-sm focus:ring-0 resize-none text-slate-800 dark:text-slate-200 hidden" placeholder="Paste Claude's insight here..."></textarea>
-            <textarea id="input-gemini" class="content-input w-full h-full bg-transparent border-0 p-0 font-mono text-sm focus:ring-0 resize-none text-slate-800 dark:text-slate-200 hidden" placeholder="Paste Gemini's insight here..."></textarea>
-            <textarea id="input-synthesis" class="content-input w-full h-full bg-transparent border-0 p-0 font-mono text-sm focus:ring-0 resize-none text-slate-800 dark:text-slate-200 hidden" placeholder="Synthesize your final solution or code here..."></textarea>
-          </div>
-
-          <!-- Read Mode Rendered Markdown -->
-          <div id="readContainer" class="h-full">
-            <div id="render-chatgpt" class="content-render prose dark:prose-invert max-w-[85ch] pb-12"></div>
-            <div id="render-claude" class="content-render prose dark:prose-invert max-w-[85ch] pb-12 hidden"></div>
-            <div id="render-gemini" class="content-render prose dark:prose-invert max-w-[85ch] pb-12 hidden"></div>
-            <div id="render-synthesis" class="content-render prose dark:prose-invert max-w-[85ch] pb-12 hidden"></div>
-          </div>
-
+        <div class="flex justify-end gap-2 pt-3">
+          <button type="button" id="btnCancelModal" class="px-4 py-2 rounded-lg text-xs font-medium text-zinc-400 hover:bg-zinc-900">Cancel</button>
+          <button type="submit" class="px-5 py-2 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white">Save Class</button>
         </div>
-
-        <!-- Sticky Action Footer -->
-        <div class="px-8 py-4 border-t border-slate-100 dark:border-borderDark/50 bg-white/80 dark:bg-[#0c0c0e]/80 backdrop-blur-md flex justify-between items-center shrink-0">
-          <button id="btnDelete" class="text-sm font-medium text-rose-500 hover:text-rose-600 transition-colors flex items-center gap-1.5 hidden">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-            Delete Entry
-          </button>
-          <div class="ml-auto">
-            <button id="btnSave" class="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-2.5 rounded-full text-sm font-semibold hover:scale-105 transition-transform shadow-lg shadow-slate-900/10 dark:shadow-white/10">Save Changes</button>
-          </div>
-        </div>
-
-      </div>
-    </main>
+      </form>
+    </div>
   </div>
 
-  <!-- Firebase Scripts -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
-    import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, updateDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+  <script>
+    // 1. Courses Metadata matching the screenshot colors
+    const COURSES = [
+      { code: 'CSE 4165', color: '#2563eb', bg: 'rgba(37, 99, 235, 0.16)', text: '#60a5fa' },
+      { code: 'CSE 2218', color: '#16a34a', bg: 'rgba(22, 163, 74, 0.16)', text: '#4ade80' },
+      { code: 'CSE 3411', color: '#ea580c', bg: 'rgba(234, 88, 12, 0.16)', text: '#fb923c' },
+      { code: 'CSE 3412', color: '#9333ea', bg: 'rgba(147, 51, 234, 0.16)', text: '#c084fc' },
+      { code: 'CSE 3521', color: '#db2777', bg: 'rgba(219, 39, 119, 0.16)', text: '#f472b6' },
+      { code: 'SOC 2101', color: '#0891b2', bg: 'rgba(8, 145, 178, 0.16)', text: '#22d3ee' }
+    ];
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyA7bRP5Hca8lmfMr43C4a8L41wTH3tI7uo",
-      authDomain: "ai-suggestion-tracker.firebaseapp.com",
-      projectId: "ai-suggestion-tracker",
-      storageBucket: "ai-suggestion-tracker.firebasestorage.app",
-      messagingSenderId: "29642483521",
-      appId: "1:29642483521:web:0dfe7b762ba307da41a3c0",
-      measurementId: "G-G8YEMPYTSN"
-    };
+    // 2. Default Weekly Routine (mapped by JS day-of-week: 0=SUN, 1=MON, 2=TUE, 3=WED, 6=SAT)
+    const DEFAULT_CLASSES = [
+      // Tuesday (2)
+      { id: 'c1', dayOfWeek: 2, time: '8:30 AM - 11 AM', course: 'CSE 2218', title: 'Data Structure and Algorithms II Laboratory', room: '424 - Computer Lab', initials: 'SS', teacher: 'Sayem Shahad' },
+      { id: 'c2', dayOfWeek: 2, time: '11:11 AM - 12:30 PM', course: 'SOC 2101', title: 'Society, Environment and Engineering Ethics', room: '703', initials: 'TT', teacher: 'Taniah Mahmuda Tinni' },
+      { id: 'c3', dayOfWeek: 2, time: '3:11 PM - 4:30 PM', course: 'CSE 3411', title: 'System Analysis and Design', room: '322', initials: 'TS', teacher: 'Tasmin Sanjida' },
+      // Wednesday (3)
+      { id: 'c4', dayOfWeek: 3, time: '8:30 AM - 11 AM', course: 'CSE 3412', title: 'System Analysis and Design Laboratory', room: '426 - Computer Lab', initials: 'TS', teacher: 'Tasmin Sanjida' },
+      { id: 'c5', dayOfWeek: 3, time: '11:11 AM - 12:30 PM', course: 'CSE 3521', title: 'Database Management Systems', room: '402', initials: 'MT', teacher: 'Md. Shafqat Talukder' },
+      // Saturday (6)
+      { id: 'c6', dayOfWeek: 6, time: '11:11 AM - 12:30 PM', course: 'SOC 2101', title: 'Society, Environment and Engineering Ethics', room: '703', initials: 'TT', teacher: 'Taniah Mahmuda Tinni' },
+      { id: 'c7', dayOfWeek: 6, time: '3:11 PM - 4:30 PM', course: 'CSE 3411', title: 'System Analysis and Design', room: '322', initials: 'TS', teacher: 'Tasmin Sanjida' },
+      // Sunday (0)
+      { id: 'c8', dayOfWeek: 0, time: '11:11 AM - 12:30 PM', course: 'CSE 3521', title: 'Database Management Systems', room: '402', initials: 'MT', teacher: 'Md. Shafqat Talukder' },
+      // Monday (1)
+      { id: 'c9', dayOfWeek: 1, time: '8:30 AM - 11 AM', course: 'CSE 4165', title: 'Web Programming', room: '427 - Computer Lab', initials: 'MH', teacher: 'Mahmudul Hasan' }
+    ];
 
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const db = getFirestore(app);
+    // Order of days in a week cycle starting Tuesday -> Monday (matching screenshot)
+    const WEEK_ORDER = [2, 3, 4, 5, 6, 0, 1];
+    const DAY_NAMES = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    const MONTH_TITLE = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    // State
-    let vaultItems = [];
-    let currentItemId = null;
-    let activeTab = 'chatgpt';
-    let editMode = false;
-    let searchTerm = '';
+    let routineData = JSON.parse(localStorage.getItem('cse_routine_v2')) || DEFAULT_CLASSES;
+    let weekOffset = 0; // 0 = Current Real-Time Week
+    let selectedCourse = null;
+    let isEditMode = false;
 
-    // Elements
-    const sidebar = document.getElementById('sidebar');
-    const vaultList = document.getElementById('vaultList');
-    const searchInput = document.getElementById('searchInput');
-    const emptyState = document.getElementById('emptyState');
-    const editorView = document.getElementById('editorView');
-    
-    const docTitle = document.getElementById('docTitle');
-    const docPrompt = document.getElementById('docPrompt');
-    const textareas = {
-      chatgpt: document.getElementById('input-chatgpt'),
-      claude: document.getElementById('input-claude'),
-      gemini: document.getElementById('input-gemini'),
-      synthesis: document.getElementById('input-synthesis')
-    };
-    
-    const renderers = {
-      chatgpt: document.getElementById('render-chatgpt'),
-      claude: document.getElementById('render-claude'),
-      gemini: document.getElementById('render-gemini'),
-      synthesis: document.getElementById('render-synthesis')
-    };
-
-    const btnNew = document.getElementById('btnNew');
-    const btnSave = document.getElementById('btnSave');
-    const btnDelete = document.getElementById('btnDelete');
-    const btnModeView = document.getElementById('btnModeView');
-    const btnModeEdit = document.getElementById('btnModeEdit');
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const btnBackMobile = document.getElementById('btnBackMobile');
-
-    // Theme Setup
-    const html = document.documentElement;
-    const themeToggleBtn = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      html.classList.add('dark');
-      themeIcon.textContent = '☀️';
-    } else {
-      html.classList.remove('dark');
-      themeIcon.textContent = '🌙';
+    function saveRoutine() {
+      localStorage.setItem('cse_routine_v2', JSON.stringify(routineData));
     }
 
-    themeToggleBtn.addEventListener('click', () => {
-      html.classList.toggle('dark');
-      const isDark = html.classList.contains('dark');
-      localStorage.theme = isDark ? 'dark' : 'light';
-      themeIcon.textContent = isDark ? '☀️' : '🌙';
-    });
+    // Calculate the Tuesday-to-Monday dates for the active week
+    function getCycleStartTuesday(baseDate, offsetWeeks = 0) {
+      const d = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+      const day = d.getDay(); // 0=Sun, 1=Mon, 2=Tue...
+      // Distance back to the most recent Tuesday
+      const diffToTuesday = (day >= 2) ? (day - 2) : (day + 5);
+      d.setDate(d.getDate() - diffToTuesday + (offsetWeeks * 7));
+      return d;
+    }
 
-    // Fetch Data
-    const q = query(collection(db, 'ai_insights'), orderBy('createdAt', 'desc'));
-    onSnapshot(q, (snapshot) => {
-      vaultItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      renderList();
-    });
+    // Parse "8:30 AM - 11 AM" into minutes from midnight for live status detection
+    function parseTimeRange(rangeStr) {
+      try {
+        const parts = rangeStr.split('-').map(s => s.trim());
+        if (parts.length !== 2) return null;
+        const toMins = (t) => {
+          const match = t.match(/(\d+)(?::(\d+))?\s*(AM|PM)/i);
+          if (!match) return null;
+          let h = parseInt(match[1], 10);
+          const m = parseInt(match[2] || '0', 10);
+          const ampm = match[3].toUpperCase();
+          if (ampm === 'PM' && h !== 12) h += 12;
+          if (ampm === 'AM' && h === 12) h = 0;
+          return h * 60 + m;
+        };
+        const start = toMins(parts[0]);
+        const end = toMins(parts[1]);
+        return (start !== null && end !== null) ? { start, end } : null;
+      } catch {
+        return null;
+      }
+    }
 
-    function renderList() {
-      vaultList.innerHTML = '';
-      const filtered = vaultItems.filter(item => 
-        (item.title || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
-        (item.prompt || '').toLowerCase().includes(searchTerm.toLowerCase())
-      );
+    function isSameDate(d1, d2) {
+      return d1.getFullYear() === d2.getFullYear() &&
+             d1.getMonth() === d2.getMonth() &&
+             d1.getDate() === d2.getDate();
+    }
 
-      filtered.forEach(item => {
-        const li = document.createElement('li');
-        const isActive = item.id === currentItemId;
-        li.className = `p-3 rounded-xl cursor-pointer transition-all border ${isActive ? 'bg-white dark:bg-panelDark border-slate-200 dark:border-borderDark shadow-sm' : 'border-transparent hover:bg-slate-200/50 dark:hover:bg-borderDark/50'}`;
-        
-        li.innerHTML = `
-          <h3 class="font-semibold text-sm ${isActive ? 'text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300'} truncate">${escapeHtml(item.title || 'Untitled Entry')}</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-500 truncate mt-1.5">${escapeHtml(item.prompt || 'No prompt...')}</p>
-        `;
-        
-        li.addEventListener('click', () => openItem(item.id));
-        vaultList.appendChild(li);
+    function renderCoursePills() {
+      const container = document.getElementById('coursePillsContainer');
+      const selectEl = document.getElementById('formCourseCode');
+      container.innerHTML = '';
+      selectEl.innerHTML = '';
+
+      COURSES.forEach(c => {
+        const active = selectedCourse === c.code;
+        const btn = document.createElement('button');
+        btn.className = `px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2 transition-all shrink-0 border ${
+          active ? 'ring-2 ring-white/40 scale-105' : ' border-transparent opacity-90 hover:opacity-100'
+        }`;
+        btn.style.backgroundColor = c.bg;
+        btn.style.color = c.text;
+        btn.innerHTML = `<span class="w-2 h-2 rounded-full" style="background-color:${c.color}"></span>${c.code}`;
+        btn.onclick = () => {
+          selectedCourse = (selectedCourse === c.code) ? null : c.code;
+          document.getElementById('btnClearFilter').classList.toggle('hidden', !selectedCourse);
+          renderCoursePills();
+          renderSchedule();
+        };
+        container.appendChild(btn);
+
+        const opt = document.createElement('option');
+        opt.value = c.code;
+        opt.textContent = c.code;
+        selectEl.appendChild(opt);
       });
     }
 
-    function openItem(id) {
-      currentItemId = id;
-      const item = vaultItems.find(i => i.id === id);
-      if (!item) return;
+    function renderSchedule() {
+      const now = new Date();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const startTuesday = getCycleStartTuesday(now, weekOffset);
+      const endMonday = new Date(startTuesday);
+      endMonday.setDate(startTuesday.getDate() + 6);
 
-      docTitle.value = item.title || '';
-      docPrompt.value = item.prompt || '';
-      textareas.chatgpt.value = item.chatgpt || '';
-      textareas.claude.value = item.claude || '';
-      textareas.gemini.value = item.gemini || '';
-      textareas.synthesis.value = item.synthesis || '';
+      // Update Header Range (e.g., "Oct 27 – Nov 2, 2026")
+      const sameMonth = startTuesday.getMonth() === endMonday.getMonth();
+      const rangeText = sameMonth
+        ? `${MONTH_TITLE[startTuesday.getMonth()]} ${startTuesday.getDate()} – ${endMonday.getDate()}, ${endMonday.getFullYear()}`
+        : `${MONTH_TITLE[startTuesday.getMonth()]} ${startTuesday.getDate()} – ${MONTH_TITLE[endMonday.getMonth()]} ${endMonday.getDate()}, ${endMonday.getFullYear()}`;
+      document.getElementById('weekRangeTitle').textContent = rangeText;
 
-      updateMarkdownRenderers();
+      const container = document.getElementById('scheduleContainer');
+      container.innerHTML = '';
 
-      emptyState.classList.add('hidden');
-      editorView.classList.remove('hidden');
-      btnDelete.classList.remove('hidden');
-      
-      if(window.innerWidth < 768) sidebar.classList.add('-translate-x-full');
+      // Iterate through the 7 days of the Tuesday -> Monday cycle
+      for (let i = 0; i < 7; i++) {
+        const cellDate = new Date(startTuesday);
+        cellDate.setDate(startTuesday.getDate() + i);
+        const dayOfWeek = cellDate.getDay();
+        const isToday = isSameDate(cellDate, now);
 
-      renderList();
-      setMode('view');
+        // Filter classes for this weekday
+        let dayClasses = routineData.filter(item => Number(item.dayOfWeek) === dayOfWeek);
+        if (selectedCourse) {
+          dayClasses = dayClasses.filter(item => item.course === selectedCourse);
+        }
+
+        // Only render days that have classes (or render Today even if empty so you always see Today)
+        if (dayClasses.length === 0 && !isToday) continue;
+
+        const dayRow = document.createElement('div');
+        dayRow.id = isToday ? 'todayRow' : '';
+        dayRow.className = `py-6 px-4 sm:px-8 flex flex-col sm:flex-row gap-4 sm:gap-8 items-start transition-colors animate-row`;
+
+        // Left Date Column
+        const leftCol = document.createElement('div');
+        leftCol.className = 'w-16 shrink-0 flex sm:flex-col items-baseline sm:items-center gap-2 sm:gap-0.5 text-center select-none';
+        leftCol.innerHTML = `
+          <span class="text-[11px] font-semibold tracking-widest uppercase ${isToday ? 'text-blue-400' : 'text-zinc-400'}">${DAY_NAMES[dayOfWeek]}</span>
+          <span class="text-2xl sm:text-[26px] leading-tight font-bold ${isToday ? 'text-blue-400' : 'text-white'}">${cellDate.getDate()}</span>
+          <span class="text-[10px] font-medium tracking-widest uppercase text-zinc-500">${MONTH_NAMES[cellDate.getMonth()]}</span>
+          ${isToday ? '<span class="mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">TODAY</span>' : ''}
+        `;
+
+        // Right Classes Column
+        const rightCol = document.createElement('div');
+        rightCol.className = 'flex-1 w-full space-y-2.5';
+
+        if (dayClasses.length === 0) {
+          rightCol.innerHTML = `
+            <div class="rounded-2xl bg-cardHighlight/60 border border-zinc-800/80 px-5 py-4 text-sm text-zinc-400">
+              No classes scheduled for today. Enjoy your free day!
+            </div>
+          `;
+        } else {
+          dayClasses.forEach(cls => {
+            const courseObj = COURSES.find(c => c.code === cls.course) || COURSES[0];
+            const parsedTime = parseTimeRange(cls.time);
+            const isLiveNow = isToday && parsedTime && currentMinutes >= parsedTime.start && currentMinutes <= parsedTime.end;
+            const isUpNext = isToday && parsedTime && currentMinutes < parsedTime.start && (parsedTime.start - currentMinutes <= 60);
+
+            const card = document.createElement('div');
+            // Today's classes automatically get the dark rounded highlight card from the screenshot
+            card.className = `group relative flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-8 px-4 py-3.5 rounded-2xl transition-all ${
+              isToday
+                ? 'bg-cardHighlight border border-zinc-800/90 shadow-lg'
+                : 'hover:bg-zinc-900/50 border border-transparent'
+            } ${isLiveNow ? 'ring-1 ring-emerald-500/60' : ''}`;
+
+            card.innerHTML = `
+              <!-- Time Column -->
+              <div class="w-40 shrink-0 text-xs sm:text-[13px] font-medium text-zinc-400 flex items-center gap-2">
+                <span data-field="time" data-id="${cls.id}" ${isEditMode ? 'contenteditable="true"' : ''}>${cls.time}</span>
+              </div>
+
+              <!-- Course Details -->
+              <div class="flex-1 flex items-start gap-3.5">
+                <span class="w-3 h-3 rounded-full mt-1.5 shrink-0 shadow-sm" style="background-color: ${courseObj.color}"></span>
+                <div class="space-y-1 flex-1">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <h2 data-field="title" data-id="${cls.id}" ${isEditMode ? 'contenteditable="true"' : ''} class="text-[15px] font-medium text-zinc-100 leading-snug">
+                      ${cls.title}
+                    </h2>
+                    ${isLiveNow ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">LIVE NOW</span>' : ''}
+                    ${isUpNext ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40">SOON</span>' : ''}
+                  </div>
+                  
+                  <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-400">
+                    <span data-field="room" data-id="${cls.id}" ${isEditMode ? 'contenteditable="true"' : ''}>${cls.room}</span>
+                    <span>·</span>
+                    <span class="inline-flex items-center gap-1.5">
+                      <span class="w-5 h-5 rounded-full bg-zinc-800 text-zinc-300 text-[10px] font-bold inline-flex items-center justify-center border border-zinc-700">
+                        ${cls.initials}
+                      </span>
+                      <span data-field="teacher" data-id="${cls.id}" ${isEditMode ? 'contenteditable="true"' : ''}>${cls.teacher}</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Edit / Delete Controls -->
+              <div class="${isEditMode ? 'flex' : 'hidden group-hover:flex'} items-center gap-1.5 self-end sm:self-center">
+                <button onclick="openEditModal('${cls.id}')" class="p-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300" title="Edit Class">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                </button>
+                <button onclick="deleteClass('${cls.id}')" class="p-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900 text-rose-300" title="Delete Class">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </div>
+            `;
+            rightCol.appendChild(card);
+          });
+        }
+
+        dayRow.appendChild(leftCol);
+        dayRow.appendChild(rightCol);
+        container.appendChild(dayRow);
+      }
+
+      // Attach inline editing listeners
+      if (isEditMode) {
+        document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+          el.addEventListener('blur', (e) => {
+            const id = e.target.dataset.id;
+            const field = e.target.dataset.field;
+            const item = routineData.find(x => x.id === id);
+            if (item && field) {
+              item[field] = e.target.textContent.trim();
+              saveRoutine();
+            }
+          });
+        });
+      }
     }
 
-    window.createNew = function() {
-      currentItemId = null;
-      docTitle.value = '';
-      docPrompt.value = '';
-      Object.values(textareas).forEach(t => t.value = '');
-      
-      emptyState.classList.add('hidden');
-      editorView.classList.remove('hidden');
-      btnDelete.classList.add('hidden');
-      
-      if(window.innerWidth < 768) sidebar.classList.add('-translate-x-full');
-      
-      renderList();
-      setMode('edit');
-      docTitle.focus();
+    // Live Clock & Automatic Roll-Over Check
+    function updateLiveClock() {
+      const now = new Date();
+      const clockText = document.getElementById('liveClockText');
+      if (clockText) {
+        clockText.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
     }
 
-    async function saveItem() {
-      const data = {
-        title: docTitle.value.trim(),
-        prompt: docPrompt.value.trim(),
-        chatgpt: textareas.chatgpt.value,
-        claude: textareas.claude.value,
-        gemini: textareas.gemini.value,
-        synthesis: textareas.synthesis.value,
-        updatedAt: serverTimestamp()
+    // Modal & Controls Logic
+    const modal = document.getElementById('classModal');
+    const classForm = document.getElementById('classForm');
+
+    window.openEditModal = function(id) {
+      const cls = routineData.find(x => x.id === id);
+      if (!cls) return;
+      document.getElementById('modalTitle').textContent = 'Edit Class Slot';
+      document.getElementById('formClassId').value = cls.id;
+      document.getElementById('formDayCode').value = cls.dayOfWeek;
+      document.getElementById('formCourseCode').value = cls.course;
+      document.getElementById('formTime').value = cls.time;
+      document.getElementById('formTitle').value = cls.title;
+      document.getElementById('formRoom').value = cls.room;
+      document.getElementById('formInitials').value = cls.initials;
+      document.getElementById('formTeacher').value = cls.teacher;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    };
+
+    window.deleteClass = function(id) {
+      if (confirm('Remove this class from your weekly routine?')) {
+        routineData = routineData.filter(x => x.id !== id);
+        saveRoutine();
+        renderSchedule();
+      }
+    };
+
+    document.getElementById('btnAddClass').onclick = () => {
+      document.getElementById('modalTitle').textContent = 'Add Class Slot';
+      classForm.reset();
+      document.getElementById('formClassId').value = '';
+      document.getElementById('formDayCode').value = new Date().getDay();
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    };
+
+    const closeModal = () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    };
+    document.getElementById('btnCloseModal').onclick = closeModal;
+    document.getElementById('btnCancelModal').onclick = closeModal;
+
+    classForm.onsubmit = (e) => {
+      e.preventDefault();
+      const id = document.getElementById('formClassId').value;
+      const newEntry = {
+        id: id || 'c_' + Date.now(),
+        dayOfWeek: Number(document.getElementById('formDayCode').value),
+        course: document.getElementById('formCourseCode').value,
+        time: document.getElementById('formTime').value.trim(),
+        title: document.getElementById('formTitle').value.trim(),
+        room: document.getElementById('formRoom').value.trim(),
+        initials: document.getElementById('formInitials').value.trim().toUpperCase(),
+        teacher: document.getElementById('formTeacher').value.trim()
       };
 
-      try {
-        btnSave.innerHTML = '<span class="animate-pulse">Saving...</span>';
-        if (currentItemId) {
-          await updateDoc(doc(db, 'ai_insights', currentItemId), data);
-        } else {
-          data.createdAt = serverTimestamp();
-          const docRef = await addDoc(collection(db, 'ai_insights'), data);
-          currentItemId = docRef.id;
-        }
-        updateMarkdownRenderers();
-        setMode('view');
-      } catch (e) {
-        alert("Error saving: " + e.message);
-      } finally {
-        btnSave.textContent = 'Save Changes';
-      }
-    }
-
-    async function deleteItem() {
-      if (!currentItemId) return;
-      if (confirm('Delete this entry permanently?')) {
-        await deleteDoc(doc(db, 'ai_insights', currentItemId));
-        currentItemId = null;
-        editorView.classList.add('hidden');
-        emptyState.classList.remove('hidden');
-        
-        if(window.innerWidth < 768) sidebar.classList.remove('-translate-x-full');
-      }
-    }
-
-    function switchTab(tabId) {
-      activeTab = tabId;
-      
-      tabBtns.forEach(btn => {
-        const isTarget = btn.dataset.tab === tabId;
-        const colorText = getBrandColorText(tabId);
-        
-        if (isTarget) {
-          btn.className = `tab-btn active px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 transition-all bg-white dark:bg-borderDark shadow-sm ${colorText}`;
-        } else {
-          btn.className = `tab-btn px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 transition-all text-slate-500 hover:text-slate-800 dark:hover:text-slate-200`;
-        }
-      });
-
-      Object.keys(textareas).forEach(key => {
-        textareas[key].classList.toggle('hidden', key !== tabId);
-        renderers[key].classList.toggle('hidden', key !== tabId);
-      });
-    }
-
-    function setMode(mode) {
-      editMode = mode === 'edit';
-      const readContainer = document.getElementById('readContainer');
-      const editContainer = document.getElementById('editContainer');
-      
-      if (editMode) {
-        btnModeEdit.className = 'px-3 py-1.5 text-xs font-semibold rounded-md bg-white dark:bg-borderDark shadow-sm text-slate-800 dark:text-white transition-all';
-        btnModeView.className = 'px-3 py-1.5 text-xs font-semibold rounded-md text-slate-500 hover:text-slate-800 dark:hover:text-white transition-all';
-        readContainer.classList.add('hidden');
-        editContainer.classList.remove('hidden');
+      if (id) {
+        const idx = routineData.findIndex(x => x.id === id);
+        if (idx > -1) routineData[idx] = newEntry;
       } else {
-        btnModeView.className = 'px-3 py-1.5 text-xs font-semibold rounded-md bg-white dark:bg-borderDark shadow-sm text-slate-800 dark:text-white transition-all';
-        btnModeEdit.className = 'px-3 py-1.5 text-xs font-semibold rounded-md text-slate-500 hover:text-slate-800 dark:hover:text-white transition-all';
-        readContainer.classList.remove('hidden');
-        editContainer.classList.add('hidden');
-        updateMarkdownRenderers();
+        routineData.push(newEntry);
       }
-    }
+      saveRoutine();
+      closeModal();
+      renderSchedule();
+    };
 
-    function updateMarkdownRenderers() {
-      marked.use({ breaks: true, gfm: true });
-      Object.keys(textareas).forEach(key => {
-        const rawText = textareas[key].value || `*No insight added for ${key} yet.*`;
-        renderers[key].innerHTML = marked.parse(rawText);
-      });
-    }
+    // Navigation & Edit Mode Buttons
+    document.getElementById('btnPrevWeek').onclick = () => { weekOffset--; renderSchedule(); };
+    document.getElementById('btnNextWeek').onclick = () => { weekOffset++; renderSchedule(); };
+    document.getElementById('btnToday').onclick = () => {
+      weekOffset = 0;
+      renderSchedule();
+      const todayEl = document.getElementById('todayRow');
+      if (todayEl) todayEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
 
-    function escapeHtml(unsafe) {
-      return (unsafe || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-    }
+    document.getElementById('btnClearFilter').onclick = () => {
+      selectedCourse = null;
+      document.getElementById('btnClearFilter').classList.add('hidden');
+      renderCoursePills();
+      renderSchedule();
+    };
 
-    function getBrandColorText(tab) {
-      const map = { chatgpt: 'text-brandGpt', claude: 'text-brandClaude', gemini: 'text-brandGemini', synthesis: 'text-brandSynth' };
-      return map[tab] || 'text-brandSynth';
-    }
+    document.getElementById('btnToggleEdit').onclick = () => {
+      isEditMode = !isEditMode;
+      document.getElementById('editBtnText').textContent = isEditMode ? 'Done Editing' : 'Edit Routine';
+      renderSchedule();
+    };
 
-    btnNew.addEventListener('click', window.createNew);
-    btnSave.addEventListener('click', saveItem);
-    btnDelete.addEventListener('click', deleteItem);
-    btnModeView.addEventListener('click', () => setMode('view'));
-    btnModeEdit.addEventListener('click', () => setMode('edit'));
-    searchInput.addEventListener('input', (e) => { searchTerm = e.target.value; renderList(); });
-    btnBackMobile.addEventListener('click', () => sidebar.classList.remove('-translate-x-full'));
-
-    tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
-        e.preventDefault();
-        if (!editorView.classList.contains('hidden')) saveItem();
-      }
-    });
-
-    switchTab('chatgpt');
-    setTimeout(() => { if(vaultItems.length === 0) emptyState.classList.remove('hidden'); }, 500);
+    // Initialize and refresh live status every 60 seconds
+    renderCoursePills();
+    renderSchedule();
+    updateLiveClock();
+    setInterval(() => {
+      updateLiveClock();
+      if (!isEditMode && weekOffset === 0) renderSchedule();
+    }, 60000);
   </script>
 </body>
 </html>
