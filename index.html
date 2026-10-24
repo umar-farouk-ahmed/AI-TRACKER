@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" class="dark antialiased">
 <head>
+  <!-- =====================================================================
+       1. HEAD, FONTS & TAILWIND CONFIGURATION
+       ===================================================================== -->
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#000000">
   <title>Live Class Routine</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,25 +33,134 @@
     };
   </script>
 
+  <!-- =====================================================================
+       2. CUSTOM STYLES & ANIMATIONS (WITH PREFERS-REDUCED-MOTION)
+       ===================================================================== -->
   <style>
-    body {
-      background-color: #000000;
-      color: #f4f4f5;
-      overflow-x: hidden;
+    :root {
+      --bg-primary: #f8fafc;
+      --bg-elevated: #ffffff;
+      --border-subtle: #e2e8f0;
+      --text-primary: #0f172a;
     }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #000000; }
-    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+    html.dark {
+      --bg-primary: #000000;
+      --bg-elevated: #1c1c1e;
+      --border-subtle: #1f1f22;
+      --text-primary: #f4f4f5;
+    }
 
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+
+    /* Staggered Row Entrance (Only triggered on initial load or week change) */
     @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
     }
     .animate-row {
-      animation: fadeSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+      animation: fadeSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-    
+
+    /* Week Navigation Slide Left / Right */
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(28px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-28px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .slide-next { animation: slideInRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .slide-prev { animation: slideInLeft 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    /* Card Hover Lift + Dynamic Course Color Glow */
+    .class-card {
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                  background-color 0.2s ease,
+                  opacity 0.25s ease,
+                  max-height 0.3s ease;
+    }
+    .class-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 26px -6px var(--course-glow, rgba(59, 130, 246, 0.28));
+    }
+
+    /* Smooth Card Collapse on Delete */
+    .card-collapsing {
+      max-height: 0 !important;
+      opacity: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      overflow: hidden !important;
+      transform: scale(0.95) !important;
+      transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    /* Modal Scale + Fade Transition */
+    .modal-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-panel {
+      transform: scale(0.94) translateY(8px);
+      opacity: 0;
+      transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+    }
+    .modal-backdrop.open .modal-panel {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    /* Course Pill Smooth Active Transition */
+    .course-pill {
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.2s ease,
+                  opacity 0.2s ease,
+                  background-color 0.2s ease;
+    }
+
+    /* Confetti / Checkmark Burst Animation */
+    @keyframes checkBurst {
+      0% { transform: scale(0.6); }
+      50% { transform: scale(1.28); }
+      100% { transform: scale(1); }
+    }
+    .burst-active {
+      animation: checkBurst 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes particleFly {
+      0% { opacity: 1; transform: translate(0, 0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
+    }
+    .confetti-dot {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 9999px;
+      pointer-events: none;
+      animation: particleFly 0.55s ease-out forwards;
+    }
+
+    /* Inline ContentEditable Styling */
     [contenteditable="true"] {
       outline: 1px dashed rgba(59, 130, 246, 0.6);
       border-radius: 4px;
@@ -59,111 +172,310 @@
       outline: 1px solid #3b82f6;
       background: rgba(59, 130, 246, 0.15);
     }
+
+    /* Respect Reduced Motion Preferences */
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .animate-row { opacity: 1 !important; transform: none !important; }
+      .class-card:hover { transform: none !important; }
+    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-blue-500/30 selection:text-blue-200">
 
-  <!-- Top Navigation Header -->
-  <header class="sticky top-0 z-30 bg-black/85 backdrop-blur-md border-b border-borderSubtle px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
-    <div class="flex items-center gap-3 sm:gap-5">
-      <button id="btnToday" class="px-4 py-1.5 rounded-lg border border-zinc-700/80 text-zinc-200 text-sm font-medium hover:bg-zinc-900 hover:border-zinc-500 active:scale-95 transition-all">
+<body class="min-h-screen flex flex-col pb-20 sm:pb-8 selection:bg-blue-500/30 selection:text-blue-200">
+
+  <!-- =====================================================================
+       3. STICKY "NEXT CLASS" LIVE BANNER & POMODORO BAR
+       ===================================================================== -->
+  <div id="nextClassBanner" class="bg-gradient-to-r from-blue-950/90 via-indigo-950/90 to-zinc-950/90 border-b border-blue-500/20 px-4 sm:px-8 py-2 text-xs flex flex-wrap items-center justify-between gap-2 z-40">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <span id="bannerPulseDot" class="w-2 h-2 rounded-full bg-blue-400 animate-ping shrink-0"></span>
+      <span id="bannerStatusLabel" class="font-semibold uppercase tracking-wider text-blue-300 shrink-0">NEXT UP</span>
+      <span id="bannerCourseInfo" class="text-zinc-100 font-medium truncate">Checking schedule...</span>
+    </div>
+    <div class="flex items-center gap-3 shrink-0">
+      <span id="bannerRoomBadge" class="px-2 py-0.5 rounded bg-white/10 text-zinc-200 font-medium hidden sm:inline-block"></span>
+      <span id="bannerCountdown" class="font-semibold text-amber-300 font-mono"></span>
+      <!-- Active Pomodoro Mini Widget -->
+      <div id="pomoWidget" class="hidden items-center gap-2 bg-rose-950/80 border border-rose-500/40 text-rose-200 px-2.5 py-0.5 rounded-full">
+        <span>🍅</span>
+        <span id="pomoTimeDisplay" class="font-mono font-bold">25:00</span>
+        <button id="btnPomoToggle" class="hover:text-white underline text-[11px]">Pause</button>
+        <button id="btnPomoStop" class="hover:text-white text-[11px]" title="Close Timer">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       4. TOP NAVIGATION HEADER
+       ===================================================================== -->
+  <header class="sticky top-0 z-30 bg-white/90 dark:bg-black/85 backdrop-blur-md border-b border-slate-200 dark:border-borderSubtle px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+    <!-- Left: Week Controls -->
+    <div class="flex items-center gap-2.5 sm:gap-4">
+      <button id="btnToday" class="px-3.5 py-1.5 rounded-lg border border-slate-300 dark:border-zinc-700/80 text-slate-800 dark:text-zinc-200 text-xs sm:text-sm font-medium hover:bg-slate-100 dark:hover:bg-zinc-900 active:scale-95 transition-all" title="Shortcut: T">
         Today
       </button>
       
       <div class="flex items-center gap-1">
-        <button id="btnPrevWeek" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors" title="Previous Week">
+        <button id="btnPrevWeek" class="p-2 rounded-lg text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-900 transition-colors" title="Previous Week (←)">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         </button>
-        <button id="btnNextWeek" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors" title="Next Week">
+        <button id="btnNextWeek" class="p-2 rounded-lg text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-900 transition-colors" title="Next Week (→)">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </button>
       </div>
 
-      <h1 id="weekRangeTitle" class="text-base sm:text-lg font-semibold tracking-tight text-white">
+      <h1 id="weekRangeTitle" class="text-sm sm:text-lg font-semibold tracking-tight text-slate-900 dark:text-white">
         Loading dates...
       </h1>
 
-      <span id="liveClockBadge" class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-950/60 text-emerald-400 border border-emerald-800/50">
+      <span id="liveClockBadge" class="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 dark:border-emerald-800/50">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
         <span id="liveClockText"></span>
       </span>
     </div>
 
-    <!-- Action Controls -->
-    <div class="flex items-center gap-2.5">
-      <button id="btnToggleEdit" class="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-zinc-800 bg-zinc-900/80 text-zinc-300 hover:text-white hover:border-zinc-700 transition-all flex items-center gap-1.5">
+    <!-- Right: Search, Notifications, Productivity Hub, Theme, Edit, Add -->
+    <div class="flex items-center gap-2 flex-wrap">
+      <!-- Search Input -->
+      <div class="relative w-36 sm:w-48">
+        <svg class="w-3.5 h-3.5 text-zinc-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
+        <input id="searchInput" type="text" placeholder="Search (/)" class="w-full bg-slate-100 dark:bg-zinc-900/90 border border-slate-300 dark:border-zinc-800 rounded-lg pl-8 pr-6 py-1.5 text-xs text-slate-900 dark:text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-all">
+        <button id="btnClearSearch" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white text-xs">✕</button>
+      </div>
+
+      <!-- Productivity Hub Toggle -->
+      <button id="btnToggleHub" class="px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-300 dark:border-zinc-800 bg-slate-100 dark:bg-zinc-900/80 text-slate-700 dark:text-zinc-300 hover:border-blue-500/50 transition-all flex items-center gap-1.5">
+        <span>📊</span>
+        <span class="hidden md:inline">Productivity</span>
+        <span id="hubBadgeCount" class="px-1.5 py-0.2 rounded-full text-[10px] bg-blue-600 text-white font-bold">0</span>
+      </button>
+
+      <!-- 15-Min Notification Opt-In Toggle -->
+      <button id="btnNotifications" class="p-1.5 rounded-lg border border-slate-300 dark:border-zinc-800 bg-slate-100 dark:bg-zinc-900/80 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-all" title="Toggle 15-min class reminders">
+        <span id="notifIcon">🔕</span>
+      </button>
+
+      <!-- Theme Toggle -->
+      <button id="btnThemeToggle" class="p-1.5 rounded-lg border border-slate-300 dark:border-zinc-800 bg-slate-100 dark:bg-zinc-900/80 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-all" title="Toggle Light/Dark Mode">
+        <span id="themeIcon">🌙</span>
+      </button>
+
+      <!-- Backup / Export Menu Button -->
+      <button id="btnOpenTools" class="p-1.5 rounded-lg border border-slate-300 dark:border-zinc-800 bg-slate-100 dark:bg-zinc-900/80 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-all" title="Export .ICS / Backup JSON">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+      </button>
+
+      <!-- Edit Routine Toggle (Desktop) -->
+      <button id="btnToggleEdit" class="hidden sm:flex px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-300 dark:border-zinc-800 bg-slate-100 dark:bg-zinc-900/80 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-all items-center gap-1.5">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
         <span id="editBtnText">Edit Routine</span>
       </button>
 
-      <button id="btnAddClass" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-blue-600 hover:bg-blue-500 text-white transition-all flex items-center gap-1.5 shadow-lg shadow-blue-600/20">
+      <!-- Add Class Button (Desktop) -->
+      <button id="btnAddClass" class="hidden sm:flex px-3.5 py-1.5 rounded-lg text-xs font-medium bg-blue-600 hover:bg-blue-500 text-white transition-all items-center gap-1.5 shadow-lg shadow-blue-600/20" title="Shortcut: N">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
         Add Class
       </button>
     </div>
   </header>
 
-  <!-- Courses Filter Bar -->
-  <section class="border-b border-borderSubtle bg-black px-4 sm:px-8 py-3 flex items-center gap-3 overflow-x-auto">
-    <span class="text-[11px] font-semibold uppercase tracking-widest text-zinc-500 shrink-0">COURSES</span>
-    <div id="coursePillsContainer" class="flex items-center gap-2"></div>
-    <button id="btnClearFilter" class="hidden text-xs text-zinc-400 hover:text-white underline ml-2 shrink-0">Show All</button>
+  <!-- =====================================================================
+       5. COURSES FILTER BAR
+       ===================================================================== -->
+  <section class="border-b border-slate-200 dark:border-borderSubtle bg-slate-50/70 dark:bg-black px-4 sm:px-8 py-2.5 flex items-center justify-between gap-3 overflow-x-auto">
+    <div class="flex items-center gap-3 overflow-x-auto">
+      <span class="text-[11px] font-semibold uppercase tracking-widest text-zinc-500 shrink-0">COURSES</span>
+      <div id="coursePillsContainer" class="flex items-center gap-2"></div>
+      <button id="btnClearFilter" class="hidden text-xs text-blue-400 hover:underline ml-1 shrink-0">Show All</button>
+    </div>
+    <div class="hidden xl:flex items-center gap-2 text-[11px] text-zinc-500 shrink-0">
+      <kbd class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">T</kbd> Today
+      <kbd class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">←/→</kbd> Week
+      <kbd class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">N</kbd> Add
+      <kbd class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">/</kbd> Search
+    </div>
   </section>
 
-  <!-- Main Schedule List -->
-  <main id="scheduleContainer" class="flex-1 divide-y divide-borderSubtle max-w-6xl w-full mx-auto">
+  <!-- =====================================================================
+       6. COLLAPSIBLE PRODUCTIVITY HUB (TASKS, EXAMS, ATTENDANCE)
+       ===================================================================== -->
+  <section id="productivityHub" class="hidden border-b border-slate-200 dark:border-borderSubtle bg-slate-100/60 dark:bg-zinc-950/90 px-4 sm:px-8 py-5 transition-all">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-5">
+      
+      <!-- Panel 1: Due This Week (Tasks & Assignments) -->
+      <div class="bg-white dark:bg-cardHighlight border border-slate-200 dark:border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+              <span>📌</span> Due This Week & Pending
+            </h3>
+            <span id="dueWeekCount" class="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-semibold">0</span>
+          </div>
+          <div id="globalTasksList" class="space-y-2 max-h-48 overflow-y-auto pr-1 text-xs"></div>
+        </div>
+        <p class="text-[11px] text-zinc-500 mt-3 pt-2 border-t border-slate-200 dark:border-zinc-800/80">
+          Tip: You can also add tasks directly inside any class card below.
+        </p>
+      </div>
+
+      <!-- Panel 2: Exam / Quiz Countdown Tracker -->
+      <div class="bg-white dark:bg-cardHighlight border border-slate-200 dark:border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+              <span>⏳</span> Exam & Quiz Tracker
+            </h3>
+            <button id="btnAddExam" class="text-xs px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium">+ Add Exam</button>
+          </div>
+          <!-- Quick Add Exam Inline Form -->
+          <form id="examForm" class="hidden mb-3 p-2.5 rounded-xl bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 space-y-2 text-xs">
+            <div class="grid grid-cols-2 gap-2">
+              <select id="examCourse" class="bg-white dark:bg-zinc-950 border border-zinc-700 rounded px-2 py-1 text-slate-900 dark:text-white"></select>
+              <input id="examDate" type="date" required class="bg-white dark:bg-zinc-950 border border-zinc-700 rounded px-2 py-1 text-slate-900 dark:text-white">
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <input id="examTitle" type="text" placeholder="Quiz 2 / Midterm" required class="col-span-2 bg-white dark:bg-zinc-950 border border-zinc-700 rounded px-2 py-1 text-slate-900 dark:text-white">
+              <input id="examRoom" type="text" placeholder="Room 402" class="bg-white dark:bg-zinc-950 border border-zinc-700 rounded px-2 py-1 text-slate-900 dark:text-white">
+            </div>
+            <div class="flex justify-end gap-2">
+              <button type="button" id="btnCancelExam" class="px-2 py-1 text-zinc-400">Cancel</button>
+              <button type="submit" class="px-3 py-1 rounded bg-blue-600 text-white font-medium">Save</button>
+            </div>
+          </form>
+          <div id="examsListContainer" class="space-y-2 max-h-48 overflow-y-auto pr-1 text-xs"></div>
+        </div>
+        <p class="text-[11px] text-zinc-500 mt-3 pt-2 border-t border-slate-200 dark:border-zinc-800/80">
+          Color urgency: <span class="text-rose-400">≤3d Urgent</span> · <span class="text-amber-400">≤7d Soon</span> · <span class="text-emerald-400">&gt;7d Safe</span>
+        </p>
+      </div>
+
+      <!-- Panel 3: Course Attendance Tracker -->
+      <div class="bg-white dark:bg-cardHighlight border border-slate-200 dark:border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+              <span>✅</span> Attendance (75% Target / 24 Classes)
+            </h3>
+          </div>
+          <div id="attendanceListContainer" class="space-y-2.5 max-h-52 overflow-y-auto pr-1 text-xs"></div>
+        </div>
+        <p class="text-[11px] text-zinc-500 mt-3 pt-2 border-t border-slate-200 dark:border-zinc-800/80">
+          Calculates how many classes you can still safely miss per course.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       7. MAIN SCHEDULE TIMELINE CONTAINER
+       ===================================================================== -->
+  <main id="scheduleContainer" class="flex-1 divide-y divide-slate-200 dark:divide-borderSubtle max-w-6xl w-full mx-auto">
     <!-- Dynamically populated by JS -->
   </main>
 
-  <!-- Add / Edit Class Modal -->
-  <div id="classModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-    <div class="bg-zinc-950 border border-zinc-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+  <!-- =====================================================================
+       8. MOBILE BOTTOM ACTION BAR (LARGER TAP TARGETS)
+       ===================================================================== -->
+  <nav class="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-lg border-t border-slate-200 dark:border-zinc-800 px-2 py-1.5 grid grid-cols-4 gap-1">
+    <button id="mobBtnToday" class="flex flex-col items-center justify-center py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-zinc-300 active:bg-zinc-800">
+      <span>📅</span>
+      <span class="text-[11px] mt-0.5">Today</span>
+    </button>
+    <button id="mobBtnHub" class="flex flex-col items-center justify-center py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-zinc-300 active:bg-zinc-800">
+      <span>📊</span>
+      <span class="text-[11px] mt-0.5">Hub</span>
+    </button>
+    <button id="mobBtnEdit" class="flex flex-col items-center justify-center py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-zinc-300 active:bg-zinc-800">
+      <span>✏️</span>
+      <span id="mobEditLabel" class="text-[11px] mt-0.5">Edit</span>
+    </button>
+    <button id="mobBtnAdd" class="flex flex-col items-center justify-center py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-md shadow-blue-600/30">
+      <span>＋</span>
+      <span class="text-[11px] mt-0.5">Add Class</span>
+    </button>
+  </nav>
+
+  <!-- =====================================================================
+       9. ADD / EDIT CLASS MODAL (WITH CONFLICT DETECTION & QUICK LINKS)
+       ===================================================================== -->
+  <div id="classModal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="modal-panel bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl max-h-[92vh] overflow-y-auto">
       <div class="flex items-center justify-between mb-4">
-        <h3 id="modalTitle" class="text-lg font-semibold text-white">Add Class Slot</h3>
-        <button id="btnCloseModal" class="text-zinc-500 hover:text-zinc-300">✕</button>
+        <h3 id="modalTitle" class="text-lg font-semibold text-slate-900 dark:text-white">Add Class Slot</h3>
+        <button id="btnCloseModal" class="p-1 text-zinc-500 hover:text-zinc-300">✕</button>
       </div>
-      <form id="classForm" class="space-y-4">
+
+      <!-- Live Conflict Detection Alert -->
+      <div id="conflictWarningBox" class="hidden mb-4 p-3 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs flex items-start gap-2">
+        <span>⚠️</span>
+        <span id="conflictWarningText">Time conflict detected!</span>
+      </div>
+
+      <form id="classForm" class="space-y-3.5">
         <input type="hidden" id="formClassId">
-        <div>
-          <label class="block text-xs text-zinc-400 mb-1">Day of Week</label>
-          <select id="formDayCode" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-            <option value="2">Tuesday (TUE)</option>
-            <option value="3">Wednesday (WED)</option>
-            <option value="4">Thursday (THU)</option>
-            <option value="5">Friday (FRI)</option>
-            <option value="6">Saturday (SAT)</option>
-            <option value="0">Sunday (SUN)</option>
-            <option value="1">Monday (MON)</option>
-          </select>
-        </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs text-zinc-400 mb-1">Course Code</label>
-            <select id="formCourseCode" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"></select>
+            <label class="block text-xs text-zinc-400 mb-1">Day of Week</label>
+            <select id="formDayCode" class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+              <option value="2">Tuesday (TUE)</option>
+              <option value="3">Wednesday (WED)</option>
+              <option value="4">Thursday (THU)</option>
+              <option value="5">Friday (FRI)</option>
+              <option value="6">Saturday (SAT)</option>
+              <option value="0">Sunday (SUN)</option>
+              <option value="1">Monday (MON)</option>
+            </select>
           </div>
           <div>
-            <label class="block text-xs text-zinc-400 mb-1">Time Slot</label>
-            <input type="text" id="formTime" placeholder="8:30 AM - 11 AM" required class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+            <label class="block text-xs text-zinc-400 mb-1">Course Code</label>
+            <select id="formCourseCode" class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"></select>
           </div>
         </div>
-        <div>
-          <label class="block text-xs text-zinc-400 mb-1">Course Title</label>
-          <input type="text" id="formTitle" placeholder="System Analysis and Design" required class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-        </div>
-        <div class="grid grid-cols-3 gap-3">
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Time Slot (e.g. 8:30 AM - 11 AM)</label>
+            <input type="text" id="formTime" placeholder="8:30 AM - 11 AM" required class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+          </div>
           <div>
             <label class="block text-xs text-zinc-400 mb-1">Room / Lab</label>
-            <input type="text" id="formRoom" placeholder="424 - Computer Lab" required class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-          </div>
-          <div>
-            <label class="block text-xs text-zinc-400 mb-1">Initials</label>
-            <input type="text" id="formInitials" placeholder="SS" maxlength="3" required class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-          </div>
-          <div>
-            <label class="block text-xs text-zinc-400 mb-1">Instructor</label>
-            <input type="text" id="formTeacher" placeholder="Sayem Shahad" required class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+            <input type="text" id="formRoom" placeholder="424 - Computer Lab" required class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
           </div>
         </div>
+
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1">Course Title</label>
+          <input type="text" id="formTitle" placeholder="System Analysis and Design" required class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Initials</label>
+            <input type="text" id="formInitials" placeholder="SS" maxlength="4" required class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+          </div>
+          <div class="col-span-2">
+            <label class="block text-xs text-zinc-400 mb-1">Instructor</label>
+            <input type="text" id="formTeacher" placeholder="Sayem Shahad" required class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+
+        <!-- Quick Links Section -->
+        <div class="pt-2 border-t border-slate-200 dark:border-zinc-800">
+          <label class="block text-xs font-medium text-zinc-400 mb-2">Quick Links (Optional URLs)</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <input type="url" id="formLinkClassroom" placeholder="Classroom URL" class="bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+            <input type="url" id="formLinkMeet" placeholder="Google Meet URL" class="bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+            <input type="url" id="formLinkDrive" placeholder="Drive Folder URL" class="bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+
         <div class="flex justify-end gap-2 pt-3">
           <button type="button" id="btnCancelModal" class="px-4 py-2 rounded-lg text-xs font-medium text-zinc-400 hover:bg-zinc-900">Cancel</button>
           <button type="submit" class="px-5 py-2 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white">Save Class</button>
@@ -172,8 +484,55 @@
     </div>
   </div>
 
+  <!-- =====================================================================
+       10. EXPORT / IMPORT / CALENDAR (.ICS) MODAL
+       ===================================================================== -->
+  <div id="toolsModal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="modal-panel bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Backup & Calendar Export</h3>
+        <button id="btnCloseTools" class="p-1 text-zinc-500 hover:text-zinc-300">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="p-3.5 rounded-xl bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 flex items-center justify-between">
+          <div>
+            <div class="font-semibold text-slate-900 dark:text-white">Export to Google Calendar (.ics)</div>
+            <div class="text-zinc-400 mt-0.5">Generates recurring weekly events for your routine</div>
+          </div>
+          <button id="btnExportICS" class="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold shrink-0">Download .ics</button>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 flex items-center justify-between">
+          <div>
+            <div class="font-semibold text-slate-900 dark:text-white">Export Full JSON Backup</div>
+            <div class="text-zinc-400 mt-0.5">Saves classes, notes, tasks, exams & attendance</div>
+          </div>
+          <button id="btnExportJSON" class="px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-semibold shrink-0">Export JSON</button>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 flex items-center justify-between">
+          <div>
+            <div class="font-semibold text-slate-900 dark:text-white">Restore from JSON Backup</div>
+            <div class="text-zinc-400 mt-0.5">Import a previously saved backup file</div>
+          </div>
+          <label class="px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-semibold cursor-pointer shrink-0">
+            Import JSON
+            <input type="file" id="inputImportJSON" accept=".json" class="hidden">
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // 1. Courses Metadata matching the screenshot colors
+    /* =====================================================================
+       11. DATA SCHEMA, MIGRATION & STATE MANAGEMENT
+       ===================================================================== */
+    const SCHEMA_VERSION = 3;
+    const STORAGE_KEY_CLASSES = 'cse_routine_v2'; // Preserved key for compatibility
+    const STORAGE_KEY_META = 'cse_routine_meta_v3';
+
     const COURSES = [
       { code: 'CSE 4165', color: '#2563eb', bg: 'rgba(37, 99, 235, 0.16)', text: '#60a5fa' },
       { code: 'CSE 2218', color: '#16a34a', bg: 'rgba(22, 163, 74, 0.16)', text: '#4ade80' },
@@ -183,7 +542,6 @@
       { code: 'SOC 2101', color: '#0891b2', bg: 'rgba(8, 145, 178, 0.16)', text: '#22d3ee' }
     ];
 
-    // 2. Default Weekly Routine (mapped by JS day-of-week: 0=SUN, 1=MON, 2=TUE, 3=WED, 6=SAT)
     const DEFAULT_CLASSES = [
       // Tuesday (2)
       { id: 'c1', dayOfWeek: 2, time: '8:30 AM - 11 AM', course: 'CSE 2218', title: 'Data Structure and Algorithms II Laboratory', room: '424 - Computer Lab', initials: 'SS', teacher: 'Sayem Shahad' },
@@ -201,35 +559,128 @@
       { id: 'c9', dayOfWeek: 1, time: '8:30 AM - 11 AM', course: 'CSE 4165', title: 'Web Programming', room: '427 - Computer Lab', initials: 'MH', teacher: 'Mahmudul Hasan' }
     ];
 
-    // Order of days in a week cycle starting Tuesday -> Monday (matching screenshot)
-    const WEEK_ORDER = [2, 3, 4, 5, 6, 0, 1];
     const DAY_NAMES = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
     const MONTH_TITLE = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    let routineData = JSON.parse(localStorage.getItem('cse_routine_v2')) || DEFAULT_CLASSES;
-    let weekOffset = 0; // 0 = Current Real-Time Week
-    let selectedCourse = null;
-    let isEditMode = false;
-
-    function saveRoutine() {
-      localStorage.setItem('cse_routine_v2', JSON.stringify(routineData));
+    // Migrate and normalize class items without breaking existing v2 array in localStorage
+    function loadAndMigrateRoutine() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_CLASSES);
+        let parsed = raw ? JSON.parse(raw) : null;
+        if (!Array.isArray(parsed) || parsed.length === 0) {
+          parsed = DEFAULT_CLASSES;
+        }
+        return parsed.map((item, idx) => ({
+          id: String(item.id || `c_${idx}_${Date.now()}`),
+          dayOfWeek: Number(item.dayOfWeek ?? 2),
+          time: String(item.time || '8:30 AM - 10:00 AM'),
+          course: String(item.course || 'CSE 4165'),
+          title: String(item.title || 'Untitled Course'),
+          room: String(item.room || 'TBA'),
+          initials: String(item.initials || 'NA').substring(0, 4).toUpperCase(),
+          teacher: String(item.teacher || 'TBA'),
+          notes: String(item.notes || ''),
+          links: {
+            classroom: String(item.links?.classroom || ''),
+            meet: String(item.links?.meet || ''),
+            drive: String(item.links?.drive || '')
+          },
+          tasks: Array.isArray(item.tasks) ? item.tasks : []
+        }));
+      } catch (e) {
+        console.warn('Migration fallback triggered:', e);
+        return JSON.parse(JSON.stringify(DEFAULT_CLASSES));
+      }
     }
 
-    // Calculate the Tuesday-to-Monday dates for the active week
+    function loadAndMigrateMeta() {
+      const defaultAttendance = {};
+      COURSES.forEach(c => {
+        defaultAttendance[c.code] = { present: 0, absent: 0, totalClasses: 24, targetPct: 75 };
+      });
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_META);
+        const parsed = raw ? JSON.parse(raw) : {};
+        return {
+          version: SCHEMA_VERSION,
+          theme: parsed.theme || 'dark',
+          notificationsEnabled: Boolean(parsed.notificationsEnabled),
+          completedMap: parsed.completedMap || {}, // key: `${classId}_${YYYY-MM-DD}`
+          exams: Array.isArray(parsed.exams) ? parsed.exams : [
+            { id: 'ex1', course: 'CSE 3411', title: 'Midterm Assessment', date: getFutureISO(5), room: '322' },
+            { id: 'ex2', course: 'CSE 3521', title: 'SQL Lab Quiz 1', date: getFutureISO(2), room: '402' }
+          ],
+          attendance: { ...defaultAttendance, ...(parsed.attendance || {}) }
+        };
+      } catch {
+        return {
+          version: SCHEMA_VERSION,
+          theme: 'dark',
+          notificationsEnabled: false,
+          completedMap: {},
+          exams: [],
+          attendance: defaultAttendance
+        };
+      }
+    }
+
+    function getFutureISO(daysAhead) {
+      const d = new Date();
+      d.setDate(d.getDate() + daysAhead);
+      return toISODate(d);
+    }
+
+    function toISODate(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    let routineData = loadAndMigrateRoutine();
+    let appMeta = loadAndMigrateMeta();
+    let weekOffset = 0;
+    let selectedCourse = null;
+    let searchQuery = '';
+    let isEditMode = false;
+    let openNotesSet = new Set(); // Tracks expanded notes/tasks drawers per class card
+    let lastRenderedDayISO = toISODate(new Date());
+    let sentNotifications = new Set();
+
+    function saveRoutine() {
+      localStorage.setItem(STORAGE_KEY_CLASSES, JSON.stringify(routineData));
+      renderProductivityHub();
+      updateLiveTick();
+    }
+
+    function saveMeta() {
+      localStorage.setItem(STORAGE_KEY_META, JSON.stringify(appMeta));
+    }
+
+    /* =====================================================================
+       12. SECURITY (HTML ESCAPING) & TIME PARSING UTILITIES
+       ===================================================================== */
+    function escapeHtml(unsafe) {
+      return String(unsafe ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
     function getCycleStartTuesday(baseDate, offsetWeeks = 0) {
       const d = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
-      const day = d.getDay(); // 0=Sun, 1=Mon, 2=Tue...
-      // Distance back to the most recent Tuesday
+      const day = d.getDay();
       const diffToTuesday = (day >= 2) ? (day - 2) : (day + 5);
       d.setDate(d.getDate() - diffToTuesday + (offsetWeeks * 7));
       return d;
     }
 
-    // Parse "8:30 AM - 11 AM" into minutes from midnight for live status detection
     function parseTimeRange(rangeStr) {
       try {
-        const parts = rangeStr.split('-').map(s => s.trim());
+        const parts = String(rangeStr).split('-').map(s => s.trim());
         if (parts.length !== 2) return null;
         const toMins = (t) => {
           const match = t.match(/(\d+)(?::(\d+))?\s*(AM|PM)/i);
@@ -243,10 +694,25 @@
         };
         const start = toMins(parts[0]);
         const end = toMins(parts[1]);
-        return (start !== null && end !== null) ? { start, end } : null;
+        return (start !== null && end !== null && end > start) ? { start, end } : null;
       } catch {
         return null;
       }
+    }
+
+    function formatMinsTo12H(totalMins) {
+      const h24 = Math.floor(totalMins / 60);
+      const m = totalMins % 60;
+      const ampm = h24 >= 12 ? 'PM' : 'AM';
+      const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
+      return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;
+    }
+
+    function formatDurationLeft(mins) {
+      if (mins <= 0) return '0m';
+      const h = Math.floor(mins / 60);
+      const m = mins % 60;
+      return h > 0 ? `${h}h ${m}m` : `${m}m`;
     }
 
     function isSameDate(d1, d2) {
@@ -255,26 +721,214 @@
              d1.getDate() === d2.getDate();
     }
 
+    // Detect overlapping classes on the same dayOfWeek
+    function findTimeConflict(dayOfWeek, timeStr, ignoreClassId = null) {
+      const candidate = parseTimeRange(timeStr);
+      if (!candidate) return null;
+      for (const cls of routineData) {
+        if (cls.id === ignoreClassId) continue;
+        if (Number(cls.dayOfWeek) !== Number(dayOfWeek)) continue;
+        const existing = parseTimeRange(cls.time);
+        if (!existing) continue;
+        if (candidate.start < existing.end && candidate.end > existing.start) {
+          return cls;
+        }
+      }
+      return null;
+    }
+
+    /* =====================================================================
+       13. LIVE TICK ENGINE (ZERO-FLICKER DOM UPDATES & NOTIFICATIONS)
+       ===================================================================== */
+    function updateLiveTick() {
+      const now = new Date();
+      const todayISO = toISODate(now);
+
+      // If midnight passed, re-render the schedule once without animation flicker
+      if (todayISO !== lastRenderedDayISO) {
+        lastRenderedDayISO = todayISO;
+        renderSchedule({ animate: false });
+      }
+
+      // 1. Update Header Clock
+      const clockText = document.getElementById('liveClockText');
+      if (clockText) {
+        clockText.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+      // 2. Update Today's Cards In-Place (Zero Re-render / Zero Flicker)
+      document.querySelectorAll('.class-card[data-class-id]').forEach(card => {
+        const clsId = card.dataset.classId;
+        const cardDateISO = card.dataset.dateIso;
+        const isCardToday = cardDateISO === todayISO;
+        const startMin = Number(card.dataset.startMin || -1);
+        const endMin = Number(card.dataset.endMin || -1);
+        const validRange = startMin >= 0 && endMin > startMin;
+
+        const manualDoneKey = `${clsId}_${cardDateISO}`;
+        const isManualDone = Boolean(appMeta.completedMap[manualDoneKey]);
+        const isTimeDone = isCardToday && validRange && currentMinutes > endMin;
+        const isLive = isCardToday && validRange && !isManualDone && currentMinutes >= startMin && currentMinutes <= endMin;
+        const isUpcomingToday = isCardToday && validRange && !isManualDone && currentMinutes < startMin;
+        const isDone = isManualDone || isTimeDone;
+
+        // Toggle card visual state
+        card.classList.toggle('ring-1', isLive);
+        card.classList.toggle('ring-emerald-500/70', isLive);
+        card.classList.toggle('opacity-55', isDone && !isLive);
+
+        // Badge container update
+        const badgeEl = card.querySelector('.js-status-badge');
+        if (badgeEl) {
+          if (isLive) {
+            badgeEl.className = 'js-status-badge px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse';
+            badgeEl.textContent = 'LIVE NOW';
+          } else if (isDone) {
+            badgeEl.className = 'js-status-badge px-2 py-0.5 rounded-full text-[10px] font-semibold bg-zinc-700/50 text-zinc-400 border border-zinc-600/40';
+            badgeEl.textContent = 'DONE';
+          } else if (isUpcomingToday) {
+            const minsUntil = startMin - currentMinutes;
+            badgeEl.className = minsUntil <= 60
+              ? 'js-status-badge px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40'
+              : 'js-status-badge px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-500/15 text-blue-300 border border-blue-500/30';
+            badgeEl.textContent = `Starts in ${formatDurationLeft(minsUntil)}`;
+          } else {
+            badgeEl.className = 'js-status-badge hidden';
+            badgeEl.textContent = '';
+          }
+        }
+
+        // Live Progress Bar Update
+        const progressWrap = card.querySelector('.js-live-progress-wrap');
+        if (progressWrap) {
+          if (isLive) {
+            const totalDuration = endMin - startMin;
+            const elapsed = Math.max(0, currentMinutes - startMin);
+            const pct = Math.min(100, Math.round((elapsed / totalDuration) * 100));
+            const minsLeft = Math.max(0, endMin - currentMinutes);
+            progressWrap.classList.remove('hidden');
+            const bar = progressWrap.querySelector('.js-live-progress-bar');
+            const label = progressWrap.querySelector('.js-live-time-left');
+            if (bar) bar.style.width = `${pct}%`;
+            if (label) label.textContent = `${minsLeft} min left (${pct}%)`;
+          } else {
+            progressWrap.classList.add('hidden');
+          }
+        }
+      });
+
+      // 3. Update Sticky "Next Class" Banner & Check 15-min Notifications
+      updateNextClassBannerAndNotifications(now, currentMinutes, todayISO);
+    }
+
+    function updateNextClassBannerAndNotifications(now, currentMinutes, todayISO) {
+      const todayDayOfWeek = now.getDay();
+      const todayClasses = routineData
+        .filter(c => Number(c.dayOfWeek) === todayDayOfWeek)
+        .map(c => ({ ...c, parsed: parseTimeRange(c.time) }))
+        .filter(c => c.parsed)
+        .sort((a, b) => a.parsed.start - b.parsed.start);
+
+      // Check 15-minute browser notifications for today's classes
+      if (appMeta.notificationsEnabled && 'Notification' in window && Notification.permission === 'granted') {
+        todayClasses.forEach(c => {
+          const minsUntil = c.parsed.start - currentMinutes;
+          const notifKey = `${c.id}_${todayISO}`;
+          if (minsUntil > 0 && minsUntil <= 15 && !sentNotifications.has(notifKey)) {
+            sentNotifications.add(notifKey);
+            new Notification(`Upcoming Class in ${minsUntil} min`, {
+              body: `${c.course}: ${c.title} — Room ${c.room}`,
+              tag: notifKey
+            });
+          }
+        });
+      }
+
+      // Determine active or next upcoming class (today or later in the week)
+      const activeNow = todayClasses.find(c => currentMinutes >= c.parsed.start && currentMinutes <= c.parsed.end);
+      const nextToday = todayClasses.find(c => currentMinutes < c.parsed.start);
+
+      const statusLabel = document.getElementById('bannerStatusLabel');
+      const courseInfo = document.getElementById('bannerCourseInfo');
+      const roomBadge = document.getElementById('bannerRoomBadge');
+      const countdownEl = document.getElementById('bannerCountdown');
+      const pulseDot = document.getElementById('bannerPulseDot');
+
+      if (activeNow) {
+        const left = activeNow.parsed.end - currentMinutes;
+        statusLabel.textContent = 'LIVE NOW';
+        statusLabel.className = 'font-bold uppercase tracking-wider text-emerald-400 shrink-0';
+        pulseDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0';
+        courseInfo.textContent = `${activeNow.course} · ${activeNow.title}`;
+        roomBadge.textContent = `📍 ${activeNow.room}`;
+        roomBadge.classList.remove('hidden');
+        countdownEl.textContent = `${left} min remaining`;
+      } else if (nextToday) {
+        const diff = nextToday.parsed.start - currentMinutes;
+        statusLabel.textContent = 'NEXT TODAY';
+        statusLabel.className = 'font-bold uppercase tracking-wider text-blue-300 shrink-0';
+        pulseDot.className = 'w-2 h-2 rounded-full bg-blue-400 animate-ping shrink-0';
+        courseInfo.textContent = `${nextToday.course} · ${nextToday.title}`;
+        roomBadge.textContent = `📍 ${nextToday.room}`;
+        roomBadge.classList.remove('hidden');
+        countdownEl.textContent = `Starts in ${formatDurationLeft(diff)}`;
+      } else {
+        // Find next class in the upcoming days
+        let foundNext = null;
+        for (let offset = 1; offset <= 7; offset++) {
+          const checkDay = (todayDayOfWeek + offset) % 7;
+          const matches = routineData
+            .filter(c => Number(c.dayOfWeek) === checkDay)
+            .map(c => ({ ...c, parsed: parseTimeRange(c.time) }))
+            .sort((a, b) => (a.parsed?.start || 0) - (b.parsed?.start || 0));
+          if (matches.length > 0) {
+            foundNext = { cls: matches[0], dayName: DAY_NAMES[checkDay] };
+            break;
+          }
+        }
+        pulseDot.className = 'w-2 h-2 rounded-full bg-zinc-400 shrink-0';
+        statusLabel.textContent = 'UP NEXT';
+        statusLabel.className = 'font-semibold uppercase tracking-wider text-zinc-400 shrink-0';
+        if (foundNext) {
+          courseInfo.textContent = `${foundNext.cls.course} · ${foundNext.cls.title}`;
+          roomBadge.textContent = `📍 ${foundNext.cls.room}`;
+          roomBadge.classList.remove('hidden');
+          countdownEl.textContent = `${foundNext.dayName} (${foundNext.cls.time.split('-')[0].trim()})`;
+        } else {
+          courseInfo.textContent = 'No upcoming classes found';
+          roomBadge.classList.add('hidden');
+          countdownEl.textContent = '';
+        }
+      }
+    }
+
+    /* =====================================================================
+       14. SCHEDULE RENDERER (GAP DETECTION, NOTES, TASKS, ANIMATIONS)
+       ===================================================================== */
     function renderCoursePills() {
       const container = document.getElementById('coursePillsContainer');
       const selectEl = document.getElementById('formCourseCode');
+      const examCourseSelect = document.getElementById('examCourse');
       container.innerHTML = '';
       selectEl.innerHTML = '';
+      if (examCourseSelect) examCourseSelect.innerHTML = '';
 
       COURSES.forEach(c => {
         const active = selectedCourse === c.code;
         const btn = document.createElement('button');
-        btn.className = `px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2 transition-all shrink-0 border ${
-          active ? 'ring-2 ring-white/40 scale-105' : ' border-transparent opacity-90 hover:opacity-100'
+        btn.className = `course-pill px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2 shrink-0 border ${
+          active ? 'ring-2 ring-blue-400 scale-105 shadow-md' : 'border-transparent opacity-85 hover:opacity-100'
         }`;
         btn.style.backgroundColor = c.bg;
         btn.style.color = c.text;
-        btn.innerHTML = `<span class="w-2 h-2 rounded-full" style="background-color:${c.color}"></span>${c.code}`;
+        btn.innerHTML = `<span class="w-2 h-2 rounded-full" style="background-color:${escapeHtml(c.color)}"></span>${escapeHtml(c.code)}`;
         btn.onclick = () => {
           selectedCourse = (selectedCourse === c.code) ? null : c.code;
           document.getElementById('btnClearFilter').classList.toggle('hidden', !selectedCourse);
           renderCoursePills();
-          renderSchedule();
+          renderSchedule({ animate: false });
         };
         container.appendChild(btn);
 
@@ -282,17 +936,24 @@
         opt.value = c.code;
         opt.textContent = c.code;
         selectEl.appendChild(opt);
+
+        if (examCourseSelect) {
+          const opt2 = document.createElement('option');
+          opt2.value = c.code;
+          opt2.textContent = c.code;
+          examCourseSelect.appendChild(opt2);
+        }
       });
     }
 
-    function renderSchedule() {
+    function renderSchedule(options = { animate: false, slideDir: null }) {
+      const { animate = false, slideDir = null } = options;
       const now = new Date();
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
       const startTuesday = getCycleStartTuesday(now, weekOffset);
       const endMonday = new Date(startTuesday);
       endMonday.setDate(startTuesday.getDate() + 6);
 
-      // Update Header Range (e.g., "Oct 27 – Nov 2, 2026")
+      // Update Header Range
       const sameMonth = startTuesday.getMonth() === endMonday.getMonth();
       const rangeText = sameMonth
         ? `${MONTH_TITLE[startTuesday.getMonth()]} ${startTuesday.getDate()} – ${endMonday.getDate()}, ${endMonday.getFullYear()}`
@@ -302,34 +963,65 @@
       const container = document.getElementById('scheduleContainer');
       container.innerHTML = '';
 
-      // Iterate through the 7 days of the Tuesday -> Monday cycle
+      if (slideDir === 'next') {
+        container.classList.remove('slide-prev', 'slide-next');
+        void container.offsetWidth;
+        container.classList.add('slide-next');
+      } else if (slideDir === 'prev') {
+        container.classList.remove('slide-prev', 'slide-next');
+        void container.offsetWidth;
+        container.classList.add('slide-prev');
+      }
+
+      let renderedRowIndex = 0;
+
       for (let i = 0; i < 7; i++) {
         const cellDate = new Date(startTuesday);
         cellDate.setDate(startTuesday.getDate() + i);
         const dayOfWeek = cellDate.getDay();
         const isToday = isSameDate(cellDate, now);
+        const dateISO = toISODate(cellDate);
 
-        // Filter classes for this weekday
         let dayClasses = routineData.filter(item => Number(item.dayOfWeek) === dayOfWeek);
+
         if (selectedCourse) {
           dayClasses = dayClasses.filter(item => item.course === selectedCourse);
         }
+        if (searchQuery.trim() !== '') {
+          const q = searchQuery.toLowerCase();
+          dayClasses = dayClasses.filter(item =>
+            item.course.toLowerCase().includes(q) ||
+            item.title.toLowerCase().includes(q) ||
+            item.teacher.toLowerCase().includes(q) ||
+            item.room.toLowerCase().includes(q)
+          );
+        }
 
-        // Only render days that have classes (or render Today even if empty so you always see Today)
+        // Sort chronologically by start time
+        dayClasses.sort((a, b) => {
+          const pa = parseTimeRange(a.time);
+          const pb = parseTimeRange(b.time);
+          return (pa ? pa.start : 9999) - (pb ? pb.start : 9999);
+        });
+
         if (dayClasses.length === 0 && !isToday) continue;
 
         const dayRow = document.createElement('div');
         dayRow.id = isToday ? 'todayRow' : '';
-        dayRow.className = `py-6 px-4 sm:px-8 flex flex-col sm:flex-row gap-4 sm:gap-8 items-start transition-colors animate-row`;
+        dayRow.className = `py-6 px-4 sm:px-8 flex flex-col sm:flex-row gap-4 sm:gap-8 items-start transition-colors ${animate ? 'animate-row' : ''}`;
+        if (animate) {
+          dayRow.style.animationDelay = `${renderedRowIndex * 50}ms`;
+        }
+        renderedRowIndex++;
 
         // Left Date Column
         const leftCol = document.createElement('div');
         leftCol.className = 'w-16 shrink-0 flex sm:flex-col items-baseline sm:items-center gap-2 sm:gap-0.5 text-center select-none';
         leftCol.innerHTML = `
-          <span class="text-[11px] font-semibold tracking-widest uppercase ${isToday ? 'text-blue-400' : 'text-zinc-400'}">${DAY_NAMES[dayOfWeek]}</span>
-          <span class="text-2xl sm:text-[26px] leading-tight font-bold ${isToday ? 'text-blue-400' : 'text-white'}">${cellDate.getDate()}</span>
-          <span class="text-[10px] font-medium tracking-widest uppercase text-zinc-500">${MONTH_NAMES[cellDate.getMonth()]}</span>
-          ${isToday ? '<span class="mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">TODAY</span>' : ''}
+          <span class="text-[11px] font-semibold tracking-widest uppercase ${isToday ? 'text-blue-400' : 'text-zinc-400'}">${escapeHtml(DAY_NAMES[dayOfWeek])}</span>
+          <span class="text-2xl sm:text-[26px] leading-tight font-bold ${isToday ? 'text-blue-400' : 'text-slate-900 dark:text-white'}">${escapeHtml(cellDate.getDate())}</span>
+          <span class="text-[10px] font-medium tracking-widest uppercase text-zinc-500">${escapeHtml(MONTH_NAMES[cellDate.getMonth()])}</span>
+          ${isToday ? '<span class="mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">TODAY</span>' : ''}
         `;
 
         // Right Classes Column
@@ -338,67 +1030,163 @@
 
         if (dayClasses.length === 0) {
           rightCol.innerHTML = `
-            <div class="rounded-2xl bg-cardHighlight/60 border border-zinc-800/80 px-5 py-4 text-sm text-zinc-400">
-              No classes scheduled for today. Enjoy your free day!
+            <div class="rounded-2xl bg-slate-100 dark:bg-cardHighlight/60 border border-slate-200 dark:border-zinc-800/80 px-5 py-4 text-sm text-zinc-400">
+              No matching classes scheduled for this day.
             </div>
           `;
         } else {
-          dayClasses.forEach(cls => {
+          dayClasses.forEach((cls, idx) => {
             const courseObj = COURSES.find(c => c.code === cls.course) || COURSES[0];
             const parsedTime = parseTimeRange(cls.time);
-            const isLiveNow = isToday && parsedTime && currentMinutes >= parsedTime.start && currentMinutes <= parsedTime.end;
-            const isUpNext = isToday && parsedTime && currentMinutes < parsedTime.start && (parsedTime.start - currentMinutes <= 60);
+            const doneKey = `${cls.id}_${dateISO}`;
+            const isManualDone = Boolean(appMeta.completedMap[doneKey]);
+            const isDrawerOpen = openNotesSet.has(cls.id);
+            const pendingTasksCount = (cls.tasks || []).filter(t => !t.done).length;
 
             const card = document.createElement('div');
-            // Today's classes automatically get the dark rounded highlight card from the screenshot
-            card.className = `group relative flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-8 px-4 py-3.5 rounded-2xl transition-all ${
+            card.dataset.classId = cls.id;
+            card.dataset.dateIso = dateISO;
+            card.dataset.startMin = parsedTime ? parsedTime.start : -1;
+            card.dataset.endMin = parsedTime ? parsedTime.end : -1;
+            card.style.setProperty('--course-glow', courseObj.bg.replace('0.16', '0.45'));
+
+            card.className = `class-card group relative flex flex-col px-4 py-3.5 rounded-2xl border ${
               isToday
-                ? 'bg-cardHighlight border border-zinc-800/90 shadow-lg'
-                : 'hover:bg-zinc-900/50 border border-transparent'
-            } ${isLiveNow ? 'ring-1 ring-emerald-500/60' : ''}`;
+                ? 'bg-white dark:bg-cardHighlight border-slate-200 dark:border-zinc-800/90 shadow-lg'
+                : 'bg-white/60 dark:bg-transparent hover:bg-slate-100 dark:hover:bg-zinc-900/50 border-slate-200/60 dark:border-transparent'
+            }`;
+
+            // Build Quick Links HTML safely
+            const hasLinks = cls.links && (cls.links.classroom || cls.links.meet || cls.links.drive);
+            const linksHtml = hasLinks ? `
+              <div class="flex items-center gap-1.5 ml-auto">
+                ${cls.links.classroom ? `<a href="${escapeHtml(cls.links.classroom)}" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-[10px] text-zinc-200 font-medium">📚 Classroom</a>` : ''}
+                ${cls.links.meet ? `<a href="${escapeHtml(cls.links.meet)}" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-emerald-950/80 hover:bg-emerald-900 text-[10px] text-emerald-300 border border-emerald-700/40 font-medium">📹 Meet</a>` : ''}
+                ${cls.links.drive ? `<a href="${escapeHtml(cls.links.drive)}" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-blue-950/80 hover:bg-blue-900 text-[10px] text-blue-300 border border-blue-700/40 font-medium">📁 Drive</a>` : ''}
+              </div>
+            ` : '';
 
             card.innerHTML = `
-              <!-- Time Column -->
-              <div class="w-40 shrink-0 text-xs sm:text-[13px] font-medium text-zinc-400 flex items-center gap-2">
-                <span data-field="time" data-id="${cls.id}" ${isEditMode ? 'contenteditable="true"' : ''}>${cls.time}</span>
-              </div>
+              <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+                <!-- Left: Mark Done Checkbox + Time Column -->
+                <div class="w-44 shrink-0 flex items-center gap-2.5 text-xs sm:text-[13px] font-medium text-zinc-400">
+                  <button type="button" onclick="toggleClassDone('${escapeHtml(cls.id)}', '${escapeHtml(dateISO)}', this)"
+                    class="relative w-5 h-5 rounded-md border ${isManualDone ? 'bg-emerald-500 border-emerald-500 text-black' : 'border-zinc-700 hover:border-zinc-500 text-transparent'} flex items-center justify-center transition-all shrink-0"
+                    title="Mark class done for this day">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                  </button>
+                  <span data-field="time" data-id="${escapeHtml(cls.id)}" ${isEditMode ? 'contenteditable="true"' : ''}>${escapeHtml(cls.time)}</span>
+                </div>
 
-              <!-- Course Details -->
-              <div class="flex-1 flex items-start gap-3.5">
-                <span class="w-3 h-3 rounded-full mt-1.5 shrink-0 shadow-sm" style="background-color: ${courseObj.color}"></span>
-                <div class="space-y-1 flex-1">
-                  <div class="flex flex-wrap items-center gap-2">
-                    <h2 data-field="title" data-id="${cls.id}" ${isEditMode ? 'contenteditable="true"' : ''} class="text-[15px] font-medium text-zinc-100 leading-snug">
-                      ${cls.title}
-                    </h2>
-                    ${isLiveNow ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">LIVE NOW</span>' : ''}
-                    ${isUpNext ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40">SOON</span>' : ''}
-                  </div>
-                  
-                  <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-400">
-                    <span data-field="room" data-id="${cls.id}" ${isEditMode ? 'contenteditable="true"' : ''}>${cls.room}</span>
-                    <span>·</span>
-                    <span class="inline-flex items-center gap-1.5">
-                      <span class="w-5 h-5 rounded-full bg-zinc-800 text-zinc-300 text-[10px] font-bold inline-flex items-center justify-center border border-zinc-700">
-                        ${cls.initials}
+                <!-- Middle: Course Dot, Title, Badges, Room & Teacher -->
+                <div class="flex-1 flex items-start gap-3.5 min-w-0">
+                  <span class="w-3 h-3 rounded-full mt-1.5 shrink-0 shadow-sm" style="background-color: ${escapeHtml(courseObj.color)}"></span>
+                  <div class="space-y-1 flex-1 min-w-0">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md" style="background-color:${escapeHtml(courseObj.bg)}; color:${escapeHtml(courseObj.text)}">${escapeHtml(cls.course)}</span>
+                      <h2 data-field="title" data-id="${escapeHtml(cls.id)}" ${isEditMode ? 'contenteditable="true"' : ''} class="text-[15px] font-medium text-slate-900 dark:text-zinc-100 leading-snug">
+                        ${escapeHtml(cls.title)}
+                      </h2>
+                      <span class="js-status-badge hidden"></span>
+                    </div>
+                    
+                    <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-400">
+                      <span data-field="room" data-id="${escapeHtml(cls.id)}" ${isEditMode ? 'contenteditable="true"' : ''}>${escapeHtml(cls.room)}</span>
+                      <span>·</span>
+                      <span class="inline-flex items-center gap-1.5">
+                        <span class="w-5 h-5 rounded-full bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 text-[10px] font-bold inline-flex items-center justify-center border border-slate-300 dark:border-zinc-700">
+                          ${escapeHtml(cls.initials)}
+                        </span>
+                        <span data-field="teacher" data-id="${escapeHtml(cls.id)}" ${isEditMode ? 'contenteditable="true"' : ''}>${escapeHtml(cls.teacher)}</span>
                       </span>
-                      <span data-field="teacher" data-id="${cls.id}" ${isEditMode ? 'contenteditable="true"' : ''}>${cls.teacher}</span>
-                    </span>
+                      ${linksHtml}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right: Notes/Tasks Toggle + Edit/Delete Controls -->
+                <div class="flex items-center gap-1.5 self-end sm:self-center shrink-0">
+                  <button type="button" onclick="toggleClassDrawer('${escapeHtml(cls.id)}')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-zinc-800/70 hover:bg-slate-200 dark:hover:bg-zinc-800 text-xs text-zinc-400 hover:text-white flex items-center gap-1 transition-colors" title="Notes & Tasks">
+                    <span>📝</span>
+                    ${pendingTasksCount > 0 ? `<span class="text-[10px] font-bold text-blue-400">${pendingTasksCount}</span>` : ''}
+                  </button>
+                  <div class="${isEditMode ? 'flex' : 'hidden group-hover:flex'} items-center gap-1">
+                    <button type="button" onclick="openEditModal('${escapeHtml(cls.id)}')" class="p-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300" title="Edit Class">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                    </button>
+                    <button type="button" onclick="deleteClass('${escapeHtml(cls.id)}', this)" class="p-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900 text-rose-300" title="Delete Class">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
                   </div>
                 </div>
               </div>
 
-              <!-- Edit / Delete Controls -->
-              <div class="${isEditMode ? 'flex' : 'hidden group-hover:flex'} items-center gap-1.5 self-end sm:self-center">
-                <button onclick="openEditModal('${cls.id}')" class="p-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300" title="Edit Class">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                </button>
-                <button onclick="deleteClass('${cls.id}')" class="p-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900 text-rose-300" title="Delete Class">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                </button>
+              <!-- Animated Live Class Progress Bar (Visible only when class is LIVE) -->
+              <div class="js-live-progress-wrap hidden mt-3 pt-2 border-t border-zinc-800/80">
+                <div class="flex items-center justify-between text-[11px] text-emerald-400 mb-1">
+                  <span class="font-medium">Class in progress</span>
+                  <span class="js-live-time-left font-mono"></span>
+                </div>
+                <div class="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                  <div class="js-live-progress-bar h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <!-- Expandable Quick Notes & Per-Class Tasks Drawer -->
+              <div id="drawer_${escapeHtml(cls.id)}" class="${isDrawerOpen ? 'block' : 'hidden'} mt-3 pt-3 border-t border-slate-200 dark:border-zinc-800/80 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                <div>
+                  <label class="block text-[11px] font-medium text-zinc-400 mb-1">Quick Class Notes</label>
+                  <textarea rows="2" placeholder="Jot down topics, room changes, or syllabus notes..."
+                    onblur="saveClassNote('${escapeHtml(cls.id)}', this.value)"
+                    class="w-full bg-slate-100 dark:bg-zinc-900/90 border border-slate-300 dark:border-zinc-800 rounded-lg p-2 text-xs text-slate-900 dark:text-zinc-200 focus:outline-none focus:border-blue-500">${escapeHtml(cls.notes || '')}</textarea>
+                </div>
+                <div>
+                  <label class="block text-[11px] font-medium text-zinc-400 mb-1">Assignments & Tasks</label>
+                  <div class="space-y-1.5 mb-2 max-h-28 overflow-y-auto">
+                    ${(cls.tasks || []).map(t => `
+                      <div class="flex items-center justify-between gap-2 bg-slate-100 dark:bg-zinc-900/70 px-2.5 py-1 rounded-md">
+                        <label class="flex items-center gap-2 cursor-pointer truncate">
+                          <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTaskDone('${escapeHtml(cls.id)}', '${escapeHtml(t.id)}')" class="rounded border-zinc-700">
+                          <span class="${t.done ? 'line-through text-zinc-500' : 'text-slate-800 dark:text-zinc-200'} truncate">${escapeHtml(t.title)}</span>
+                        </label>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                          ${t.dueDate ? `<span class="text-[10px] text-amber-400">${escapeHtml(t.dueDate)}</span>` : ''}
+                          <button type="button" onclick="deleteTask('${escapeHtml(cls.id)}', '${escapeHtml(t.id)}')" class="text-zinc-500 hover:text-rose-400">✕</button>
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                  <div class="flex gap-1.5">
+                    <input type="text" id="newTaskTitle_${escapeHtml(cls.id)}" placeholder="New assignment..." class="flex-1 bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-2 py-1 text-xs text-slate-900 dark:text-white">
+                    <input type="date" id="newTaskDue_${escapeHtml(cls.id)}" class="bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-2 py-1 text-xs text-slate-900 dark:text-white">
+                    <button type="button" onclick="addClassTask('${escapeHtml(cls.id)}')" class="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium">+</button>
+                  </div>
+                </div>
               </div>
             `;
+
             rightCol.appendChild(card);
+
+            // Free-Gap Detection Between Consecutive Classes on the Same Day
+            if (idx < dayClasses.length - 1) {
+              const nextCls = dayClasses[idx + 1];
+              const nextParsed = parseTimeRange(nextCls.time);
+              if (parsedTime && nextParsed && nextParsed.start - parsedTime.end >= 15) {
+                const gapMins = nextParsed.start - parsedTime.end;
+                const gapBar = document.createElement('div');
+                gapBar.className = 'flex items-center justify-between px-4 py-2 rounded-xl border border-dashed border-slate-300 dark:border-zinc-800/90 bg-slate-100/40 dark:bg-zinc-950/50 text-xs text-zinc-400';
+                gapBar.innerHTML = `
+                  <span class="flex items-center gap-2">
+                    <span>☕</span>
+                    <span>Free gap: <strong class="text-zinc-300">${formatDurationLeft(gapMins)}</strong> (${formatMinsTo12H(parsedTime.end)} – ${formatMinsTo12H(nextParsed.start)})</span>
+                  </span>
+                  <button type="button" onclick="startPomodoro(25)" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 font-medium transition-colors">
+                    🍅 Start 25-min Pomodoro
+                  </button>
+                `;
+                rightCol.appendChild(gapBar);
+              }
+            }
           });
         }
 
@@ -407,7 +1195,7 @@
         container.appendChild(dayRow);
       }
 
-      // Attach inline editing listeners
+      // Bind inline editing blur handlers safely
       if (isEditMode) {
         document.querySelectorAll('[contenteditable="true"]').forEach(el => {
           el.addEventListener('blur', (e) => {
@@ -421,20 +1209,326 @@
           });
         });
       }
+
+      // Immediately sync live badges & progress bars without re-triggering animations
+      updateLiveTick();
     }
 
-    // Live Clock & Automatic Roll-Over Check
-    function updateLiveClock() {
-      const now = new Date();
-      const clockText = document.getElementById('liveClockText');
-      if (clockText) {
-        clockText.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    /* =====================================================================
+       15. INTERACTIVE ACTIONS (CONFETTI DONE, NOTES, TASKS, POMODORO)
+       ===================================================================== */
+    window.toggleClassDone = function(classId, dateISO, btnEl) {
+      const key = `${classId}_${dateISO}`;
+      const isNowDone = !appMeta.completedMap[key];
+      if (isNowDone) {
+        appMeta.completedMap[key] = true;
+        spawnConfettiBurst(btnEl);
+      } else {
+        delete appMeta.completedMap[key];
+      }
+      saveMeta();
+      renderSchedule({ animate: false });
+    };
+
+    function spawnConfettiBurst(targetBtn) {
+      targetBtn.classList.add('burst-active');
+      const colors = ['#34d399', '#60a5fa', '#f472b6', '#fbbf24', '#a78bfa'];
+      for (let i = 0; i < 8; i++) {
+        const dot = document.createElement('span');
+        dot.className = 'confetti-dot';
+        const angle = (i / 8) * Math.PI * 2;
+        const dist = 16 + Math.random() * 10;
+        dot.style.setProperty('--tx', `${Math.cos(angle) * dist}px`);
+        dot.style.setProperty('--ty', `${Math.sin(angle) * dist}px`);
+        dot.style.backgroundColor = colors[i % colors.length];
+        targetBtn.appendChild(dot);
+        setTimeout(() => dot.remove(), 600);
       }
     }
 
-    // Modal & Controls Logic
-    const modal = document.getElementById('classModal');
+    window.toggleClassDrawer = function(classId) {
+      if (openNotesSet.has(classId)) {
+        openNotesSet.delete(classId);
+      } else {
+        openNotesSet.add(classId);
+      }
+      const drawer = document.getElementById(`drawer_${classId}`);
+      if (drawer) drawer.classList.toggle('hidden');
+    };
+
+    window.saveClassNote = function(classId, text) {
+      const item = routineData.find(x => x.id === classId);
+      if (item) {
+        item.notes = text.trim();
+        saveRoutine();
+      }
+    };
+
+    window.addClassTask = function(classId) {
+      const titleInput = document.getElementById(`newTaskTitle_${classId}`);
+      const dueInput = document.getElementById(`newTaskDue_${classId}`);
+      if (!titleInput || !titleInput.value.trim()) return;
+      const item = routineData.find(x => x.id === classId);
+      if (!item) return;
+      item.tasks = item.tasks || [];
+      item.tasks.push({
+        id: 't_' + Date.now(),
+        title: titleInput.value.trim(),
+        dueDate: dueInput ? dueInput.value : '',
+        done: false
+      });
+      openNotesSet.add(classId);
+      saveRoutine();
+      renderSchedule({ animate: false });
+    };
+
+    window.toggleTaskDone = function(classId, taskId) {
+      const item = routineData.find(x => x.id === classId);
+      if (!item || !item.tasks) return;
+      const t = item.tasks.find(x => x.id === taskId);
+      if (t) t.done = !t.done;
+      saveRoutine();
+      renderSchedule({ animate: false });
+    };
+
+    window.deleteTask = function(classId, taskId) {
+      const item = routineData.find(x => x.id === classId);
+      if (!item || !item.tasks) return;
+      item.tasks = item.tasks.filter(x => x.id !== taskId);
+      saveRoutine();
+      renderSchedule({ animate: false });
+    };
+
+    // Pomodoro Timer Engine
+    let pomoSecondsLeft = 25 * 60;
+    let pomoInterval = null;
+    let pomoRunning = false;
+
+    window.startPomodoro = function(minutes = 25) {
+      pomoSecondsLeft = minutes * 60;
+      pomoRunning = true;
+      document.getElementById('pomoWidget').classList.remove('hidden');
+      document.getElementById('pomoWidget').classList.add(' inline-flex');
+      document.getElementById('btnPomoToggle').textContent = 'Pause';
+      updatePomoDisplay();
+      if (pomoInterval) clearInterval(pomoInterval);
+      pomoInterval = setInterval(() => {
+        if (!pomoRunning) return;
+        pomoSecondsLeft--;
+        updatePomoDisplay();
+        if (pomoSecondsLeft <= 0) {
+          clearInterval(pomoInterval);
+          pomoRunning = false;
+          if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification('Pomodoro Complete! 🍅', { body: 'Great focus session! Take a 5-minute break.' });
+          } else {
+            alert('Pomodoro Complete! 🍅 Take a 5-minute break.');
+          }
+        }
+      }, 1000);
+    };
+
+    function updatePomoDisplay() {
+      const m = Math.floor(pomoSecondsLeft / 60);
+      const s = pomoSecondsLeft % 60;
+      document.getElementById('pomoTimeDisplay').textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    document.getElementById('btnPomoToggle').onclick = () => {
+      pomoRunning = !pomoRunning;
+      document.getElementById('btnPomoToggle').textContent = pomoRunning ? 'Pause' : 'Resume';
+    };
+
+    document.getElementById('btnPomoStop').onclick = () => {
+      clearInterval(pomoInterval);
+      pomoRunning = false;
+      document.getElementById('pomoWidget').classList.add('hidden');
+    };
+
+    /* =====================================================================
+       16. PRODUCTIVITY HUB RENDERER (DUE THIS WEEK, EXAMS, ATTENDANCE)
+       ===================================================================== */
+    function renderProductivityHub() {
+      const now = new Date();
+      const todayISO = toISODate(now);
+
+      // 1. Render Global Pending Tasks
+      const allTasks = [];
+      routineData.forEach(cls => {
+        (cls.tasks || []).forEach(t => {
+          if (!t.done) {
+            allTasks.push({ ...t, course: cls.course, classId: cls.id });
+          }
+        });
+      });
+      allTasks.sort((a, b) => (a.dueDate || '9999').localeCompare(b.dueDate || '9999'));
+
+      document.getElementById('dueWeekCount').textContent = allTasks.length;
+      document.getElementById('hubBadgeCount').textContent = allTasks.length + (appMeta.exams || []).length;
+
+      const tasksContainer = document.getElementById('globalTasksList');
+      if (allTasks.length === 0) {
+        tasksContainer.innerHTML = `<div class="text-zinc-500 py-4 text-center">No pending assignments! 🎉</div>`;
+      } else {
+        tasksContainer.innerHTML = allTasks.map(t => `
+          <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-slate-100 dark:bg-zinc-900/90 border border-slate-200 dark:border-zinc-800">
+            <label class="flex items-center gap-2 cursor-pointer truncate">
+              <input type="checkbox" onchange="toggleTaskDone('${escapeHtml(t.classId)}', '${escapeHtml(t.id)}')" class="rounded">
+              <span class="font-semibold text-blue-400 shrink-0">${escapeHtml(t.course)}</span>
+              <span class="text-slate-800 dark:text-zinc-200 truncate">${escapeHtml(t.title)}</span>
+            </label>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 shrink-0">${escapeHtml(t.dueDate || 'No date')}</span>
+          </div>
+        `).join('');
+      }
+
+      // 2. Render Exam / Quiz Countdown Tracker
+      const examsContainer = document.getElementById('examsListContainer');
+      const exams = [...(appMeta.exams || [])].sort((a, b) => a.date.localeCompare(b.date));
+      if (exams.length === 0) {
+        examsContainer.innerHTML = `<div class="text-zinc-500 py-4 text-center">No upcoming exams tracked.</div>`;
+      } else {
+        examsContainer.innerHTML = exams.map(ex => {
+          const examDate = new Date(ex.date + 'T00:00:00');
+          const todayMidnight = new Date(todayISO + 'T00:00:00');
+          const diffDays = Math.round((examDate - todayMidnight) / (1000 * 60 * 60 * 24));
+          let badgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+          let label = `${diffDays}d left`;
+          if (diffDays < 0) {
+            badgeClass = 'bg-zinc-700/40 text-zinc-400 border-zinc-600/30';
+            label = 'Passed';
+          } else if (diffDays === 0) {
+            badgeClass = 'bg-rose-500/25 text-rose-300 border-rose-500/50 animate-pulse';
+            label = 'TODAY!';
+          } else if (diffDays <= 3) {
+            badgeClass = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+          } else if (diffDays <= 7) {
+            badgeClass = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+          }
+
+          return `
+            <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-slate-100 dark:bg-zinc-900/90 border border-slate-200 dark:border-zinc-800">
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="font-semibold text-slate-900 dark:text-white">${escapeHtml(ex.course)}</span>
+                  <span class="text-slate-700 dark:text-zinc-300 truncate">${escapeHtml(ex.title)}</span>
+                </div>
+                <div class="text-[10px] text-zinc-500">${escapeHtml(ex.date)} ${ex.room ? `· Room ${escapeHtml(ex.room)}` : ''}</div>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border ${badgeClass}">${escapeHtml(label)}</span>
+                <button type="button" onclick="deleteExam('${escapeHtml(ex.id)}')" class="text-zinc-500 hover:text-rose-400">✕</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 3. Render Attendance Tracker per Course
+      const attContainer = document.getElementById('attendanceListContainer');
+      attContainer.innerHTML = COURSES.map(c => {
+        const rec = appMeta.attendance[c.code] || { present: 0, absent: 0, totalClasses: 24, targetPct: 75 };
+        const conducted = rec.present + rec.absent;
+        const pct = conducted > 0 ? Math.round((rec.present / conducted) * 100) : 100;
+        const maxAllowedMisses = Math.floor(rec.totalClasses * ((100 - rec.targetPct) / 100));
+        const canStillMiss = Math.max(0, maxAllowedMisses - rec.absent);
+
+        return `
+          <div class="p-2 rounded-xl bg-slate-100 dark:bg-zinc-900/90 border border-slate-200 dark:border-zinc-800 flex items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full" style="background-color:${escapeHtml(c.color)}"></span>
+                <span class="font-semibold text-slate-900 dark:text-white">${escapeHtml(c.code)}</span>
+                <span class="text-[11px] font-bold ${pct >= 75 ? 'text-emerald-400' : 'text-rose-400'}">${pct}% (${rec.present}/${conducted})</span>
+              </div>
+              <div class="text-[10px] text-zinc-400 mt-0.5">
+                ${rec.absent > maxAllowedMisses
+                  ? `<span class="text-rose-400">⚠️ Exceeded safe misses (${rec.absent}/${maxAllowedMisses})</span>`
+                  : `Can safely miss: <strong class="text-zinc-200">${canStillMiss}</strong> more`}
+              </div>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+              <button type="button" onclick="markAttendance('${escapeHtml(c.code)}', 'present')" class="px-2 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 font-semibold" title="Mark Present">+P</button>
+              <button type="button" onclick="markAttendance('${escapeHtml(c.code)}', 'absent')" class="px-2 py-1 rounded bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 font-semibold" title="Mark Absent">+A</button>
+              <button type="button" onclick="markAttendance('${escapeHtml(c.code)}', 'reset')" class="px-1.5 py-1 rounded text-zinc-500 hover:text-zinc-300" title="Reset Course Attendance">↺</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.markAttendance = function(courseCode, action) {
+      if (!appMeta.attendance[courseCode]) {
+        appMeta.attendance[courseCode] = { present: 0, absent: 0, totalClasses: 24, targetPct: 75 };
+      }
+      if (action === 'present') appMeta.attendance[courseCode].present++;
+      else if (action === 'absent') appMeta.attendance[courseCode].absent++;
+      else if (action === 'reset') {
+        appMeta.attendance[courseCode].present = 0;
+        appMeta.attendance[courseCode].absent = 0;
+      }
+      saveMeta();
+      renderProductivityHub();
+    };
+
+    document.getElementById('btnAddExam').onclick = () => {
+      document.getElementById('examForm').classList.toggle('hidden');
+    };
+    document.getElementById('btnCancelExam').onclick = () => {
+      document.getElementById('examForm').classList.add('hidden');
+    };
+    document.getElementById('examForm').onsubmit = (e) => {
+      e.preventDefault();
+      appMeta.exams.push({
+        id: 'ex_' + Date.now(),
+        course: document.getElementById('examCourse').value,
+        date: document.getElementById('examDate').value,
+        title: document.getElementById('examTitle').value.trim(),
+        room: document.getElementById('examRoom').value.trim()
+      });
+      saveMeta();
+      e.target.reset();
+      e.target.classList.add('hidden');
+      renderProductivityHub();
+    };
+
+    window.deleteExam = function(examId) {
+      appMeta.exams = (appMeta.exams || []).filter(x => x.id !== examId);
+      saveMeta();
+      renderProductivityHub();
+    };
+
+    /* =====================================================================
+       17. MODAL CONTROLS, TIME CONFLICT CHECK & SMOOTH DELETE
+       ===================================================================== */
+    const classModal = document.getElementById('classModal');
     const classForm = document.getElementById('classForm');
+
+    function openModalEl(modalEl) {
+      modalEl.classList.add('open');
+    }
+    function closeModalEl(modalEl) {
+      modalEl.classList.remove('open');
+    }
+
+    function checkModalConflictLive() {
+      const id = document.getElementById('formClassId').value || null;
+      const day = document.getElementById('formDayCode').value;
+      const time = document.getElementById('formTime').value;
+      const conflict = findTimeConflict(day, time, id);
+      const box = document.getElementById('conflictWarningBox');
+      const txt = document.getElementById('conflictWarningText');
+      if (conflict) {
+        box.classList.remove('hidden');
+        txt.textContent = `Time conflict on ${DAY_NAMES[day]} with ${conflict.course} (${conflict.time})!`;
+      } else {
+        box.classList.add('hidden');
+      }
+      return conflict;
+    }
+
+    document.getElementById('formDayCode').addEventListener('change', checkModalConflictLive);
+    document.getElementById('formTime').addEventListener('input', checkModalConflictLive);
 
     window.openEditModal = function(id) {
       const cls = routineData.find(x => x.id === id);
@@ -448,37 +1542,55 @@
       document.getElementById('formRoom').value = cls.room;
       document.getElementById('formInitials').value = cls.initials;
       document.getElementById('formTeacher').value = cls.teacher;
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      document.getElementById('formLinkClassroom').value = cls.links?.classroom || '';
+      document.getElementById('formLinkMeet').value = cls.links?.meet || '';
+      document.getElementById('formLinkDrive').value = cls.links?.drive || '';
+      checkModalConflictLive();
+      openModalEl(classModal);
     };
 
-    window.deleteClass = function(id) {
-      if (confirm('Remove this class from your weekly routine?')) {
+    window.deleteClass = function(id, btnEl) {
+      if (!confirm('Remove this class from your weekly routine?')) return;
+      const card = btnEl ? btnEl.closest('.class-card') : null;
+      if (card) {
+        card.style.maxHeight = card.offsetHeight + 'px';
+        void card.offsetWidth;
+        card.classList.add('card-collapsing');
+        setTimeout(() => {
+          routineData = routineData.filter(x => x.id !== id);
+          saveRoutine();
+          renderSchedule({ animate: false });
+        }, 280);
+      } else {
         routineData = routineData.filter(x => x.id !== id);
         saveRoutine();
-        renderSchedule();
+        renderSchedule({ animate: false });
       }
     };
 
-    document.getElementById('btnAddClass').onclick = () => {
+    function triggerAddClassModal() {
       document.getElementById('modalTitle').textContent = 'Add Class Slot';
       classForm.reset();
       document.getElementById('formClassId').value = '';
       document.getElementById('formDayCode').value = new Date().getDay();
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    };
+      document.getElementById('conflictWarningBox').classList.add('hidden');
+      openModalEl(classModal);
+    }
 
-    const closeModal = () => {
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    };
-    document.getElementById('btnCloseModal').onclick = closeModal;
-    document.getElementById('btnCancelModal').onclick = closeModal;
+    document.getElementById('btnAddClass').onclick = triggerAddClassModal;
+    document.getElementById('mobBtnAdd').onclick = triggerAddClassModal;
+    document.getElementById('btnCloseModal').onclick = () => closeModalEl(classModal);
+    document.getElementById('btnCancelModal').onclick = () => closeModalEl(classModal);
 
     classForm.onsubmit = (e) => {
       e.preventDefault();
+      const conflict = checkModalConflictLive();
+      if (conflict && !confirm(`This slot overlaps with ${conflict.course} (${conflict.time}). Save anyway?`)) {
+        return;
+      }
       const id = document.getElementById('formClassId').value;
+      const existing = routineData.find(x => x.id === id);
+
       const newEntry = {
         id: id || 'c_' + Date.now(),
         dayOfWeek: Number(document.getElementById('formDayCode').value),
@@ -487,7 +1599,14 @@
         title: document.getElementById('formTitle').value.trim(),
         room: document.getElementById('formRoom').value.trim(),
         initials: document.getElementById('formInitials').value.trim().toUpperCase(),
-        teacher: document.getElementById('formTeacher').value.trim()
+        teacher: document.getElementById('formTeacher').value.trim(),
+        notes: existing?.notes || '',
+        tasks: existing?.tasks || [],
+        links: {
+          classroom: document.getElementById('formLinkClassroom').value.trim(),
+          meet: document.getElementById('formLinkMeet').value.trim(),
+          drive: document.getElementById('formLinkDrive').value.trim()
+        }
       };
 
       if (id) {
@@ -497,41 +1616,306 @@
         routineData.push(newEntry);
       }
       saveRoutine();
-      closeModal();
-      renderSchedule();
+      closeModalEl(classModal);
+      renderSchedule({ animate: false });
     };
 
-    // Navigation & Edit Mode Buttons
-    document.getElementById('btnPrevWeek').onclick = () => { weekOffset--; renderSchedule(); };
-    document.getElementById('btnNextWeek').onclick = () => { weekOffset++; renderSchedule(); };
-    document.getElementById('btnToday').onclick = () => {
+    /* =====================================================================
+       18. EXPORT / IMPORT (.JSON & .ICS CALENDAR GENERATOR)
+       ===================================================================== */
+    const toolsModal = document.getElementById('toolsModal');
+    document.getElementById('btnOpenTools').onclick = () => openModalEl(toolsModal);
+    document.getElementById('btnCloseTools').onclick = () => closeModalEl(toolsModal);
+
+    document.getElementById('btnExportJSON').onclick = () => {
+      const payload = {
+        version: SCHEMA_VERSION,
+        exportedAt: new Date().toISOString(),
+        classes: routineData,
+        meta: appMeta
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `class_routine_backup_${toISODate(new Date())}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    document.getElementById('inputImportJSON').onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          if (Array.isArray(data)) {
+            localStorage.setItem(STORAGE_KEY_CLASSES, JSON.stringify(data));
+          } else if (data && Array.isArray(data.classes)) {
+            localStorage.setItem(STORAGE_KEY_CLASSES, JSON.stringify(data.classes));
+            if (data.meta) localStorage.setItem(STORAGE_KEY_META, JSON.stringify(data.meta));
+          } else {
+            throw new Error('Invalid backup structure');
+          }
+          routineData = loadAndMigrateRoutine();
+          appMeta = loadAndMigrateMeta();
+          renderProductivityHub();
+          renderSchedule({ animate: true });
+          closeModalEl(toolsModal);
+          alert('Routine backup restored successfully!');
+        } catch (err) {
+          alert('Failed to import JSON: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    };
+
+    // Export Recurring Weekly .ICS File for Google Calendar
+    document.getElementById('btnExportICS').onclick = () => {
+      const now = new Date();
+      const startTuesday = getCycleStartTuesday(now, 0);
+      const icsDays = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+
+      const pad = (n) => String(n).padStart(2, '0');
+      const formatICSDateTime = (dateObj, totalMins) => {
+        const y = dateObj.getFullYear();
+        const m = pad(dateObj.getMonth() + 1);
+        const d = pad(dateObj.getDate());
+        const hr = pad(Math.floor(totalMins / 60));
+        const min = pad(totalMins % 60);
+        return `${y}${m}${d}T${hr}${min}00`;
+      };
+
+      let icsLines = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Live Class Routine//EN',
+        'CALSCALE:GREGORIAN'
+      ];
+
+      routineData.forEach(cls => {
+        const range = parseTimeRange(cls.time);
+        if (!range) return;
+        // Find matching date in current cycle
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(startTuesday);
+          d.setDate(startTuesday.getDate() + i);
+          if (d.getDay() === Number(cls.dayOfWeek)) {
+            const dtStart = formatICSDateTime(d, range.start);
+            const dtEnd = formatICSDateTime(d, range.end);
+            const byDay = icsDays[d.getDay()];
+            icsLines.push(
+              'BEGIN:VEVENT',
+              `UID:${cls.id}@classroutine.local`,
+              `SUMMARY:${cls.course} - ${cls.title}`,
+              `LOCATION:${cls.room}`,
+              `DESCRIPTION:Instructor: ${cls.teacher} (${cls.initials})`,
+              `DTSTART:${dtStart}`,
+              `DTEND:${dtEnd}`,
+              `RRULE:FREQ=WEEKLY;BYDAY=${byDay};COUNT=16`,
+              'END:VEVENT'
+            );
+            break;
+          }
+        }
+      });
+
+      icsLines.push('END:VCALENDAR');
+      const blob = new Blob([icsLines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'semester_class_routine.ics';
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    /* =====================================================================
+       19. NAVIGATION, SEARCH, THEME, NOTIFICATIONS & SHORTCUTS
+       ===================================================================== */
+    function goPrevWeek() {
+      weekOffset--;
+      renderSchedule({ animate: true, slideDir: 'prev' });
+    }
+    function goNextWeek() {
+      weekOffset++;
+      renderSchedule({ animate: true, slideDir: 'next' });
+    }
+    function goToday() {
       weekOffset = 0;
-      renderSchedule();
+      renderSchedule({ animate: true });
       const todayEl = document.getElementById('todayRow');
       if (todayEl) todayEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    };
+    }
+    function toggleEditRoutine() {
+      isEditMode = !isEditMode;
+      document.getElementById('editBtnText').textContent = isEditMode ? 'Done Editing' : 'Edit Routine';
+      document.getElementById('mobEditLabel').textContent = isEditMode ? 'Done' : 'Edit';
+      renderSchedule({ animate: false });
+    }
+    function toggleProductivityHub() {
+      const hub = document.getElementById('productivityHub');
+      hub.classList.toggle('hidden');
+      renderProductivityHub();
+    }
+
+    document.getElementById('btnPrevWeek').onclick = goPrevWeek;
+    document.getElementById('btnNextWeek').onclick = goNextWeek;
+    document.getElementById('btnToday').onclick = goToday;
+    document.getElementById('mobBtnToday').onclick = goToday;
+    document.getElementById('btnToggleEdit').onclick = toggleEditRoutine;
+    document.getElementById('mobBtnEdit').onclick = toggleEditRoutine;
+    document.getElementById('btnToggleHub').onclick = toggleProductivityHub;
+    document.getElementById('mobBtnHub').onclick = toggleProductivityHub;
 
     document.getElementById('btnClearFilter').onclick = () => {
       selectedCourse = null;
       document.getElementById('btnClearFilter').classList.add('hidden');
       renderCoursePills();
-      renderSchedule();
+      renderSchedule({ animate: false });
     };
 
-    document.getElementById('btnToggleEdit').onclick = () => {
-      isEditMode = !isEditMode;
-      document.getElementById('editBtnText').textContent = isEditMode ? 'Done Editing' : 'Edit Routine';
-      renderSchedule();
+    // Search Input
+    const searchInput = document.getElementById('searchInput');
+    const btnClearSearch = document.getElementById('btnClearSearch');
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      btnClearSearch.classList.toggle('hidden', !searchQuery);
+      renderSchedule({ animate: false });
+    });
+    btnClearSearch.onclick = () => {
+      searchQuery = '';
+      searchInput.value = '';
+      btnClearSearch.classList.add('hidden');
+      renderSchedule({ animate: false });
     };
 
-    // Initialize and refresh live status every 60 seconds
+    // Theme Toggle
+    function applyTheme(theme) {
+      const htmlEl = document.documentElement;
+      if (theme === 'light') {
+        htmlEl.classList.remove('dark');
+        document.getElementById('themeIcon').textContent = '☀️';
+      } else {
+        htmlEl.classList.add('dark');
+        document.getElementById('themeIcon').textContent = '🌙';
+      }
+    }
+    applyTheme(appMeta.theme || 'dark');
+
+    document.getElementById('btnThemeToggle').onclick = () => {
+      appMeta.theme = appMeta.theme === 'dark' ? 'light' : 'dark';
+      saveMeta();
+      applyTheme(appMeta.theme);
+    };
+
+    // 15-Minute Browser Notifications Opt-In Toggle
+    function syncNotificationIcon() {
+      document.getElementById('notifIcon').textContent = appMeta.notificationsEnabled ? '🔔' : '🔕';
+    }
+    syncNotificationIcon();
+
+    document.getElementById('btnNotifications').onclick = async () => {
+      if (!('Notification' in window)) {
+        alert('Browser notifications are not supported on this device.');
+        return;
+      }
+      if (!appMeta.notificationsEnabled) {
+        const perm = await Notification.requestPermission();
+        if (perm === 'granted') {
+          appMeta.notificationsEnabled = true;
+          new Notification('Class Notifications Enabled 🔔', {
+            body: 'You will be notified 15 minutes before each class starts.'
+          });
+        } else {
+          alert('Please allow notifications in your browser settings.');
+        }
+      } else {
+        appMeta.notificationsEnabled = false;
+      }
+      saveMeta();
+      syncNotificationIcon();
+    };
+
+    // Global Keyboard Shortcuts (T = today, ←/→ = week, N = add class, / = search)
+    document.addEventListener('keydown', (e) => {
+      const tag = (e.target.tagName || '').toLowerCase();
+      const isTyping = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
+      if (e.key === 'Escape') {
+        closeModalEl(classModal);
+        closeModalEl(toolsModal);
+        return;
+      }
+      if (isTyping) return;
+
+      if (e.key === 't' || e.key === 'T') {
+        e.preventDefault();
+        goToday();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goPrevWeek();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        goNextWeek();
+      } else if (e.key === 'n' || e.key === 'N') {
+        e.preventDefault();
+        triggerAddClassModal();
+      } else if (e.key === '/') {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+
+    /* =====================================================================
+       20. SINGLE-FILE PWA (DYNAMIC MANIFEST + SERVICE WORKER) & INIT
+       ===================================================================== */
+    function setupSingleFilePWA() {
+      // 1. Dynamic Web App Manifest
+      const manifest = {
+        name: 'Live Class Routine',
+        short_name: 'Routine',
+        start_url: '.',
+        display: 'standalone',
+        background_color: '#000000',
+        theme_color: '#000000',
+        icons: [{
+          src: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="%231c1c1e"/><circle cx="50" cy="50" r="26" fill="%232563eb"/></svg>',
+          sizes: '192x192',
+          type: 'image/svg+xml'
+        }]
+      };
+      const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+      const link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = URL.createObjectURL(manifestBlob);
+      document.head.appendChild(link);
+
+      // 2. Offline Service Worker Registration
+      if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+        const swCode = `
+          const CACHE_NAME = 'cse-routine-cache-v3';
+          self.addEventListener('install', e => self.skipWaiting());
+          self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+          self.addEventListener('fetch', e => {
+            e.respondWith(
+              fetch(e.request).catch(() => caches.match(e.request))
+            );
+          });
+        `;
+        const swBlob = new Blob([swCode], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+      }
+    }
+
+    // Initial Boot
     renderCoursePills();
-    renderSchedule();
-    updateLiveClock();
-    setInterval(() => {
-      updateLiveClock();
-      if (!isEditMode && weekOffset === 0) renderSchedule();
-    }, 60000);
+    renderProductivityHub();
+    renderSchedule({ animate: true }); // Staggered entrance runs ONLY on initial load & week change
+    setupSingleFilePWA();
+
+    // Zero-Flicker Live Tick every 15 seconds (updates badges, countdowns & progress bars in-place)
+    setInterval(updateLiveTick, 15000);
   </script>
 </body>
 </html>
