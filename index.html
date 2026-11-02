@@ -2,17 +2,17 @@
 <html lang="en" class="dark antialiased">
 <head>
   <!-- =====================================================================
-       1. HEAD, FONTS & TAILWIND CONFIGURATION
+       1. HEAD, TECHNICAL FONTS & TAILWIND CONFIGURATION
        ===================================================================== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="theme-color" content="#000000">
-  <title>Live Class Routine</title>
-  
+  <meta name="theme-color" content="#090A0D">
+  <title>CHRONO.ROUTINE // Live Academic Telemetry</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
@@ -21,12 +21,21 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Outfit', 'Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
           },
           colors: {
-            bgPure: '#000000',
-            cardHighlight: '#1c1c1e',
-            borderSubtle: '#1f1f22',
+            carbon: '#090A0D',
+            panelDark: '#101217',
+            panelElevated: '#161920',
+            hairlineDark: '#222631',
+            paper: '#F3F1EA',
+            panelLight: '#FFFFFF',
+            hairlineLight: '#D6D3C9',
+            intlOrange: '#FF5500',
+            acidVolt: '#CCFF00',
+            cyberCyan: '#00E5FF',
           }
         }
       }
@@ -34,67 +43,158 @@
   </script>
 
   <!-- =====================================================================
-       2. CUSTOM STYLES & ANIMATIONS (WITH PREFERS-REDUCED-MOTION)
+       2. SWISS INSTRUMENT STYLES, HAIRLINE GRIDS & MECHANICAL CONTROLS
        ===================================================================== -->
   <style>
     :root {
-      --bg-primary: #f8fafc;
-      --bg-elevated: #ffffff;
-      --border-subtle: #e2e8f0;
-      --text-primary: #0f172a;
+      --bg-base: #F3F1EA;
+      --bg-panel: #FFFFFF;
+      --bg-subpanel: #EAE7DF;
+      --border-hairline: #D1CEC3;
+      --border-strong: #18181B;
+      --text-main: #111317;
+      --text-muted: #5A5D65;
+      --text-faint: #8C8F98;
+      --accent-orange: #FF4F00;
+      --accent-volt: #15803D;
+      --accent-volt-bg: rgba(21, 128, 61, 0.12);
+      --ledge-shadow: #C4C0B3;
+      --grid-dot: rgba(24, 24, 27, 0.07);
     }
+
     html.dark {
-      --bg-primary: #000000;
-      --bg-elevated: #1c1c1e;
-      --border-subtle: #1f1f22;
-      --text-primary: #f4f4f5;
+      --bg-base: #090A0D;
+      --bg-panel: #101217;
+      --bg-subpanel: #151821;
+      --border-hairline: #222631;
+      --border-strong: #383E4E;
+      --text-main: #F3F4F6;
+      --text-muted: #9CA3AF;
+      --text-faint: #5E6472;
+      --accent-orange: #FF5500;
+      --accent-volt: #CCFF00;
+      --accent-volt-bg: rgba(204, 255, 0, 0.12);
+      --ledge-shadow: #000000;
+      --grid-dot: rgba(255, 255, 255, 0.04);
     }
 
     body {
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
       overflow-x: hidden;
-      transition: background-color 0.25s ease, color 0.25s ease;
+      background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
+      background-size: 16px 16px;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+    /* Custom Technical Scrollbars */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg-base); }
+    ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 1px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-orange); }
 
-    /* Staggered Row Entrance (Only triggered on initial load or week change) */
+    /* Exposed Architectural Surfaces */
+    .inst-panel {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-hairline);
+      border-radius: 2px;
+    }
+
+    .inst-subpanel {
+      background-color: var(--bg-subpanel);
+      border: 1px solid var(--border-hairline);
+      border-radius: 2px;
+    }
+
+    /* Tactile Mechanical Buttons (Teenage Engineering / Braun inspired) */
+    .mech-btn {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-hairline);
+      color: var(--text-main);
+      border-radius: 2px;
+      box-shadow: 0 2px 0 var(--ledge-shadow);
+      transition: transform 0.08s ease, box-shadow 0.08s ease, border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .mech-btn:hover {
+      border-color: var(--border-strong);
+    }
+    .mech-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 0 var(--ledge-shadow);
+    }
+
+    .mech-btn-orange {
+      background-color: var(--accent-orange);
+      border: 1px solid #CC3F00;
+      color: #FFFFFF;
+      border-radius: 2px;
+      box-shadow: 0 2px 0 #7A2400;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
+    }
+    .mech-btn-orange:hover {
+      filter: brightness(1.08);
+    }
+    .mech-btn-orange:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 0 #7A2400;
+    }
+
+    /* Corner Crosshair Accents */
+    .crosshair-box {
+      position: relative;
+    }
+    .crosshair-box::before,
+    .crosshair-box::after {
+      content: '+';
+      position: absolute;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      line-height: 1;
+      color: var(--text-faint);
+      pointer-events: none;
+    }
+    .crosshair-box::before { top: 4px; left: 6px; }
+    .crosshair-box::after { top: 4px; right: 6px; }
+
+    /* Staggered Row Entrance */
     @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(12px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
     .animate-row {
       opacity: 0;
-      animation: fadeSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: fadeSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     /* Week Navigation Slide Left / Right */
     @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(28px); }
+      from { opacity: 0; transform: translateX(18px); }
       to { opacity: 1; transform: translateX(0); }
     }
     @keyframes slideInLeft {
-      from { opacity: 0; transform: translateX(-28px); }
+      from { opacity: 0; transform: translateX(-18px); }
       to { opacity: 1; transform: translateX(0); }
     }
-    .slide-next { animation: slideInRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    .slide-prev { animation: slideInLeft 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .slide-next { animation: slideInRight 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .slide-prev { animation: slideInLeft 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-    /* Card Hover Lift + Dynamic Course Color Glow */
+    /* Class Slot Card Precision Hover */
     .class-card {
-      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-                  box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-                  background-color 0.2s ease,
-                  opacity 0.25s ease,
-                  max-height 0.3s ease;
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-hairline);
+      border-radius: 2px;
+      transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, opacity 0.2s ease, max-height 0.28s ease;
     }
     .class-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 26px -6px var(--course-glow, rgba(59, 130, 246, 0.28));
+      border-color: var(--course-accent, var(--accent-orange));
+      box-shadow: 3px 3px 0px var(--course-glow, rgba(255, 85, 0, 0.18));
+    }
+
+    /* Active Live Class Highlight */
+    .class-card.is-live-card {
+      border-color: var(--accent-volt) !important;
+      box-shadow: 0 0 0 1px var(--accent-volt), 4px 4px 0px var(--accent-volt-bg) !important;
     }
 
     /* Smooth Card Collapse on Delete */
@@ -106,46 +206,38 @@
       margin-top: 0 !important;
       margin-bottom: 0 !important;
       overflow: hidden !important;
-      transform: scale(0.95) !important;
-      transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      transform: scale(0.97) !important;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
     /* Modal Scale + Fade Transition */
     .modal-backdrop {
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.22s ease;
+      transition: opacity 0.18s ease;
     }
     .modal-backdrop.open {
       opacity: 1;
       pointer-events: auto;
     }
     .modal-panel {
-      transform: scale(0.94) translateY(8px);
+      transform: translateY(6px) scale(0.98);
       opacity: 0;
-      transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease;
     }
     .modal-backdrop.open .modal-panel {
-      transform: scale(1) translateY(0);
+      transform: translateY(0) scale(1);
       opacity: 1;
-    }
-
-    /* Course Pill Smooth Active Transition */
-    .course-pill {
-      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-                  box-shadow 0.2s ease,
-                  opacity 0.2s ease,
-                  background-color 0.2s ease;
     }
 
     /* Confetti / Checkmark Burst Animation */
     @keyframes checkBurst {
-      0% { transform: scale(0.6); }
-      50% { transform: scale(1.28); }
+      0% { transform: scale(0.75); }
+      50% { transform: scale(1.22); }
       100% { transform: scale(1); }
     }
     .burst-active {
-      animation: checkBurst 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: checkBurst 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     @keyframes particleFly {
       0% { opacity: 1; transform: translate(0, 0) scale(1); }
@@ -153,24 +245,44 @@
     }
     .confetti-dot {
       position: absolute;
-      width: 5px;
-      height: 5px;
-      border-radius: 9999px;
+      width: 4px;
+      height: 4px;
+      border-radius: 1px;
       pointer-events: none;
-      animation: particleFly 0.55s ease-out forwards;
+      animation: particleFly 0.5s ease-out forwards;
     }
 
-    /* Inline ContentEditable Styling */
+    /* Inline ContentEditable Technical Field */
     [contenteditable="true"] {
-      outline: 1px dashed rgba(59, 130, 246, 0.6);
-      border-radius: 4px;
-      padding: 1px 6px;
-      background: rgba(59, 130, 246, 0.08);
-      transition: all 0.2s ease;
+      outline: 1px dashed var(--accent-orange);
+      border-radius: 2px;
+      padding: 1px 5px;
+      background: rgba(255, 85, 0, 0.08);
+      transition: all 0.15s ease;
     }
     [contenteditable="true"]:focus {
-      outline: 1px solid #3b82f6;
-      background: rgba(59, 130, 246, 0.15);
+      outline: 1px solid var(--accent-orange);
+      background: rgba(255, 85, 0, 0.16);
+    }
+
+    /* Blinking Colon for Digital Clock */
+    @keyframes blinkColon {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0.25; }
+    }
+    .blink-colon {
+      animation: blinkColon 1s infinite;
+    }
+
+    /* Diagonal Technical Hazard Stripe for Gap Bar */
+    .gap-stripe {
+      background-image: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 6px,
+        var(--grid-dot) 6px,
+        var(--grid-dot) 12px
+      );
     }
 
     /* Respect Reduced Motion Preferences */
@@ -182,253 +294,364 @@
         scroll-behavior: auto !important;
       }
       .animate-row { opacity: 1 !important; transform: none !important; }
-      .class-card:hover { transform: none !important; }
     }
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col pb-20 sm:pb-8 selection:bg-blue-500/30 selection:text-blue-200">
+<body class="min-h-screen flex flex-col pb-20 sm:pb-10 selection:bg-intlOrange selection:text-white">
 
   <!-- =====================================================================
-       3. STICKY "NEXT CLASS" LIVE BANNER & POMODORO BAR
+       3. TOP TELEMETRY COCKPIT BAR (LIVE RADAR + HARDWARE POMODORO MODULE)
        ===================================================================== -->
-  <div id="nextClassBanner" class="bg-gradient-to-r from-blue-950/90 via-indigo-950/90 to-zinc-950/90 border-b border-blue-500/20 px-4 sm:px-8 py-2 text-xs flex flex-wrap items-center justify-between gap-2 z-40">
-    <div class="flex items-center gap-2.5 min-w-0">
-      <span id="bannerPulseDot" class="w-2 h-2 rounded-full bg-blue-400 animate-ping shrink-0"></span>
-      <span id="bannerStatusLabel" class="font-semibold uppercase tracking-wider text-blue-300 shrink-0">NEXT UP</span>
-      <span id="bannerCourseInfo" class="text-zinc-100 font-medium truncate">Checking schedule...</span>
-    </div>
-    <div class="flex items-center gap-3 shrink-0">
-      <span id="bannerRoomBadge" class="px-2 py-0.5 rounded bg-white/10 text-zinc-200 font-medium hidden sm:inline-block"></span>
-      <span id="bannerCountdown" class="font-semibold text-amber-300 font-mono"></span>
-      <!-- Active Pomodoro Mini Widget -->
-      <div id="pomoWidget" class="hidden items-center gap-2 bg-rose-950/80 border border-rose-500/40 text-rose-200 px-2.5 py-0.5 rounded-full">
-        <span>🍅</span>
-        <span id="pomoTimeDisplay" class="font-mono font-bold">25:00</span>
-        <button id="btnPomoToggle" class="hover:text-white underline text-[11px]">Pause</button>
-        <button id="btnPomoStop" class="hover:text-white text-[11px]" title="Close Timer">✕</button>
+  <div id="nextClassBanner" class="sticky top-0 z-40 border-b border-[var(--border-hairline)] bg-[#060709] text-zinc-100 px-3 sm:px-6 py-2 text-xs">
+    <div class="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-2">
+      <!-- Left: System ID + Live Radar Status -->
+      <div class="flex items-center gap-2.5 min-w-0 flex-1">
+        <span class="hidden md:inline-flex items-center gap-1.5 font-mono text-[10px] tracking-widest uppercase px-1.5 py-0.5 bg-zinc-900 border border-zinc-800 text-zinc-400 shrink-0">
+          SYS.CHRONO // 03
+        </span>
+
+        <span class="relative flex h-2.5 w-2.5 shrink-0">
+          <span id="bannerPulseDot" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-intlOrange opacity-75"></span>
+          <span id="bannerCoreDot" class="relative inline-flex rounded-full h-2.5 w-2.5 bg-intlOrange"></span>
+        </span>
+
+        <span id="bannerStatusLabel" class="font-mono text-[11px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-intlOrange/20 text-[#FF5500] border border-[#FF5500]/40 shrink-0">
+          RADAR.INIT
+        </span>
+
+        <span id="bannerCourseInfo" class="font-medium text-xs sm:text-sm text-zinc-100 truncate">
+          Scanning weekly academic telemetry...
+        </span>
+      </div>
+
+      <!-- Right: Room Telemetry, Countdown & Hardware Pomodoro Timer -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <span id="bannerRoomBadge" class="hidden sm:inline-flex items-center gap-1 font-mono text-[11px] px-2 py-0.5 bg-zinc-900 border border-zinc-700 text-zinc-200">
+          LOC // --
+        </span>
+
+        <span id="bannerCountdown" class="font-mono text-xs font-bold text-[#CCFF00] bg-zinc-900/90 border border-zinc-800 px-2.5 py-0.5 tracking-tight">
+          --:--
+        </span>
+
+        <!-- Hardware Pomodoro Trigger (when inactive) -->
+        <button id="btnQuickPomoStart" onclick="startPomodoro(25)" class="font-mono text-[11px] px-2 py-0.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-700 flex items-center gap-1.5 transition-colors" title="Launch 25-Min Focus Timer">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#FF5500]"></span>
+          <span>POMO.25M</span>
+        </button>
+
+        <!-- Active Pomodoro Mini Hardware Widget -->
+        <div id="pomoWidget" class="hidden items-center gap-2 bg-[#1A0D08] border border-[#FF5500] text-white px-2.5 py-0.5 font-mono text-xs">
+          <span class="w-2 h-2 rounded-full bg-[#FF5500] animate-ping"></span>
+          <span class="text-[10px] uppercase tracking-wider text-orange-300">FOCUS</span>
+          <span id="pomoTimeDisplay" class="font-bold text-[#CCFF00] tracking-wider">25:00</span>
+          <button id="btnPomoToggle" class="px-1.5 py-0.2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-[10px] uppercase">PAUSE</button>
+          <button id="btnPomoStop" class="text-zinc-400 hover:text-white px-1 text-xs" title="Terminate Timer">✕</button>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- =====================================================================
-       4. TOP NAVIGATION HEADER
+       4. MASTER CONTROL HEADER (WEEK NAV, VIEW SWITCHER, TOOLS & SEARCH)
        ===================================================================== -->
-  <header class="sticky top-0 z-30 bg-white/90 dark:bg-black/85 backdrop-blur-md border-b border-slate-200 dark:border-borderSubtle px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
-    <!-- Left: Week Controls -->
-    <div class="flex items-center gap-2.5 sm:gap-4">
-      <button id="btnToday" class="px-3.5 py-1.5 rounded-lg border border-slate-300 dark:border-zinc-700/80 text-slate-800 dark:text-zinc-200 text-xs sm:text-sm font-medium hover:bg-slate-100 dark:hover:bg-zinc-900 active:scale-95 transition-all" title="Shortcut: T">
-        Today
-      </button>
+  <header class="sticky top-[37px] z-30 border-b border-[var(--border-hairline)] bg-[var(--bg-panel)]/95 backdrop-blur-md px-3 sm:px-6 py-3">
+    <div class="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-3">
       
-      <div class="flex items-center gap-1">
-        <button id="btnPrevWeek" class="p-2 rounded-lg text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-900 transition-colors" title="Previous Week (←)">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      <!-- Left: Brand Identity, Week Controls & Date Readout -->
+      <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+        <!-- Today Button -->
+        <button id="btnToday" class="mech-btn px-3 py-1.5 font-mono text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5" title="Jump to Current Cycle (Shortcut: T)">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#FF5500]"></span>
+          <span>TODAY</span>
+          <kbd class="hidden sm:inline-block text-[10px] opacity-60">[T]</kbd>
         </button>
-        <button id="btnNextWeek" class="p-2 rounded-lg text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-900 transition-colors" title="Next Week (→)">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+
+        <!-- Prev / Next Mechanical Rocker -->
+        <div class="inline-flex items-center">
+          <button id="btnPrevWeek" class="mech-btn px-2.5 py-1.5 rounded-r-none border-r-0" title="Previous Week Cycle (←)">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2.2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <button id="btnNextWeek" class="mech-btn px-2.5 py-1.5 rounded-l-none" title="Next Week Cycle (→)">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2.2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <!-- Active Cycle Range Title -->
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-[10px] uppercase tracking-widest text-[var(--text-faint)]">CYCLE.WINDOW // TUE–MON</span>
+            <span id="cycleOffsetTag" class="hidden font-mono text-[10px] px-1.5 py-0.2 bg-[#FF5500]/15 text-[#FF5500] border border-[#FF5500]/30 font-semibold">OFFSET</span>
+          </div>
+          <h1 id="weekRangeTitle" class="font-display text-sm sm:text-lg font-bold tracking-tight uppercase">
+            LOADING CHRONO...
+          </h1>
+        </div>
+
+        <!-- Digital Live Clock Readout -->
+        <div id="liveClockBadge" class="hidden xl:flex items-center gap-2 px-3 py-1 inst-subpanel font-mono text-xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span class="text-[10px] text-[var(--text-muted)] uppercase">CLK</span>
+          <span id="liveClockText" class="font-bold tracking-wider">--:--:--</span>
+        </div>
+      </div>
+
+      <!-- Right: View Switcher, Search, Command Deck Toggle, Theme, Sync, Edit, Add -->
+      <div class="flex items-center gap-2 flex-wrap">
+        
+        <!-- Dual View Switcher: LEDGER vs MATRIX -->
+        <div class="inline-flex items-center inst-subpanel p-0.5" role="group" aria-label="Schedule Layout Switcher">
+          <button id="btnViewLedger" type="button" class="px-2.5 py-1 font-mono text-[11px] font-semibold uppercase transition-all flex items-center gap-1.5 bg-[var(--accent-orange)] text-white" title="Split Ledger & Command Deck View (Shortcut: V)">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M4 6h16M4 12h10M4 18h16"/></svg>
+            <span>LEDGER</span>
+          </button>
+          <button id="btnViewMatrix" type="button" class="px-2.5 py-1 font-mono text-[11px] font-semibold uppercase transition-all flex items-center gap-1.5 text-[var(--text-muted)] hover:text-[var(--text-main)]" title="7-Day Architectural Matrix Grid (Shortcut: V)">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+            <span>MATRIX</span>
+          </button>
+        </div>
+
+        <!-- Search Input -->
+        <div class="relative w-36 sm:w-48">
+          <svg class="w-3.5 h-3.5 text-[var(--text-faint)] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
+          <input id="searchInput" type="text" placeholder="FILTER [ / ]" class="w-full inst-subpanel pl-8 pr-6 py-1.5 font-mono text-xs text-[var(--text-main)] placeholder:text-[var(--text-faint)] focus:outline-none focus:border-[#FF5500] transition-colors">
+          <button id="btnClearSearch" class="hidden absolute right-2 top-1/2 -translate-y-1/2 font-mono text-xs text-[var(--text-muted)] hover:text-[#FF5500]">✕</button>
+        </div>
+
+        <!-- Command Deck Toggle (Scrolls/focuses on Desktop or toggles Deck Drawer) -->
+        <button id="btnToggleHub" class="mech-btn px-2.5 py-1.5 font-mono text-xs font-semibold flex items-center gap-1.5" title="Toggle / Focus Command Deck">
+          <svg class="w-3.5 h-3.5 text-[#FF5500]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M9 17v-6m3 6V7m3 10v-4M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+          <span class="hidden md:inline">DECK</span>
+          <span id="hubBadgeCount" class="px-1.5 py-0.2 bg-[#FF5500] text-white font-mono text-[10px] font-bold">0</span>
+        </button>
+
+        <!-- 15-Min Notification Opt-In Toggle -->
+        <button id="btnNotifications" class="mech-btn p-1.5 flex items-center justify-center" title="Toggle 15-Min Pre-Class Browser Alerts">
+          <span id="notifIcon" class="font-mono text-xs px-1 flex items-center gap-1">
+            <span id="notifLed" class="w-2 h-2 rounded-full bg-zinc-500"></span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          </span>
+        </button>
+
+        <!-- Theme Switcher (Carbon Dark vs Braun Paper Light) -->
+        <button id="btnThemeToggle" class="mech-btn px-2.5 py-1.5 font-mono text-xs font-semibold flex items-center gap-1.5" title="Switch Carbon Dark / Drafting Paper Light Mode">
+          <span id="themeIcon" class="w-2 h-2 rounded-full bg-[#CCFF00]"></span>
+          <span id="themeLabel" class="hidden lg:inline text-[11px]">CARBON</span>
+        </button>
+
+        <!-- Cloud Sync & Backup Modal Trigger -->
+        <button id="btnOpenTools" class="mech-btn px-2.5 py-1.5 font-mono text-xs font-semibold flex items-center gap-1.5" title="Cloud Sync, ICS Calendar & JSON Backup">
+          <span id="headerSyncDot" class="w-2 h-2 rounded-full bg-zinc-500"></span>
+          <span>SYNC</span>
+        </button>
+
+        <!-- Inline Edit Routine Mode Toggle (Desktop) -->
+        <button id="btnToggleEdit" class="hidden sm:flex mech-btn px-2.5 py-1.5 font-mono text-xs font-semibold items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+          <span id="editBtnText">EDIT</span>
+        </button>
+
+        <!-- Add Class Slot Button (Desktop) -->
+        <button id="btnAddClass" class="hidden sm:flex mech-btn-orange px-3.5 py-1.5 font-mono text-xs font-bold uppercase tracking-wider items-center gap-1.5" title="Add Class Slot (Shortcut: N)">
+          <span>+ ADD SLOT</span>
+          <kbd class="text-[10px] opacity-80">[N]</kbd>
         </button>
       </div>
 
-      <h1 id="weekRangeTitle" class="text-sm sm:text-lg font-semibold tracking-tight text-slate-900 dark:text-white">
-        Loading dates...
-      </h1>
-
-      <span id="liveClockBadge" class="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 dark:border-emerald-800/50">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-        <span id="liveClockText"></span>
-      </span>
-    </div>
-
-    <!-- Right: Search, Notifications, Productivity Hub, Theme, Cloud Sync, Edit, Add -->
-    <div class="flex items-center gap-2 flex-wrap">
-      <!-- Search Input -->
-      <div class="relative w-32 sm:w-44">
-        <svg class="w-3.5 h-3.5 text-zinc-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
-        <input id="searchInput" type="text" placeholder="Search (/)" class="w-full bg-slate-100 dark:bg-zinc-900/90 border border-slate-300 dark:border-zinc-800 rounded-lg pl-8 pr-6 py-1.5 text-xs text-slate-900 dark:text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-all">
-        <button id="btnClearSearch" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white text-xs">✕</button>
-      </div>
-
-      <!-- Productivity Hub Toggle -->
-      <button id="btnToggleHub" class="px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-300 dark:border-zinc-800 bg-slate-100 dark:bg-zinc-900/80 text-slate-700 dark:text-zinc-300 hover:border-blue-500/50 transition-all flex items-center gap-1.5">
-        <span>📊</span>
-        <span class="hidden md:inline">Productivity</span>
-        <span id="hubBadgeCount" class="px-1.5 py-0.2 rounded-full text-[10px] bg-blue-600 text-white font-bold">0</span>
-      </button>
-
-      <!-- 15-Min Notification Opt-In Toggle -->
-      <button id="btnNotifications" class="p-1.5 rounded-lg border border-slate-300 dark:border-zinc-800 bg-slate-100 dark:bg-zinc-900/80 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-all" title="Toggle 15-min class reminders">
-        <span id="notifIcon">🔕</span>
-      </button>
-
-      <!-- Theme Toggle -->
-      <button id="btnThemeToggle" class="p-1.5 rounded-lg border border-slate-300 dark:border-zinc-800 bg-slate-100 dark:bg-zinc-900/80 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-all" title="Toggle Light/Dark Mode">
-        <span id="themeIcon">🌙</span>
-      </button>
-
-      <!-- Cloud Sync & Backup Button -->
-      <button id="btnOpenTools" class="px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-zinc-800 bg-slate-100 dark:bg-zinc-900/80 text-slate-700 dark:text-zinc-300 hover:border-blue-500/50 transition-all flex items-center gap-1.5 text-xs font-medium" title="Cloud Sync & Backup">
-        <span>☁️</span>
-        <span id="headerSyncDot" class="w-2 h-2 rounded-full bg-zinc-500"></span>
-      </button>
-
-      <!-- Edit Routine Toggle (Desktop) -->
-      <button id="btnToggleEdit" class="hidden sm:flex px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-300 dark:border-zinc-800 bg-slate-100 dark:bg-zinc-900/80 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-all items-center gap-1.5">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-        <span id="editBtnText">Edit Routine</span>
-      </button>
-
-      <!-- Add Class Button (Desktop) -->
-      <button id="btnAddClass" class="hidden sm:flex px-3.5 py-1.5 rounded-lg text-xs font-medium bg-blue-600 hover:bg-blue-500 text-white transition-all items-center gap-1.5 shadow-lg shadow-blue-600/20" title="Shortcut: N">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-        Add Class
-      </button>
     </div>
   </header>
 
   <!-- =====================================================================
-       5. COURSES FILTER BAR
+       5. COURSE TELEMETRY ISOLATION BAR (FILTER PILLS + KEYBOARD LEGEND)
        ===================================================================== -->
-  <section class="border-b border-slate-200 dark:border-borderSubtle bg-slate-50/70 dark:bg-black px-4 sm:px-8 py-2.5 flex items-center justify-between gap-3 overflow-x-auto">
-    <div class="flex items-center gap-3 overflow-x-auto">
-      <span class="text-[11px] font-semibold uppercase tracking-widest text-zinc-500 shrink-0">COURSES</span>
-      <div id="coursePillsContainer" class="flex items-center gap-2"></div>
-      <button id="btnClearFilter" class="hidden text-xs text-blue-400 hover:underline ml-1 shrink-0">Show All</button>
-    </div>
-    <div class="hidden xl:flex items-center gap-2 text-[11px] text-zinc-500 shrink-0">
-      <kbd class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">T</kbd> Today
-      <kbd class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">←/→</kbd> Week
-      <kbd class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">N</kbd> Add
-      <kbd class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">/</kbd> Search
+  <section class="border-b border-[var(--border-hairline)] bg-[var(--bg-subpanel)]/70 px-3 sm:px-6 py-2">
+    <div class="max-w-[1440px] mx-auto flex items-center justify-between gap-4 overflow-x-auto">
+      <div class="flex items-center gap-2 overflow-x-auto py-0.5">
+        <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--text-faint)] shrink-0 mr-1">
+          FREQ.CHANNELS //
+        </span>
+        <div id="coursePillsContainer" class="flex items-center gap-1.5"></div>
+        <button id="btnClearFilter" class="hidden font-mono text-[11px] font-bold text-[#FF5500] hover:underline ml-2 shrink-0">
+          [RESET ISOLATION]
+        </button>
+      </div>
+
+      <!-- Hardware Keyboard Legend -->
+      <div class="hidden xl:flex items-center gap-3 font-mono text-[10px] text-[var(--text-muted)] shrink-0">
+        <span><kbd class="px-1 py-0.5 inst-panel text-[var(--text-main)]">T</kbd> TODAY</span>
+        <span><kbd class="px-1 py-0.5 inst-panel text-[var(--text-main)]">←/→</kbd> CYCLE</span>
+        <span><kbd class="px-1 py-0.5 inst-panel text-[var(--text-main)]">V</kbd> VIEW</span>
+        <span><kbd class="px-1 py-0.5 inst-panel text-[var(--text-main)]">N</kbd> NEW SLOT</span>
+        <span><kbd class="px-1 py-0.5 inst-panel text-[var(--text-main)]">/</kbd> FILTER</span>
+      </div>
     </div>
   </section>
 
   <!-- =====================================================================
-       6. COLLAPSIBLE PRODUCTIVITY HUB (TASKS, EXAMS, ATTENDANCE)
+       6. MAIN ARCHITECTURAL WORKSPACE (SPLIT LEDGER / MATRIX + COMMAND DECK)
        ===================================================================== -->
-  <section id="productivityHub" class="hidden border-b border-slate-200 dark:border-borderSubtle bg-slate-100/60 dark:bg-zinc-950/90 px-4 sm:px-8 py-5 transition-all">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-5">
-      
-      <!-- Panel 1: Due This Week (Tasks & Assignments) -->
-      <div class="bg-white dark:bg-cardHighlight border border-slate-200 dark:border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <h3 class="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-              <span>📌</span> Due This Week & Pending
-            </h3>
-            <span id="dueWeekCount" class="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-semibold">0</span>
-          </div>
-          <div id="globalTasksList" class="space-y-2 max-h-48 overflow-y-auto pr-1 text-xs"></div>
-        </div>
-        <p class="text-[11px] text-zinc-500 mt-3 pt-2 border-t border-slate-200 dark:border-zinc-800/80">
-          Tip: You can also add tasks directly inside any class card below.
-        </p>
-      </div>
+  <div class="flex-1 max-w-[1440px] w-full mx-auto px-3 sm:px-6 py-6">
+    <div id="workspaceGrid" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-      <!-- Panel 2: Exam / Quiz Countdown Tracker -->
-      <div class="bg-white dark:bg-cardHighlight border border-slate-200 dark:border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <h3 class="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-              <span>⏳</span> Exam & Quiz Tracker
-            </h3>
-            <button id="btnAddExam" class="text-xs px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium">+ Add Exam</button>
+      <!-- LEFT / MAIN COLUMN: SCHEDULE TIMELINE OR 7-DAY MATRIX -->
+      <main id="scheduleWrapper" class="lg:col-span-8 w-full space-y-4">
+        <!-- Dynamic Schedule Header Bar -->
+        <div class="inst-panel px-4 py-2.5 flex items-center justify-between">
+          <div class="flex items-center gap-2 font-mono text-xs">
+            <span class="w-2 h-2 bg-[#FF5500]"></span>
+            <span id="scheduleModeLabel" class="font-bold uppercase tracking-wider">CHRONO.LEDGER // 7-DAY TIMELINE</span>
           </div>
+          <div id="scheduleStatsLabel" class="font-mono text-[11px] text-[var(--text-muted)]">
+            SLOTS: 0
+          </div>
+        </div>
+
+        <!-- Schedule Container (Populated by JS in either LEDGER or MATRIX mode) -->
+        <div id="scheduleContainer" class="space-y-4"></div>
+      </main>
+
+      <!-- RIGHT / STICKY COMMAND DECK: PRODUCTIVITY TELEMETRY (TASKS, EXAMS, ATTENDANCE) -->
+      <aside id="productivityHub" class="lg:col-span-4 w-full lg:sticky lg:top-[108px] space-y-5">
+        
+        <!-- Command Deck Header -->
+        <div class="inst-panel px-4 py-2.5 flex items-center justify-between border-l-4 border-l-[#FF5500]">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs font-bold uppercase tracking-wider">COMMAND.DECK // TELEMETRY</span>
+          </div>
+          <span class="font-mono text-[10px] text-[var(--text-faint)]">SYS.ACTIVE</span>
+        </div>
+
+        <!-- PANEL 01: PENDING ASSIGNMENTS & TASKS LEDGER -->
+        <div class="inst-panel p-4 crosshair-box">
+          <div class="flex items-center justify-between mb-3 pb-2 border-b border-[var(--border-hairline)]">
+            <div>
+              <span class="font-mono text-[10px] uppercase tracking-widest text-[var(--text-faint)] block">DECK.01 // TASKS</span>
+              <h3 class="font-display text-sm font-bold uppercase tracking-tight">Pending Assignments</h3>
+            </div>
+            <span id="dueWeekCount" class="font-mono text-xs px-2 py-0.5 bg-[#FF5500]/15 text-[#FF5500] border border-[#FF5500]/40 font-bold">0</span>
+          </div>
+
+          <div id="globalTasksList" class="space-y-2 max-h-52 overflow-y-auto pr-1 text-xs"></div>
+
+          <div class="mt-3 pt-2 border-t border-[var(--border-hairline)] flex items-center justify-between font-mono text-[10px] text-[var(--text-faint)]">
+            <span>SOURCE: CLASS SLOT DRAWERS</span>
+            <span>AUTO-SYNC</span>
+          </div>
+        </div>
+
+        <!-- PANEL 02: EXAM & QUIZ COUNTDOWN RADAR -->
+        <div class="inst-panel p-4 crosshair-box">
+          <div class="flex items-center justify-between mb-3 pb-2 border-b border-[var(--border-hairline)]">
+            <div>
+              <span class="font-mono text-[10px] uppercase tracking-widest text-[var(--text-faint)] block">DECK.02 // RADAR</span>
+              <h3 class="font-display text-sm font-bold uppercase tracking-tight">Exam & Quiz Tracker</h3>
+            </div>
+            <button id="btnAddExam" class="mech-btn px-2.5 py-1 font-mono text-[11px] font-bold text-[#FF5500]">
+              + ADD EXAM
+            </button>
+          </div>
+
           <!-- Quick Add Exam Inline Form -->
-          <form id="examForm" class="hidden mb-3 p-2.5 rounded-xl bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 space-y-2 text-xs">
+          <form id="examForm" class="hidden mb-3 p-3 inst-subpanel space-y-2.5 text-xs">
+            <div class="font-mono text-[10px] uppercase tracking-wider text-[#FF5500] font-bold">NEW EXAM TELEMETRY</div>
             <div class="grid grid-cols-2 gap-2">
-              <select id="examCourse" class="bg-white dark:bg-zinc-950 border border-zinc-700 rounded px-2 py-1 text-slate-900 dark:text-white"></select>
-              <input id="examDate" type="date" required class="bg-white dark:bg-zinc-950 border border-zinc-700 rounded px-2 py-1 text-slate-900 dark:text-white">
+              <select id="examCourse" class="inst-panel px-2 py-1.5 font-mono text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]"></select>
+              <input id="examDate" type="date" required class="inst-panel px-2 py-1.5 font-mono text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
             </div>
             <div class="grid grid-cols-3 gap-2">
-              <input id="examTitle" type="text" placeholder="Quiz 2 / Midterm" required class="col-span-2 bg-white dark:bg-zinc-950 border border-zinc-700 rounded px-2 py-1 text-slate-900 dark:text-white">
-              <input id="examRoom" type="text" placeholder="Room 402" class="bg-white dark:bg-zinc-950 border border-zinc-700 rounded px-2 py-1 text-slate-900 dark:text-white">
+              <input id="examTitle" type="text" placeholder="Midterm / Quiz 2" required class="col-span-2 inst-panel px-2.5 py-1.5 text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
+              <input id="examRoom" type="text" placeholder="Room 402" class="inst-panel px-2 py-1.5 font-mono text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
             </div>
-            <div class="flex justify-end gap-2">
-              <button type="button" id="btnCancelExam" class="px-2 py-1 text-zinc-400">Cancel</button>
-              <button type="submit" class="px-3 py-1 rounded bg-blue-600 text-white font-medium">Save</button>
+            <div class="flex justify-end gap-2 pt-1">
+              <button type="button" id="btnCancelExam" class="mech-btn px-2.5 py-1 font-mono text-[11px]">CANCEL</button>
+              <button type="submit" class="mech-btn-orange px-3 py-1 font-mono text-[11px] font-bold">RECORD</button>
             </div>
           </form>
-          <div id="examsListContainer" class="space-y-2 max-h-48 overflow-y-auto pr-1 text-xs"></div>
-        </div>
-        <p class="text-[11px] text-zinc-500 mt-3 pt-2 border-t border-slate-200 dark:border-zinc-800/80">
-          Color urgency: <span class="text-rose-400">≤3d Urgent</span> · <span class="text-amber-400">≤7d Soon</span> · <span class="text-emerald-400">&gt;7d Safe</span>
-        </p>
-      </div>
 
-      <!-- Panel 3: Course Attendance Tracker -->
-      <div class="bg-white dark:bg-cardHighlight border border-slate-200 dark:border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <h3 class="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-              <span>✅</span> Attendance (75% Target / 24 Classes)
-            </h3>
+          <div id="examsListContainer" class="space-y-2 max-h-56 overflow-y-auto pr-1 text-xs"></div>
+
+          <div class="mt-3 pt-2 border-t border-[var(--border-hairline)] flex items-center justify-between font-mono text-[10px] text-[var(--text-faint)]">
+            <span class="text-rose-500 font-semibold">≤3D CRIT</span>
+            <span class="text-amber-500 font-semibold">≤7D WARN</span>
+            <span class="text-emerald-500 font-semibold">&gt;7D NOMINAL</span>
           </div>
-          <div id="attendanceListContainer" class="space-y-2.5 max-h-52 overflow-y-auto pr-1 text-xs"></div>
         </div>
-        <p class="text-[11px] text-zinc-500 mt-3 pt-2 border-t border-slate-200 dark:border-zinc-800/80">
-          Calculates how many classes you can still safely miss per course.
-        </p>
-      </div>
+
+        <!-- PANEL 03: 24-SEGMENT VISUAL ATTENDANCE MATRIX -->
+        <div class="inst-panel p-4 crosshair-box">
+          <div class="flex items-center justify-between mb-3 pb-2 border-b border-[var(--border-hairline)]">
+            <div>
+              <span class="font-mono text-[10px] uppercase tracking-widest text-[var(--text-faint)] block">DECK.03 // COMPLIANCE</span>
+              <h3 class="font-display text-sm font-bold uppercase tracking-tight">Attendance Matrix (75% / 24)</h3>
+            </div>
+            <span class="font-mono text-[10px] px-1.5 py-0.5 inst-subpanel text-[var(--text-muted)]">MAX MISS: 6</span>
+          </div>
+
+          <div id="attendanceListContainer" class="space-y-3 max-h-[380px] overflow-y-auto pr-1 text-xs"></div>
+
+          <div class="mt-3 pt-2 border-t border-[var(--border-hairline)] font-mono text-[10px] text-[var(--text-faint)] flex items-center justify-between">
+            <span>24-CELL LED MATRIX PER COURSE</span>
+            <span>TARGET ≥ 75%</span>
+          </div>
+        </div>
+
+      </aside>
 
     </div>
-  </section>
+  </div>
 
   <!-- =====================================================================
-       7. MAIN SCHEDULE TIMELINE CONTAINER
+       7. MOBILE HARDWARE DOCK BAR
        ===================================================================== -->
-  <main id="scheduleContainer" class="flex-1 divide-y divide-slate-200 dark:divide-borderSubtle max-w-6xl w-full mx-auto">
-    <!-- Dynamically populated by JS -->
-  </main>
-
-  <!-- =====================================================================
-       8. MOBILE BOTTOM ACTION BAR (LARGER TAP TARGETS)
-       ===================================================================== -->
-  <nav class="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-lg border-t border-slate-200 dark:border-zinc-800 px-2 py-1.5 grid grid-cols-5 gap-1">
-    <button id="mobBtnToday" class="flex flex-col items-center justify-center py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-zinc-300 active:bg-zinc-800">
-      <span>📅</span>
-      <span class="text-[10px] mt-0.5">Today</span>
+  <nav class="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-[var(--bg-panel)] border-t border-[var(--border-hairline)] px-2 py-1.5 grid grid-cols-5 gap-1.5">
+    <button id="mobBtnToday" class="mech-btn flex flex-col items-center justify-center py-1.5 font-mono text-[10px] font-semibold">
+      <svg class="w-4 h-4 mb-0.5 text-[#FF5500]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      <span>TODAY</span>
     </button>
-    <button id="mobBtnHub" class="flex flex-col items-center justify-center py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-zinc-300 active:bg-zinc-800">
-      <span>📊</span>
-      <span class="text-[10px] mt-0.5">Hub</span>
+    <button id="mobBtnHub" class="mech-btn flex flex-col items-center justify-center py-1.5 font-mono text-[10px] font-semibold">
+      <svg class="w-4 h-4 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M9 17v-6m3 6V7m3 10v-4M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+      <span>DECK</span>
     </button>
-    <button id="mobBtnSync" class="flex flex-col items-center justify-center py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-zinc-300 active:bg-zinc-800">
-      <span>☁️</span>
-      <span class="text-[10px] mt-0.5">Sync</span>
+    <button id="mobBtnSync" class="mech-btn flex flex-col items-center justify-center py-1.5 font-mono text-[10px] font-semibold">
+      <svg class="w-4 h-4 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+      <span>SYNC</span>
     </button>
-    <button id="mobBtnEdit" class="flex flex-col items-center justify-center py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-zinc-300 active:bg-zinc-800">
-      <span>✏️</span>
-      <span id="mobEditLabel" class="text-[10px] mt-0.5">Edit</span>
+    <button id="mobBtnEdit" class="mech-btn flex flex-col items-center justify-center py-1.5 font-mono text-[10px] font-semibold">
+      <svg class="w-4 h-4 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+      <span id="mobEditLabel">EDIT</span>
     </button>
-    <button id="mobBtnAdd" class="flex flex-col items-center justify-center py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-md shadow-blue-600/30">
-      <span>＋</span>
-      <span class="text-[10px] mt-0.5">Add</span>
+    <button id="mobBtnAdd" class="mech-btn-orange flex flex-col items-center justify-center py-1.5 font-mono text-[10px] font-bold">
+      <svg class="w-4 h-4 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+      <span>+ SLOT</span>
     </button>
   </nav>
 
   <!-- =====================================================================
-       9. ADD / EDIT CLASS MODAL (WITH CONFLICT DETECTION & QUICK LINKS)
+       8. ADD / EDIT CLASS SLOT MODAL (WITH LIVE CONFLICT TELEMETRY)
        ===================================================================== -->
   <div id="classModal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-    <div class="modal-panel bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl max-h-[92vh] overflow-y-auto">
-      <div class="flex items-center justify-between mb-4">
-        <h3 id="modalTitle" class="text-lg font-semibold text-slate-900 dark:text-white">Add Class Slot</h3>
-        <button id="btnCloseModal" class="p-1 text-zinc-500 hover:text-zinc-300">✕</button>
+    <div class="modal-panel inst-panel max-w-lg w-full p-6 shadow-2xl max-h-[92vh] overflow-y-auto crosshair-box border-t-4 border-t-[#FF5500]">
+      <div class="flex items-center justify-between mb-4 pb-3 border-b border-[var(--border-hairline)]">
+        <div>
+          <span class="font-mono text-[10px] uppercase tracking-widest text-[#FF5500] block">CONFIG // SLOT.EDITOR</span>
+          <h3 id="modalTitle" class="font-display text-lg font-bold uppercase tracking-tight">Add Class Slot</h3>
+        </div>
+        <button id="btnCloseModal" class="mech-btn px-2.5 py-1 font-mono text-xs">✕</button>
       </div>
 
       <!-- Live Conflict Detection Alert -->
-      <div id="conflictWarningBox" class="hidden mb-4 p-3 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs flex items-start gap-2">
-        <span>⚠️</span>
-        <span id="conflictWarningText">Time conflict detected!</span>
+      <div id="conflictWarningBox" class="hidden mb-4 p-3 bg-amber-500/15 border border-amber-500 text-amber-400 font-mono text-xs flex items-start gap-2.5">
+        <span class="font-bold px-1.5 py-0.5 bg-amber-500 text-black text-[10px] shrink-0">CONFLICT</span>
+        <span id="conflictWarningText">Time overlap detected!</span>
       </div>
 
-      <form id="classForm" class="space-y-3.5">
+      <form id="classForm" class="space-y-4">
         <input type="hidden" id="formClassId">
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs text-zinc-400 mb-1">Day of Week</label>
-            <select id="formDayCode" class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+            <label class="block font-mono text-[10px] uppercase tracking-wider text-[var(--text-muted)] mb-1">Day of Week</label>
+            <select id="formDayCode" class="w-full inst-subpanel px-3 py-2 font-mono text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
               <option value="2">Tuesday (TUE)</option>
               <option value="3">Wednesday (WED)</option>
               <option value="4">Thursday (THU)</option>
@@ -439,119 +662,124 @@
             </select>
           </div>
           <div>
-            <label class="block text-xs text-zinc-400 mb-1">Course Code</label>
-            <select id="formCourseCode" class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"></select>
+            <label class="block font-mono text-[10px] uppercase tracking-wider text-[var(--text-muted)] mb-1">Course Code</label>
+            <select id="formCourseCode" class="w-full inst-subpanel px-3 py-2 font-mono text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]"></select>
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs text-zinc-400 mb-1">Time Slot (e.g. 8:30 AM - 11 AM)</label>
-            <input type="text" id="formTime" placeholder="8:30 AM - 11 AM" required class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+            <label class="block font-mono text-[10px] uppercase tracking-wider text-[var(--text-muted)] mb-1">Time Window</label>
+            <input type="text" id="formTime" placeholder="8:30 AM - 11 AM" required class="w-full inst-subpanel px-3 py-2 font-mono text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
           </div>
           <div>
-            <label class="block text-xs text-zinc-400 mb-1">Room / Lab</label>
-            <input type="text" id="formRoom" placeholder="424 - Computer Lab" required class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+            <label class="block font-mono text-[10px] uppercase tracking-wider text-[var(--text-muted)] mb-1">Room / Lab Node</label>
+            <input type="text" id="formRoom" placeholder="424 - Computer Lab" required class="w-full inst-subpanel px-3 py-2 font-mono text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
           </div>
         </div>
 
         <div>
-          <label class="block text-xs text-zinc-400 mb-1">Course Title</label>
-          <input type="text" id="formTitle" placeholder="System Analysis and Design" required class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+          <label class="block font-mono text-[10px] uppercase tracking-wider text-[var(--text-muted)] mb-1">Course Title</label>
+          <input type="text" id="formTitle" placeholder="System Analysis and Design" required class="w-full inst-subpanel px-3 py-2 text-sm text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
         </div>
 
         <div class="grid grid-cols-3 gap-3">
           <div>
-            <label class="block text-xs text-zinc-400 mb-1">Initials</label>
-            <input type="text" id="formInitials" placeholder="SS" maxlength="4" required class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+            <label class="block font-mono text-[10px] uppercase tracking-wider text-[var(--text-muted)] mb-1">Initials</label>
+            <input type="text" id="formInitials" placeholder="SS" maxlength="4" required class="w-full inst-subpanel px-3 py-2 font-mono text-xs uppercase text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
           </div>
           <div class="col-span-2">
-            <label class="block text-xs text-zinc-400 mb-1">Instructor</label>
-            <input type="text" id="formTeacher" placeholder="Sayem Shahad" required class="w-full bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+            <label class="block font-mono text-[10px] uppercase tracking-wider text-[var(--text-muted)] mb-1">Instructor Name</label>
+            <input type="text" id="formTeacher" placeholder="Sayem Shahad" required class="w-full inst-subpanel px-3 py-2 text-sm text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
           </div>
         </div>
 
         <!-- Quick Links Section -->
-        <div class="pt-2 border-t border-slate-200 dark:border-zinc-800">
-          <label class="block text-xs font-medium text-zinc-400 mb-2">Quick Links (Optional URLs)</label>
+        <div class="pt-3 border-t border-[var(--border-hairline)]">
+          <label class="block font-mono text-[10px] uppercase tracking-wider text-[var(--text-muted)] mb-2">External Telemetry Links (Optional URLs)</label>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <input type="url" id="formLinkClassroom" placeholder="Classroom URL" class="bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
-            <input type="url" id="formLinkMeet" placeholder="Google Meet URL" class="bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
-            <input type="url" id="formLinkDrive" placeholder="Drive Folder URL" class="bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+            <input type="url" id="formLinkClassroom" placeholder="Classroom URL" class="inst-subpanel px-2.5 py-1.5 font-mono text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
+            <input type="url" id="formLinkMeet" placeholder="Google Meet URL" class="inst-subpanel px-2.5 py-1.5 font-mono text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
+            <input type="url" id="formLinkDrive" placeholder="Drive Folder URL" class="inst-subpanel px-2.5 py-1.5 font-mono text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
           </div>
         </div>
 
-        <div class="flex justify-end gap-2 pt-3">
-          <button type="button" id="btnCancelModal" class="px-4 py-2 rounded-lg text-xs font-medium text-zinc-400 hover:bg-zinc-900">Cancel</button>
-          <button type="submit" class="px-5 py-2 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white">Save Class</button>
+        <div class="flex justify-end gap-2 pt-3 border-t border-[var(--border-hairline)]">
+          <button type="button" id="btnCancelModal" class="mech-btn px-4 py-2 font-mono text-xs font-semibold uppercase">Cancel</button>
+          <button type="submit" class="mech-btn-orange px-5 py-2 font-mono text-xs font-bold uppercase tracking-wider">Commit Slot</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- =====================================================================
-       10. CLOUD SYNC / EXPORT / IMPORT / CALENDAR (.ICS) MODAL
+       9. CLOUD SYNC / EXPORT / IMPORT / CALENDAR (.ICS) MODAL
        ===================================================================== -->
   <div id="toolsModal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-    <div class="modal-panel bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
-      <div class="flex items-center justify-between">
-        <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Cloud Sync & Backup</h3>
-        <button id="btnCloseTools" class="p-1 text-zinc-500 hover:text-zinc-300">✕</button>
+    <div class="modal-panel inst-panel max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto crosshair-box border-t-4 border-t-[#00E5FF]">
+      <div class="flex items-center justify-between pb-3 border-b border-[var(--border-hairline)]">
+        <div>
+          <span class="font-mono text-[10px] uppercase tracking-widest text-[#00E5FF] block">SYS.IO // TELEMETRY SYNC</span>
+          <h3 class="font-display text-lg font-bold uppercase tracking-tight">Cloud Sync & Data I/O</h3>
+        </div>
+        <button id="btnCloseTools" class="mech-btn px-2.5 py-1 font-mono text-xs">✕</button>
       </div>
 
       <!-- Cloud Sync Configuration Box -->
-      <div class="p-4 rounded-xl bg-blue-950/20 border border-blue-500/30 space-y-3 text-xs">
+      <div class="p-4 inst-subpanel space-y-3 text-xs">
         <div class="flex items-center justify-between">
-          <div class="font-semibold text-blue-400 flex items-center gap-1.5">
-            <span>☁️</span> Cross-Device Cloud Sync
+          <div class="font-mono font-bold uppercase text-xs flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#00E5FF]"></span>
+            <span>Realtime Firebase Sync</span>
           </div>
-          <span id="syncStatusBadge" class="px-2 py-0.5 rounded-full text-[10px] bg-zinc-800 text-zinc-400">Not Connected</span>
+          <span id="syncStatusBadge" class="font-mono px-2 py-0.5 text-[10px] inst-panel text-[var(--text-muted)]">STANDBY</span>
         </div>
-        <p class="text-zinc-400 text-[11px] leading-relaxed">
-          Your Firebase URL is pre-filled. Enter the same <strong>Secret Sync Key</strong> (at least 6 characters) on your phone and laptop to sync automatically.
+        <p class="text-[var(--text-muted)] text-[11px] leading-relaxed">
+          Your Firebase endpoint is pre-configured. Enter the same <strong class="text-[var(--text-main)] font-mono">Secret Sync Key</strong> (min 6 chars) across devices for automatic bi-directional sync.
         </p>
-        <div id="syncErrorAlert" class="hidden p-2.5 rounded-lg bg-rose-950/70 border border-rose-500/40 text-rose-200 text-[11px]"></div>
-        <div class="space-y-2">
+        <div id="syncErrorAlert" class="hidden p-2.5 bg-rose-950/80 border border-rose-500 text-rose-200 font-mono text-[11px]"></div>
+        <div class="space-y-2.5">
           <div>
-            <label class="block text-[10px] text-zinc-400 mb-0.5">Firebase Database URL</label>
-            <input id="syncDbUrl" type="url" value="https://class-routine-1b0ca-default-rtdb.firebaseio.com" class="w-full bg-white dark:bg-zinc-900 border border-slate-300 dark:border-zinc-700 rounded-lg px-2.5 py-1.5 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+            <label class="block font-mono text-[10px] uppercase text-[var(--text-muted)] mb-1">Firebase Database Endpoint</label>
+            <input id="syncDbUrl" type="url" value="https://class-routine-1b0ca-default-rtdb.firebaseio.com" class="w-full inst-panel px-2.5 py-1.5 font-mono text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
           </div>
           <div>
-            <label class="block text-[10px] text-zinc-400 mb-0.5">Secret Sync Key (min 6 chars)</label>
-            <input id="syncSecretKey" type="text" placeholder="e.g. cse-routine-2026" class="w-full bg-white dark:bg-zinc-900 border border-slate-300 dark:border-zinc-700 rounded-lg px-2.5 py-1.5 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+            <label class="block font-mono text-[10px] uppercase text-[var(--text-muted)] mb-1">Secret Sync Key (Min 6 Chars)</label>
+            <input id="syncSecretKey" type="text" placeholder="e.g. cse-routine-2026" class="w-full inst-panel px-2.5 py-1.5 font-mono text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
           </div>
         </div>
-        <div class="flex items-center gap-2 pt-1">
-          <button type="button" id="btnSaveSyncConfig" class="flex-1 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors">Connect & Sync</button>
-          <button type="button" id="btnForcePush" class="px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-medium" title="Overwrite cloud with this device's data">Push ↑</button>
-          <button type="button" id="btnForcePull" class="px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-medium" title="Overwrite this device with cloud data">Pull ↓</button>
+        <div class="flex items-center gap-2 pt-2">
+          <button type="button" id="btnSaveSyncConfig" class="flex-1 mech-btn-orange py-2 font-mono text-xs font-bold uppercase">CONNECT & SYNC</button>
+          <button type="button" id="btnForcePush" class="mech-btn px-3 py-2 font-mono text-xs font-semibold" title="Overwrite cloud with local data">PUSH ↑</button>
+          <button type="button" id="btnForcePull" class="mech-btn px-3 py-2 font-mono text-xs font-semibold" title="Overwrite local with cloud data">PULL ↓</button>
         </div>
       </div>
 
-      <div class="space-y-3 text-xs">
-        <div class="p-3.5 rounded-xl bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 flex items-center justify-between">
+      <!-- Local File I/O Operations -->
+      <div class="space-y-2.5 text-xs">
+        <div class="p-3.5 inst-subpanel flex items-center justify-between gap-3">
           <div>
-            <div class="font-semibold text-slate-900 dark:text-white">Export to Google Calendar (.ics)</div>
-            <div class="text-zinc-400 mt-0.5">Generates recurring weekly events for your routine</div>
+            <div class="font-display font-bold uppercase text-xs">Export iCalendar (.ICS)</div>
+            <div class="text-[var(--text-muted)] text-[11px] mt-0.5">16-week recurring events for Google/Apple Calendar</div>
           </div>
-          <button id="btnExportICS" class="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold shrink-0">Download .ics</button>
+          <button id="btnExportICS" class="mech-btn px-3 py-2 font-mono text-[11px] font-bold text-[#FF5500] shrink-0">.ICS ↓</button>
         </div>
 
-        <div class="p-3.5 rounded-xl bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 flex items-center justify-between">
+        <div class="p-3.5 inst-subpanel flex items-center justify-between gap-3">
           <div>
-            <div class="font-semibold text-slate-900 dark:text-white">Export Full JSON Backup</div>
-            <div class="text-zinc-400 mt-0.5">Saves classes, notes, tasks, exams & attendance</div>
+            <div class="font-display font-bold uppercase text-xs">Export Full JSON Dump</div>
+            <div class="text-[var(--text-muted)] text-[11px] mt-0.5">Saves classes, notes, tasks, exams & attendance</div>
           </div>
-          <button id="btnExportJSON" class="px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-semibold shrink-0">Export JSON</button>
+          <button id="btnExportJSON" class="mech-btn px-3 py-2 font-mono text-[11px] font-bold shrink-0">JSON ↓</button>
         </div>
 
-        <div class="p-3.5 rounded-xl bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 flex items-center justify-between">
+        <div class="p-3.5 inst-subpanel flex items-center justify-between gap-3">
           <div>
-            <div class="font-semibold text-slate-900 dark:text-white">Restore from JSON Backup</div>
-            <div class="text-zinc-400 mt-0.5">Import a previously saved backup file</div>
+            <div class="font-display font-bold uppercase text-xs">Restore JSON Backup</div>
+            <div class="text-[var(--text-muted)] text-[11px] mt-0.5">Load a previously exported `.json` state file</div>
           </div>
-          <label class="px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-semibold cursor-pointer shrink-0">
-            Import JSON
+          <label class="mech-btn px-3 py-2 font-mono text-[11px] font-bold cursor-pointer shrink-0">
+            LOAD ↑
             <input type="file" id="inputImportJSON" accept=".json" class="hidden">
           </label>
         </div>
@@ -559,9 +787,34 @@
     </div>
   </div>
 
+  <!-- =====================================================================
+       10. CUSTOM HARDWARE CONFIRMATION MODAL & TELEMETRY TOAST STACK
+       (Replaces native alert() and confirm() with tactile UI)
+       ===================================================================== -->
+  <div id="confirmModal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="modal-panel inst-panel max-w-sm w-full p-5 shadow-2xl border-t-4 border-t-[#FF5500] space-y-4">
+      <div class="flex items-center justify-between border-b border-[var(--border-hairline)] pb-2">
+        <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-[#FF5500]">SYS.CONFIRM // INTERLOCK</span>
+        <span class="font-mono text-[10px] text-[var(--text-faint)]">REQ.AUTH</span>
+      </div>
+      <div>
+        <h4 id="confirmModalTitle" class="font-display text-base font-bold uppercase">Confirm Operation</h4>
+        <p id="confirmModalMessage" class="text-xs text-[var(--text-muted)] mt-1 leading-relaxed"></p>
+      </div>
+      <div class="flex justify-end gap-2 pt-2 border-t border-[var(--border-hairline)]">
+        <button id="btnConfirmCancel" type="button" class="mech-btn px-3.5 py-1.5 font-mono text-xs font-semibold uppercase">Abort</button>
+        <button id="btnConfirmProceed" type="button" class="mech-btn-orange px-4 py-1.5 font-mono text-xs font-bold uppercase">Execute</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Telemetry Toast Container -->
+  <div id="toastContainer" class="fixed bottom-16 sm:bottom-5 right-4 z-50 flex flex-col gap-2 max-w-xs w-full pointer-events-none"></div>
+
   <script>
     /* =====================================================================
        11. DATA SCHEMA, MIGRATION, STATE & CLOUD SYNC MANAGEMENT
+       (100% Backward Compatible with existing LocalStorage & Firebase Sync)
        ===================================================================== */
     const SCHEMA_VERSION = 3;
     const STORAGE_KEY_CLASSES = 'cse_routine_v2';
@@ -571,12 +824,12 @@
     const DEFAULT_FIREBASE_URL = 'https://class-routine-1b0ca-default-rtdb.firebaseio.com';
 
     const COURSES = [
-      { code: 'CSE 4165', color: '#2563eb', bg: 'rgba(37, 99, 235, 0.16)', text: '#60a5fa' },
-      { code: 'CSE 2218', color: '#16a34a', bg: 'rgba(22, 163, 74, 0.16)', text: '#4ade80' },
-      { code: 'CSE 3411', color: '#ea580c', bg: 'rgba(234, 88, 12, 0.16)', text: '#fb923c' },
-      { code: 'CSE 3412', color: '#9333ea', bg: 'rgba(147, 51, 234, 0.16)', text: '#c084fc' },
-      { code: 'CSE 3521', color: '#db2777', bg: 'rgba(219, 39, 119, 0.16)', text: '#f472b6' },
-      { code: 'SOC 2101', color: '#0891b2', bg: 'rgba(8, 145, 178, 0.16)', text: '#22d3ee' }
+      { code: 'CSE 4165', color: '#FF5500', bg: 'rgba(255, 85, 0, 0.14)', text: '#FF6D24' },
+      { code: 'CSE 2218', color: '#10B981', bg: 'rgba(16, 185, 129, 0.14)', text: '#34D399' },
+      { code: 'CSE 3411', color: '#F59E0B', bg: 'rgba(245, 158, 11, 0.14)', text: '#FBBF24' },
+      { code: 'CSE 3412', color: '#A855F7', bg: 'rgba(168, 85, 247, 0.14)', text: '#C084FC' },
+      { code: 'CSE 3521', color: '#EC4899', bg: 'rgba(236, 72, 153, 0.14)', text: '#F472B6' },
+      { code: 'SOC 2101', color: '#00E5FF', bg: 'rgba(0, 229, 255, 0.14)', text: '#22D3EE' }
     ];
 
     const DEFAULT_CLASSES = [
@@ -597,8 +850,50 @@
     ];
 
     const DAY_NAMES = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    const DAY_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
     const MONTH_TITLE = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    /* --- Custom Non-Blocking Toast & Confirmation Engine (Zero alert/confirm) --- */
+    function showToast(message, tone = 'info') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      const toast = document.createElement('div');
+      const dotColor = tone === 'err' ? 'bg-rose-500' : tone === 'ok' ? 'bg-[#CCFF00]' : 'bg-[#FF5500]';
+      const borderClass = tone === 'err' ? 'border-rose-500' : 'border-[var(--border-strong)]';
+      toast.className = `pointer-events-auto inst-panel ${borderClass} p-3 shadow-xl flex items-start gap-2.5 animate-row`;
+      toast.innerHTML = `
+        <span class="w-2 h-2 rounded-full ${dotColor} mt-1 shrink-0"></span>
+        <div class="flex-1 min-w-0">
+          <div class="font-mono text-[10px] uppercase tracking-widest text-[var(--text-faint)]">SYS.MSG // ${tone.toUpperCase()}</div>
+          <div class="text-xs font-medium text-[var(--text-main)] mt-0.5 break-words">${escapeHtml(message)}</div>
+        </div>
+        <button type="button" class="font-mono text-xs text-[var(--text-muted)] hover:text-[var(--text-main)]" onclick="this.parentElement.remove()">✕</button>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        if (toast.parentElement) toast.remove();
+      }, 4200);
+    }
+
+    let pendingConfirmCallback = null;
+    function askConfirm(title, message, onConfirm) {
+      document.getElementById('confirmModalTitle').textContent = title;
+      document.getElementById('confirmModalMessage').textContent = message;
+      pendingConfirmCallback = onConfirm;
+      openModalEl(document.getElementById('confirmModal'));
+    }
+
+    document.getElementById('btnConfirmCancel').onclick = () => {
+      pendingConfirmCallback = null;
+      closeModalEl(document.getElementById('confirmModal'));
+    };
+    document.getElementById('btnConfirmProceed').onclick = () => {
+      const cb = pendingConfirmCallback;
+      pendingConfirmCallback = null;
+      closeModalEl(document.getElementById('confirmModal'));
+      if (typeof cb === 'function') cb();
+    };
 
     function loadAndMigrateRoutine() {
       try {
@@ -641,6 +936,7 @@
         return {
           version: SCHEMA_VERSION,
           theme: parsed.theme || 'dark',
+          viewMode: parsed.viewMode || 'ledger',
           notificationsEnabled: Boolean(parsed.notificationsEnabled),
           completedMap: parsed.completedMap || {},
           exams: Array.isArray(parsed.exams) ? parsed.exams : [
@@ -653,6 +949,7 @@
         return {
           version: SCHEMA_VERSION,
           theme: 'dark',
+          viewMode: 'ledger',
           notificationsEnabled: false,
           completedMap: {},
           exams: [],
@@ -680,6 +977,7 @@
     let selectedCourse = null;
     let searchQuery = '';
     let isEditMode = false;
+    let viewMode = appMeta.viewMode || 'ledger'; // 'ledger' or 'matrix'
     let openNotesSet = new Set();
     let lastRenderedDayISO = toISODate(new Date());
     let sentNotifications = new Set();
@@ -706,16 +1004,16 @@
       if (badge) {
         badge.textContent = text;
         badge.className = tone === 'ok'
-          ? 'px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+          ? 'font-mono px-2 py-0.5 text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-bold'
           : tone === 'err'
-          ? 'px-2 py-0.5 rounded-full text-[10px] bg-rose-500/20 text-rose-300 border border-rose-500/30'
-          : 'px-2 py-0.5 rounded-full text-[10px] bg-zinc-800 text-zinc-400';
+          ? 'font-mono px-2 py-0.5 text-[10px] bg-rose-500/20 text-rose-400 border border-rose-500/40 font-bold'
+          : 'font-mono px-2 py-0.5 text-[10px] inst-panel text-[var(--text-muted)]';
       }
       if (dot) {
         dot.className = tone === 'ok'
           ? 'w-2 h-2 rounded-full bg-emerald-400'
           : tone === 'err'
-          ? 'w-2 h-2 rounded-full bg-rose-400'
+          ? 'w-2 h-2 rounded-full bg-rose-500'
           : 'w-2 h-2 rounded-full bg-zinc-500';
       }
       if (errBox) {
@@ -732,7 +1030,7 @@
       const endpoint = getSyncEndpoint();
       if (!endpoint) return;
       const updatedAt = Number(localStorage.getItem(STORAGE_KEY_UPDATED) || Date.now());
-      setSyncStatus('Syncing ↑...', 'neutral');
+      setSyncStatus('SYNCING ↑', 'neutral');
       try {
         const res = await fetch(endpoint, {
           method: 'PUT',
@@ -740,13 +1038,13 @@
           body: JSON.stringify({ updatedAt, classes: routineData, meta: appMeta })
         });
         if (res.status === 401 || res.status === 403) {
-          setSyncStatus('Locked (401)', 'err', 'Permission Denied: Please paste the security rules in your Firebase Realtime Database → Rules tab and click Publish.');
+          setSyncStatus('LOCKED (401)', 'err', 'Permission Denied: Verify Firebase Realtime Database security rules allow read/write.');
           return;
         }
         if (!res.ok) throw new Error('HTTP ' + res.status);
-        setSyncStatus('Synced ✓', 'ok');
+        setSyncStatus('ONLINE ✓', 'ok');
       } catch (e) {
-        setSyncStatus('Offline (Saved Locally)', 'err');
+        setSyncStatus('LOCAL ONLY', 'err');
       }
     }
 
@@ -756,7 +1054,7 @@
       try {
         const res = await fetch(endpoint);
         if (res.status === 401 || res.status === 403) {
-          setSyncStatus('Locked (401)', 'err', 'Permission Denied: Please paste the security rules in your Firebase Realtime Database → Rules tab and click Publish.');
+          setSyncStatus('LOCKED (401)', 'err', 'Permission Denied: Verify Firebase Realtime Database security rules.');
           return;
         }
         if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -776,10 +1074,11 @@
           renderCoursePills();
           renderProductivityHub();
           renderSchedule({ animate: false });
+          if (force) showToast('Pulled latest telemetry state from cloud.', 'ok');
         }
-        setSyncStatus('Synced ✓', 'ok');
+        setSyncStatus('ONLINE ✓', 'ok');
       } catch (e) {
-        setSyncStatus('Sync Error', 'err');
+        setSyncStatus('SYNC ERR', 'err');
       }
     }
 
@@ -791,6 +1090,7 @@
 
     function saveRoutine() {
       localStorage.setItem(STORAGE_KEY_CLASSES, JSON.stringify(routineData));
+      renderCoursePills();
       renderProductivityHub();
       updateLiveTick();
       scheduleCloudPush();
@@ -852,10 +1152,10 @@
     }
 
     function formatDurationLeft(mins) {
-      if (mins <= 0) return '0m';
+      if (mins <= 0) return '0M';
       const h = Math.floor(mins / 60);
       const m = mins % 60;
-      return h > 0 ? `${h}h ${m}m` : `${m}m`;
+      return h > 0 ? `${h}H ${m}M` : `${m}M`;
     }
 
     function isSameDate(d1, d2) {
@@ -891,9 +1191,13 @@
         renderSchedule({ animate: false });
       }
 
+      // Update Digital Clock with seconds
       const clockText = document.getElementById('liveClockText');
       if (clockText) {
-        clockText.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const hrs = String(now.getHours()).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const secs = String(now.getSeconds()).padStart(2, '0');
+        clockText.innerHTML = `${hrs}<span class="blink-colon">:</span>${mins}<span class="blink-colon">:</span>${secs}`;
       }
 
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
@@ -913,24 +1217,23 @@
         const isUpcomingToday = isCardToday && validRange && !isManualDone && currentMinutes < startMin;
         const isDone = isManualDone || isTimeDone;
 
-        card.classList.toggle('ring-1', isLive);
-        card.classList.toggle('ring-emerald-500/70', isLive);
-        card.classList.toggle('opacity-55', isDone && !isLive);
+        card.classList.toggle('is-live-card', isLive);
+        card.classList.toggle('opacity-50', isDone && !isLive);
 
         const badgeEl = card.querySelector('.js-status-badge');
         if (badgeEl) {
           if (isLive) {
-            badgeEl.className = 'js-status-badge px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse';
-            badgeEl.textContent = 'LIVE NOW';
+            badgeEl.className = 'js-status-badge font-mono px-2 py-0.5 text-[10px] font-bold bg-[#CCFF00] text-black uppercase tracking-wider';
+            badgeEl.textContent = '● LIVE NOW';
           } else if (isDone) {
-            badgeEl.className = 'js-status-badge px-2 py-0.5 rounded-full text-[10px] font-semibold bg-zinc-700/50 text-zinc-400 border border-zinc-600/40';
-            badgeEl.textContent = 'DONE';
+            badgeEl.className = 'js-status-badge font-mono px-2 py-0.5 text-[10px] font-semibold inst-subpanel text-[var(--text-faint)] uppercase';
+            badgeEl.textContent = 'LOGGED // DONE';
           } else if (isUpcomingToday) {
             const minsUntil = startMin - currentMinutes;
             badgeEl.className = minsUntil <= 60
-              ? 'js-status-badge px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40'
-              : 'js-status-badge px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-500/15 text-blue-300 border border-blue-500/30';
-            badgeEl.textContent = `Starts in ${formatDurationLeft(minsUntil)}`;
+              ? 'js-status-badge font-mono px-2 py-0.5 text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40 uppercase'
+              : 'js-status-badge font-mono px-2 py-0.5 text-[10px] font-medium bg-[#00E5FF]/15 text-[#00E5FF] border border-[#00E5FF]/30 uppercase';
+            badgeEl.textContent = `T-MINUS ${formatDurationLeft(minsUntil)}`;
           } else {
             badgeEl.className = 'js-status-badge hidden';
             badgeEl.textContent = '';
@@ -948,7 +1251,7 @@
             const bar = progressWrap.querySelector('.js-live-progress-bar');
             const label = progressWrap.querySelector('.js-live-time-left');
             if (bar) bar.style.width = `${pct}%`;
-            if (label) label.textContent = `${minsLeft} min left (${pct}%)`;
+            if (label) label.textContent = `${minsLeft}M REM // ${pct}%`;
           } else {
             progressWrap.classList.add('hidden');
           }
@@ -988,25 +1291,28 @@
       const roomBadge = document.getElementById('bannerRoomBadge');
       const countdownEl = document.getElementById('bannerCountdown');
       const pulseDot = document.getElementById('bannerPulseDot');
+      const coreDot = document.getElementById('bannerCoreDot');
 
       if (activeNow) {
         const left = activeNow.parsed.end - currentMinutes;
         statusLabel.textContent = 'LIVE NOW';
-        statusLabel.className = 'font-bold uppercase tracking-wider text-emerald-400 shrink-0';
-        pulseDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0';
-        courseInfo.textContent = `${activeNow.course} · ${activeNow.title}`;
-        roomBadge.textContent = `📍 ${activeNow.room}`;
+        statusLabel.className = 'font-mono text-[11px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-[#CCFF00] text-black shrink-0';
+        pulseDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-[#CCFF00] opacity-75';
+        coreDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-[#CCFF00]';
+        courseInfo.innerHTML = `<span class="font-mono font-bold text-[#CCFF00]">${escapeHtml(activeNow.course)}</span> <span class="text-zinc-500">//</span> ${escapeHtml(activeNow.title)}`;
+        roomBadge.textContent = `LOC // ${activeNow.room}`;
         roomBadge.classList.remove('hidden');
-        countdownEl.textContent = `${left} min remaining`;
+        countdownEl.textContent = `${left}M REMAINING`;
       } else if (nextToday) {
         const diff = nextToday.parsed.start - currentMinutes;
         statusLabel.textContent = 'NEXT TODAY';
-        statusLabel.className = 'font-bold uppercase tracking-wider text-blue-300 shrink-0';
-        pulseDot.className = 'w-2 h-2 rounded-full bg-blue-400 animate-ping shrink-0';
-        courseInfo.textContent = `${nextToday.course} · ${nextToday.title}`;
-        roomBadge.textContent = `📍 ${nextToday.room}`;
+        statusLabel.className = 'font-mono text-[11px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-[#00E5FF]/20 text-[#00E5FF] border border-[#00E5FF]/40 shrink-0';
+        pulseDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00E5FF] opacity-75';
+        coreDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00E5FF]';
+        courseInfo.innerHTML = `<span class="font-mono font-bold text-[#00E5FF]">${escapeHtml(nextToday.course)}</span> <span class="text-zinc-500">//</span> ${escapeHtml(nextToday.title)}`;
+        roomBadge.textContent = `LOC // ${nextToday.room}`;
         roomBadge.classList.remove('hidden');
-        countdownEl.textContent = `Starts in ${formatDurationLeft(diff)}`;
+        countdownEl.textContent = `T-${formatDurationLeft(diff)}`;
       } else {
         let foundNext = null;
         for (let offset = 1; offset <= 7; offset++) {
@@ -1020,24 +1326,25 @@
             break;
           }
         }
-        pulseDot.className = 'w-2 h-2 rounded-full bg-zinc-400 shrink-0';
+        pulseDot.className = 'hidden';
+        coreDot.className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-500';
         statusLabel.textContent = 'UP NEXT';
-        statusLabel.className = 'font-semibold uppercase tracking-wider text-zinc-400 shrink-0';
+        statusLabel.className = 'font-mono text-[11px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-zinc-800 text-zinc-300 border border-zinc-700 shrink-0';
         if (foundNext) {
-          courseInfo.textContent = `${foundNext.cls.course} · ${foundNext.cls.title}`;
-          roomBadge.textContent = `📍 ${foundNext.cls.room}`;
+          courseInfo.innerHTML = `<span class="font-mono font-bold text-white">${escapeHtml(foundNext.cls.course)}</span> <span class="text-zinc-500">//</span> ${escapeHtml(foundNext.cls.title)}`;
+          roomBadge.textContent = `LOC // ${foundNext.cls.room}`;
           roomBadge.classList.remove('hidden');
-          countdownEl.textContent = `${foundNext.dayName} (${foundNext.cls.time.split('-')[0].trim()})`;
+          countdownEl.textContent = `${foundNext.dayName} @ ${foundNext.cls.time.split('-')[0].trim()}`;
         } else {
-          courseInfo.textContent = 'No upcoming classes found';
+          courseInfo.textContent = 'NO SCHEDULED SLOTS IN QUEUE';
           roomBadge.classList.add('hidden');
-          countdownEl.textContent = '';
+          countdownEl.textContent = 'STANDBY';
         }
       }
     }
 
     /* =====================================================================
-       14. SCHEDULE RENDERER (GAP DETECTION, NOTES, TASKS, ANIMATIONS)
+       14. SCHEDULE RENDERER (DUAL MODE: LEDGER TIMELINE & 7-DAY MATRIX)
        ===================================================================== */
     function renderCoursePills() {
       const container = document.getElementById('coursePillsContainer');
@@ -1049,13 +1356,16 @@
 
       COURSES.forEach(c => {
         const active = selectedCourse === c.code;
+        const slotCount = routineData.filter(item => item.course === c.code).length;
         const btn = document.createElement('button');
-        btn.className = `course-pill px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2 shrink-0 border ${
-          active ? 'ring-2 ring-blue-400 scale-105 shadow-md' : 'border-transparent opacity-85 hover:opacity-100'
+        btn.className = `mech-btn px-2.5 py-1 font-mono text-[11px] font-semibold flex items-center gap-2 shrink-0 ${
+          active ? 'ring-2 ring-[#FF5500] bg-[var(--bg-panel)]' : 'opacity-85 hover:opacity-100'
         }`;
-        btn.style.backgroundColor = c.bg;
-        btn.style.color = c.text;
-        btn.innerHTML = `<span class="w-2 h-2 rounded-full" style="background-color:${escapeHtml(c.color)}"></span>${escapeHtml(c.code)}`;
+        btn.innerHTML = `
+          <span class="w-2 h-2 rounded-none" style="background-color:${escapeHtml(c.color)}"></span>
+          <span>${escapeHtml(c.code)}</span>
+          <span class="text-[10px] px-1 bg-black/20 dark:bg-white/10 text-[var(--text-muted)]">${slotCount}</span>
+        `;
         btn.onclick = () => {
           selectedCourse = (selectedCourse === c.code) ? null : c.code;
           document.getElementById('btnClearFilter').classList.toggle('hidden', !selectedCourse);
@@ -1078,12 +1388,44 @@
       });
     }
 
+    function syncViewModeButtons() {
+      const btnLedger = document.getElementById('btnViewLedger');
+      const btnMatrix = document.getElementById('btnViewMatrix');
+      const modeLabel = document.getElementById('scheduleModeLabel');
+      const scheduleWrapper = document.getElementById('scheduleWrapper');
+      const productivityHub = document.getElementById('productivityHub');
+
+      if (viewMode === 'matrix') {
+        btnMatrix.className = 'px-2.5 py-1 font-mono text-[11px] font-semibold uppercase transition-all flex items-center gap-1.5 bg-[var(--accent-orange)] text-white';
+        btnLedger.className = 'px-2.5 py-1 font-mono text-[11px] font-semibold uppercase transition-all flex items-center gap-1.5 text-[var(--text-muted)] hover:text-[var(--text-main)]';
+        modeLabel.textContent = 'ARCHITECTURAL.MATRIX // 7-DAY BENTO GRID';
+        scheduleWrapper.className = 'lg:col-span-12 w-full space-y-4';
+        productivityHub.className = 'lg:col-span-12 w-full grid grid-cols-1 md:grid-cols-3 gap-5 pt-4';
+      } else {
+        btnLedger.className = 'px-2.5 py-1 font-mono text-[11px] font-semibold uppercase transition-all flex items-center gap-1.5 bg-[var(--accent-orange)] text-white';
+        btnMatrix.className = 'px-2.5 py-1 font-mono text-[11px] font-semibold uppercase transition-all flex items-center gap-1.5 text-[var(--text-muted)] hover:text-[var(--text-main)]';
+        modeLabel.textContent = 'CHRONO.LEDGER // 7-DAY TIMELINE';
+        scheduleWrapper.className = 'lg:col-span-8 w-full space-y-4';
+        productivityHub.className = 'lg:col-span-4 w-full lg:sticky lg:top-[108px] space-y-5';
+      }
+    }
+
     function renderSchedule(options = { animate: false, slideDir: null }) {
       const { animate = false, slideDir = null } = options;
+      syncViewModeButtons();
+
       const now = new Date();
       const startTuesday = getCycleStartTuesday(now, weekOffset);
       const endMonday = new Date(startTuesday);
       endMonday.setDate(startTuesday.getDate() + 6);
+
+      const offsetTag = document.getElementById('cycleOffsetTag');
+      if (weekOffset === 0) {
+        offsetTag.classList.add('hidden');
+      } else {
+        offsetTag.classList.remove('hidden');
+        offsetTag.textContent = weekOffset > 0 ? `+${weekOffset} WK` : `${weekOffset} WK`;
+      }
 
       const sameMonth = startTuesday.getMonth() === endMonday.getMonth();
       const rangeText = sameMonth
@@ -1104,7 +1446,9 @@
         container.classList.add('slide-prev');
       }
 
-      let renderedRowIndex = 0;
+      // Build 7-day cycle data array
+      const daysArray = [];
+      let totalVisibleSlots = 0;
 
       for (let i = 0; i < 7; i++) {
         const cellDate = new Date(startTuesday);
@@ -1134,186 +1478,16 @@
           return (pa ? pa.start : 9999) - (pb ? pb.start : 9999);
         });
 
-        if (dayClasses.length === 0 && !isToday) continue;
+        totalVisibleSlots += dayClasses.length;
+        daysArray.push({ cellDate, dayOfWeek, isToday, dateISO, dayClasses, index: i });
+      }
 
-        const dayRow = document.createElement('div');
-        dayRow.id = isToday ? 'todayRow' : '';
-        dayRow.className = `py-6 px-4 sm:px-8 flex flex-col sm:flex-row gap-4 sm:gap-8 items-start transition-colors ${animate ? 'animate-row' : ''}`;
-        if (animate) {
-          dayRow.style.animationDelay = `${renderedRowIndex * 50}ms`;
-        }
-        renderedRowIndex++;
+      document.getElementById('scheduleStatsLabel').textContent = `ACTIVE SLOTS: ${totalVisibleSlots}`;
 
-        const leftCol = document.createElement('div');
-        leftCol.className = 'w-16 shrink-0 flex sm:flex-col items-baseline sm:items-center gap-2 sm:gap-0.5 text-center select-none';
-        leftCol.innerHTML = `
-          <span class="text-[11px] font-semibold tracking-widest uppercase ${isToday ? 'text-blue-400' : 'text-zinc-400'}">${escapeHtml(DAY_NAMES[dayOfWeek])}</span>
-          <span class="text-2xl sm:text-[26px] leading-tight font-bold ${isToday ? 'text-blue-400' : 'text-slate-900 dark:text-white'}">${escapeHtml(cellDate.getDate())}</span>
-          <span class="text-[10px] font-medium tracking-widest uppercase text-zinc-500">${escapeHtml(MONTH_NAMES[cellDate.getMonth()])}</span>
-          ${isToday ? '<span class="mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">TODAY</span>' : ''}
-        `;
-
-        const rightCol = document.createElement('div');
-        rightCol.className = 'flex-1 w-full space-y-2.5';
-
-        if (dayClasses.length === 0) {
-          rightCol.innerHTML = `
-            <div class="rounded-2xl bg-slate-100 dark:bg-cardHighlight/60 border border-slate-200 dark:border-zinc-800/80 px-5 py-4 text-sm text-zinc-400">
-              No matching classes scheduled for this day.
-            </div>
-          `;
-        } else {
-          dayClasses.forEach((cls, idx) => {
-            const courseObj = COURSES.find(c => c.code === cls.course) || COURSES[0];
-            const parsedTime = parseTimeRange(cls.time);
-            const doneKey = `${cls.id}_${dateISO}`;
-            const isManualDone = Boolean(appMeta.completedMap[doneKey]);
-            const isDrawerOpen = openNotesSet.has(cls.id);
-            const pendingTasksCount = (cls.tasks || []).filter(t => !t.done).length;
-
-            const card = document.createElement('div');
-            card.dataset.classId = cls.id;
-            card.dataset.dateIso = dateISO;
-            card.dataset.startMin = parsedTime ? parsedTime.start : -1;
-            card.dataset.endMin = parsedTime ? parsedTime.end : -1;
-            card.style.setProperty('--course-glow', courseObj.bg.replace('0.16', '0.45'));
-
-            card.className = `class-card group relative flex flex-col px-4 py-3.5 rounded-2xl border ${
-              isToday
-                ? 'bg-white dark:bg-cardHighlight border-slate-200 dark:border-zinc-800/90 shadow-lg'
-                : 'bg-white/60 dark:bg-transparent hover:bg-slate-100 dark:hover:bg-zinc-900/50 border-slate-200/60 dark:border-transparent'
-            }`;
-
-            const hasLinks = cls.links && (cls.links.classroom || cls.links.meet || cls.links.drive);
-            const linksHtml = hasLinks ? `
-              <div class="flex items-center gap-1.5 ml-auto">
-                ${cls.links.classroom ? `<a href="${escapeHtml(cls.links.classroom)}" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-[10px] text-zinc-200 font-medium">📚 Classroom</a>` : ''}
-                ${cls.links.meet ? `<a href="${escapeHtml(cls.links.meet)}" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-emerald-950/80 hover:bg-emerald-900 text-[10px] text-emerald-300 border border-emerald-700/40 font-medium">📹 Meet</a>` : ''}
-                ${cls.links.drive ? `<a href="${escapeHtml(cls.links.drive)}" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-blue-950/80 hover:bg-blue-900 text-[10px] text-blue-300 border border-blue-700/40 font-medium">📁 Drive</a>` : ''}
-              </div>
-            ` : '';
-
-            card.innerHTML = `
-              <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
-                <div class="w-44 shrink-0 flex items-center gap-2.5 text-xs sm:text-[13px] font-medium text-zinc-400">
-                  <button type="button" onclick="toggleClassDone('${escapeHtml(cls.id)}', '${escapeHtml(dateISO)}', this)"
-                    class="relative w-5 h-5 rounded-md border ${isManualDone ? 'bg-emerald-500 border-emerald-500 text-black' : 'border-zinc-700 hover:border-zinc-500 text-transparent'} flex items-center justify-center transition-all shrink-0"
-                    title="Mark class done for this day">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                  </button>
-                  <span data-field="time" data-id="${escapeHtml(cls.id)}" ${isEditMode ? 'contenteditable="true"' : ''}>${escapeHtml(cls.time)}</span>
-                </div>
-
-                <div class="flex-1 flex items-start gap-3.5 min-w-0">
-                  <span class="w-3 h-3 rounded-full mt-1.5 shrink-0 shadow-sm" style="background-color: ${escapeHtml(courseObj.color)}"></span>
-                  <div class="space-y-1 flex-1 min-w-0">
-                    <div class="flex flex-wrap items-center gap-2">
-                      <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md" style="background-color:${escapeHtml(courseObj.bg)}; color:${escapeHtml(courseObj.text)}">${escapeHtml(cls.course)}</span>
-                      <h2 data-field="title" data-id="${escapeHtml(cls.id)}" ${isEditMode ? 'contenteditable="true"' : ''} class="text-[15px] font-medium text-slate-900 dark:text-zinc-100 leading-snug">
-                        ${escapeHtml(cls.title)}
-                      </h2>
-                      <span class="js-status-badge hidden"></span>
-                    </div>
-                    
-                    <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-400">
-                      <span data-field="room" data-id="${escapeHtml(cls.id)}" ${isEditMode ? 'contenteditable="true"' : ''}>${escapeHtml(cls.room)}</span>
-                      <span>·</span>
-                      <span class="inline-flex items-center gap-1.5">
-                        <span class="w-5 h-5 rounded-full bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 text-[10px] font-bold inline-flex items-center justify-center border border-slate-300 dark:border-zinc-700">
-                          ${escapeHtml(cls.initials)}
-                        </span>
-                        <span data-field="teacher" data-id="${escapeHtml(cls.id)}" ${isEditMode ? 'contenteditable="true"' : ''}>${escapeHtml(cls.teacher)}</span>
-                      </span>
-                      ${linksHtml}
-                    </div>
-                  </div>
-                </div>
-
-                <div class="flex items-center gap-1.5 self-end sm:self-center shrink-0">
-                  <button type="button" onclick="toggleClassDrawer('${escapeHtml(cls.id)}')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-zinc-800/70 hover:bg-slate-200 dark:hover:bg-zinc-800 text-xs text-zinc-400 hover:text-white flex items-center gap-1 transition-colors" title="Notes & Tasks">
-                    <span>📝</span>
-                    ${pendingTasksCount > 0 ? `<span class="text-[10px] font-bold text-blue-400">${pendingTasksCount}</span>` : ''}
-                  </button>
-                  <div class="${isEditMode ? 'flex' : 'hidden group-hover:flex'} items-center gap-1">
-                    <button type="button" onclick="openEditModal('${escapeHtml(cls.id)}')" class="p-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300" title="Edit Class">
-                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                    </button>
-                    <button type="button" onclick="deleteClass('${escapeHtml(cls.id)}', this)" class="p-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900 text-rose-300" title="Delete Class">
-                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="js-live-progress-wrap hidden mt-3 pt-2 border-t border-zinc-800/80">
-                <div class="flex items-center justify-between text-[11px] text-emerald-400 mb-1">
-                  <span class="font-medium">Class in progress</span>
-                  <span class="js-live-time-left font-mono"></span>
-                </div>
-                <div class="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-                  <div class="js-live-progress-bar h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-              </div>
-
-              <div id="drawer_${escapeHtml(cls.id)}" class="${isDrawerOpen ? 'block' : 'hidden'} mt-3 pt-3 border-t border-slate-200 dark:border-zinc-800/80 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                <div>
-                  <label class="block text-[11px] font-medium text-zinc-400 mb-1">Quick Class Notes</label>
-                  <textarea rows="2" placeholder="Jot down topics, room changes, or syllabus notes..."
-                    onblur="saveClassNote('${escapeHtml(cls.id)}', this.value)"
-                    class="w-full bg-slate-100 dark:bg-zinc-900/90 border border-slate-300 dark:border-zinc-800 rounded-lg p-2 text-xs text-slate-900 dark:text-zinc-200 focus:outline-none focus:border-blue-500">${escapeHtml(cls.notes || '')}</textarea>
-                </div>
-                <div>
-                  <label class="block text-[11px] font-medium text-zinc-400 mb-1">Assignments & Tasks</label>
-                  <div class="space-y-1.5 mb-2 max-h-28 overflow-y-auto">
-                    ${(cls.tasks || []).map(t => `
-                      <div class="flex items-center justify-between gap-2 bg-slate-100 dark:bg-zinc-900/70 px-2.5 py-1 rounded-md">
-                        <label class="flex items-center gap-2 cursor-pointer truncate">
-                          <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTaskDone('${escapeHtml(cls.id)}', '${escapeHtml(t.id)}')" class="rounded border-zinc-700">
-                          <span class="${t.done ? 'line-through text-zinc-500' : 'text-slate-800 dark:text-zinc-200'} truncate">${escapeHtml(t.title)}</span>
-                        </label>
-                        <div class="flex items-center gap-1.5 shrink-0">
-                          ${t.dueDate ? `<span class="text-[10px] text-amber-400">${escapeHtml(t.dueDate)}</span>` : ''}
-                          <button type="button" onclick="deleteTask('${escapeHtml(cls.id)}', '${escapeHtml(t.id)}')" class="text-zinc-500 hover:text-rose-400">✕</button>
-                        </div>
-                      </div>
-                    `).join('')}
-                  </div>
-                  <div class="flex gap-1.5">
-                    <input type="text" id="newTaskTitle_${escapeHtml(cls.id)}" placeholder="New assignment..." class="flex-1 bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-2 py-1 text-xs text-slate-900 dark:text-white">
-                    <input type="date" id="newTaskDue_${escapeHtml(cls.id)}" class="bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 rounded-lg px-2 py-1 text-xs text-slate-900 dark:text-white">
-                    <button type="button" onclick="addClassTask('${escapeHtml(cls.id)}')" class="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium">+</button>
-                  </div>
-                </div>
-              </div>
-            `;
-
-            rightCol.appendChild(card);
-
-            if (idx < dayClasses.length - 1) {
-              const nextCls = dayClasses[idx + 1];
-              const nextParsed = parseTimeRange(nextCls.time);
-              if (parsedTime && nextParsed && nextParsed.start - parsedTime.end >= 15) {
-                const gapMins = nextParsed.start - parsedTime.end;
-                const gapBar = document.createElement('div');
-                gapBar.className = 'flex items-center justify-between px-4 py-2 rounded-xl border border-dashed border-slate-300 dark:border-zinc-800/90 bg-slate-100/40 dark:bg-zinc-950/50 text-xs text-zinc-400';
-                gapBar.innerHTML = `
-                  <span class="flex items-center gap-2">
-                    <span>☕</span>
-                    <span>Free gap: <strong class="text-zinc-300">${formatDurationLeft(gapMins)}</strong> (${formatMinsTo12H(parsedTime.end)} – ${formatMinsTo12H(nextParsed.start)})</span>
-                  </span>
-                  <button type="button" onclick="startPomodoro(25)" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 font-medium transition-colors">
-                    🍅 Start 25-min Pomodoro
-                  </button>
-                `;
-                rightCol.appendChild(gapBar);
-              }
-            }
-          });
-        }
-
-        dayRow.appendChild(leftCol);
-        dayRow.appendChild(rightCol);
-        container.appendChild(dayRow);
+      if (viewMode === 'matrix') {
+        renderMatrixView(container, daysArray, animate);
+      } else {
+        renderLedgerView(container, daysArray, animate);
       }
 
       if (isEditMode) {
@@ -1325,12 +1499,284 @@
             if (item && field) {
               item[field] = e.target.textContent.trim();
               saveRoutine();
+              showToast(`Updated ${field.toUpperCase()} for ${item.course}`, 'ok');
             }
           });
         });
       }
 
       updateLiveTick();
+    }
+
+    /* --- 14A: LEDGER TIMELINE RENDERER --- */
+    function renderLedgerView(container, daysArray, animate) {
+      let renderedRowIndex = 0;
+
+      daysArray.forEach(dayObj => {
+        const { cellDate, dayOfWeek, isToday, dateISO, dayClasses } = dayObj;
+        if (dayClasses.length === 0 && !isToday) return;
+
+        const dayBlock = document.createElement('div');
+        dayBlock.id = isToday ? 'todayRow' : '';
+        dayBlock.className = `inst-panel p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start ${
+          isToday ? 'border-l-4 border-l-[#FF5500]' : ''
+        } ${animate ? 'animate-row' : ''}`;
+
+        if (animate) {
+          dayBlock.style.animationDelay = `${renderedRowIndex * 45}ms`;
+        }
+        renderedRowIndex++;
+
+        // Left Date Stamp Column
+        const leftCol = document.createElement('div');
+        leftCol.className = 'w-full sm:w-24 shrink-0 flex sm:flex-col items-baseline sm:items-start justify-between sm:justify-start pb-2 sm:pb-0 border-b sm:border-b-0 sm:border-r border-[var(--border-hairline)] sm:pr-4 select-none';
+        leftCol.innerHTML = `
+          <div class="flex items-center gap-1.5">
+            <span class="font-mono text-xs font-bold tracking-widest uppercase ${isToday ? 'text-[#FF5500]' : 'text-[var(--text-muted)]'}">${escapeHtml(DAY_NAMES[dayOfWeek])}</span>
+            ${isToday ? '<span class="w-2 h-2 rounded-full bg-[#FF5500]"></span>' : ''}
+          </div>
+          <div class="font-display text-2xl sm:text-3xl font-bold leading-none my-0.5 ${isToday ? 'text-[#FF5500]' : 'text-[var(--text-main)]'}">
+            ${escapeHtml(String(cellDate.getDate()).padStart(2, '0'))}
+          </div>
+          <div class="font-mono text-[10px] uppercase tracking-widest text-[var(--text-faint)]">
+            ${escapeHtml(MONTH_NAMES[cellDate.getMonth()])} // ${dayClasses.length}S
+          </div>
+          ${isToday ? '<span class="mt-1.5 px-1.5 py-0.5 font-mono text-[9px] font-bold bg-[#FF5500] text-white uppercase tracking-widest">ACTIVE DAY</span>' : ''}
+        `;
+
+        // Right Class Cards Stack
+        const rightCol = document.createElement('div');
+        rightCol.className = 'flex-1 w-full space-y-3';
+
+        if (dayClasses.length === 0) {
+          rightCol.innerHTML = `
+            <div class="inst-subpanel px-4 py-4 font-mono text-xs text-[var(--text-muted)] flex items-center justify-between">
+              <span>NO ACADEMIC SLOTS SCHEDULED FOR THIS DAY CYCLE.</span>
+              <span class="text-[10px] text-[var(--text-faint)]">STATUS // CLEAR</span>
+            </div>
+          `;
+        } else {
+          dayClasses.forEach((cls, idx) => {
+            const card = buildClassCardDOM(cls, dateISO, false);
+            rightCol.appendChild(card);
+
+            // Detect Free Gap >= 15 mins between consecutive classes
+            if (idx < dayClasses.length - 1) {
+              const parsedTime = parseTimeRange(cls.time);
+              const nextCls = dayClasses[idx + 1];
+              const nextParsed = parseTimeRange(nextCls.time);
+              if (parsedTime && nextParsed && nextParsed.start - parsedTime.end >= 15) {
+                const gapMins = nextParsed.start - parsedTime.end;
+                const gapBar = document.createElement('div');
+                gapBar.className = 'gap-stripe inst-subpanel px-3.5 py-2 flex flex-wrap items-center justify-between gap-2 font-mono text-xs';
+                gapBar.innerHTML = `
+                  <div class="flex items-center gap-2 text-[var(--text-muted)]">
+                    <span class="px-1.5 py-0.2 bg-zinc-800 text-zinc-300 text-[10px] font-bold">GAP.WINDOW</span>
+                    <span>FREE INTERVAL: <strong class="text-[var(--text-main)]">${formatDurationLeft(gapMins)}</strong> (${formatMinsTo12H(parsedTime.end)} → ${formatMinsTo12H(nextParsed.start)})</span>
+                  </div>
+                  <button type="button" onclick="startPomodoro(25)" class="mech-btn px-2.5 py-1 font-mono text-[10px] font-bold text-[#FF5500] uppercase">
+                    ▶ START 25M POMODORO
+                  </button>
+                `;
+                rightCol.appendChild(gapBar);
+              }
+            }
+          });
+        }
+
+        dayBlock.appendChild(leftCol);
+        dayBlock.appendChild(rightCol);
+        container.appendChild(dayBlock);
+      });
+    }
+
+    /* --- 14B: 7-DAY ARCHITECTURAL MATRIX RENDERER --- */
+    function renderMatrixView(container, daysArray, animate) {
+      const grid = document.createElement('div');
+      grid.className = 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4';
+
+      daysArray.forEach((dayObj, idx) => {
+        const { cellDate, dayOfWeek, isToday, dateISO, dayClasses } = dayObj;
+        if (dayClasses.length === 0 && !isToday) return;
+
+        const colPanel = document.createElement('div');
+        colPanel.id = isToday ? 'todayRow' : '';
+        colPanel.className = `inst-panel p-4 flex flex-col justify-between ${
+          isToday ? 'border-t-4 border-t-[#FF5500]' : ''
+        } ${animate ? 'animate-row' : ''}`;
+        if (animate) colPanel.style.animationDelay = `${idx * 40}ms`;
+
+        const header = document.createElement('div');
+        header.className = 'flex items-center justify-between pb-3 mb-3 border-b border-[var(--border-hairline)]';
+        header.innerHTML = `
+          <div class="flex items-baseline gap-2">
+            <span class="font-display text-2xl font-bold ${isToday ? 'text-[#FF5500]' : 'text-[var(--text-main)]'}">${String(cellDate.getDate()).padStart(2, '0')}</span>
+            <span class="font-mono text-xs font-bold uppercase ${isToday ? 'text-[#FF5500]' : 'text-[var(--text-muted)]'}">${escapeHtml(DAY_NAMES[dayOfWeek])} // ${escapeHtml(MONTH_NAMES[cellDate.getMonth()])}</span>
+          </div>
+          <span class="font-mono text-[10px] px-2 py-0.5 ${isToday ? 'bg-[#FF5500] text-white font-bold' : 'inst-subpanel text-[var(--text-muted)]'}">
+            ${isToday ? 'TODAY' : `${dayClasses.length} SLOTS`}
+          </span>
+        `;
+
+        const body = document.createElement('div');
+        body.className = 'space-y-2.5 flex-1';
+
+        if (dayClasses.length === 0) {
+          body.innerHTML = `<div class="inst-subpanel p-3 font-mono text-xs text-[var(--text-faint)] text-center">NO SLOTS SCHEDULED</div>`;
+        } else {
+          dayClasses.forEach(cls => {
+            body.appendChild(buildClassCardDOM(cls, dateISO, true));
+          });
+        }
+
+        colPanel.appendChild(header);
+        colPanel.appendChild(body);
+        grid.appendChild(colPanel);
+      });
+
+      container.appendChild(grid);
+    }
+
+    /* --- Shared Precision Class Slot Card Builder --- */
+    function buildClassCardDOM(cls, dateISO, isCompactMatrix = false) {
+      const courseObj = COURSES.find(c => c.code === cls.course) || COURSES[0];
+      const parsedTime = parseTimeRange(cls.time);
+      const durationMins = parsedTime ? (parsedTime.end - parsedTime.start) : null;
+      const doneKey = `${cls.id}_${dateISO}`;
+      const isManualDone = Boolean(appMeta.completedMap[doneKey]);
+      const isDrawerOpen = openNotesSet.has(cls.id);
+      const pendingTasksCount = (cls.tasks || []).filter(t => !t.done).length;
+
+      const card = document.createElement('div');
+      card.dataset.classId = cls.id;
+      card.dataset.dateIso = dateISO;
+      card.dataset.startMin = parsedTime ? parsedTime.start : -1;
+      card.dataset.endMin = parsedTime ? parsedTime.end : -1;
+      card.style.setProperty('--course-accent', courseObj.color);
+      card.style.setProperty('--course-glow', courseObj.bg);
+
+      card.className = `class-card group relative flex flex-col p-3.5 transition-all`;
+
+      const hasLinks = cls.links && (cls.links.classroom || cls.links.meet || cls.links.drive);
+      const linksHtml = hasLinks ? `
+        <div class="flex items-center gap-1.5 flex-wrap">
+          ${cls.links.classroom ? `<a href="${escapeHtml(cls.links.classroom)}" target="_blank" rel="noopener noreferrer" class="mech-btn px-2 py-0.5 font-mono text-[10px] font-semibold uppercase">CLASSROOM ↗</a>` : ''}
+          ${cls.links.meet ? `<a href="${escapeHtml(cls.links.meet)}" target="_blank" rel="noopener noreferrer" class="mech-btn px-2 py-0.5 font-mono text-[10px] font-semibold text-emerald-400 uppercase">MEET ↗</a>` : ''}
+          ${cls.links.drive ? `<a href="${escapeHtml(cls.links.drive)}" target="_blank" rel="noopener noreferrer" class="mech-btn px-2 py-0.5 font-mono text-[10px] font-semibold text-[#00E5FF] uppercase">DRIVE ↗</a>` : ''}
+        </div>
+      ` : '';
+
+      card.innerHTML = `
+        <div class="flex flex-col ${isCompactMatrix ? 'gap-2.5' : 'sm:flex-row sm:items-center gap-3 sm:gap-5'}">
+          
+          <!-- Left: Mechanical Completion Switch + Time & Duration Readout -->
+          <div class="${isCompactMatrix ? 'w-full justify-between border-b border-[var(--border-hairline)] pb-2' : 'sm:w-48 shrink-0'} flex items-center gap-2.5">
+            <button type="button" onclick="toggleClassDone('${escapeHtml(cls.id)}', '${escapeHtml(dateISO)}', this)"
+              class="relative w-5 h-5 rounded-none border ${isManualDone ? 'bg-[#CCFF00] border-[#CCFF00] text-black' : 'border-[var(--border-strong)] hover:border-[#FF5500] text-transparent'} flex items-center justify-center transition-all shrink-0"
+              title="Log Slot Completion">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            </button>
+            <div class="flex flex-col">
+              <span data-field="time" data-id="${escapeHtml(cls.id)}" ${isEditMode ? 'contenteditable="true"' : ''} class="font-mono text-xs font-bold text-[var(--text-main)] tracking-tight">${escapeHtml(cls.time)}</span>
+              ${durationMins ? `<span class="font-mono text-[10px] text-[var(--text-faint)]">DUR // ${durationMins} MIN</span>` : ''}
+            </div>
+          </div>
+
+          <!-- Center: Course Code, Title, Room & Instructor -->
+          <div class="flex-1 flex items-start gap-3 min-w-0">
+            <span class="w-1.5 self-stretch rounded-none shrink-0" style="background-color: ${escapeHtml(courseObj.color)}"></span>
+            <div class="space-y-1.5 flex-1 min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="font-mono text-[11px] font-bold px-2 py-0.5 border" style="background-color:${escapeHtml(courseObj.bg)}; color:${escapeHtml(courseObj.text)}; border-color:${escapeHtml(courseObj.color)}40">${escapeHtml(cls.course)}</span>
+                <span class="js-status-badge hidden"></span>
+              </div>
+
+              <h2 data-field="title" data-id="${escapeHtml(cls.id)}" ${isEditMode ? 'contenteditable="true"' : ''} class="font-display text-sm sm:text-[15px] font-bold text-[var(--text-main)] leading-snug">
+                ${escapeHtml(cls.title)}
+              </h2>
+
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-[var(--text-muted)]">
+                <span class="font-mono text-[11px] inline-flex items-center gap-1">
+                  <span class="text-[var(--text-faint)]">LOC:</span>
+                  <strong data-field="room" data-id="${escapeHtml(cls.id)}" ${isEditMode ? 'contenteditable="true"' : ''} class="text-[var(--text-main)]">${escapeHtml(cls.room)}</strong>
+                </span>
+                <span class="text-[var(--text-faint)]">/</span>
+                <span class="inline-flex items-center gap-1.5">
+                  <span class="font-mono px-1.5 py-0.2 inst-subpanel text-[10px] font-bold text-[var(--text-main)]">
+                    ${escapeHtml(cls.initials)}
+                  </span>
+                  <span data-field="teacher" data-id="${escapeHtml(cls.id)}" ${isEditMode ? 'contenteditable="true"' : ''} class="text-xs">${escapeHtml(cls.teacher)}</span>
+                </span>
+              </div>
+
+              ${linksHtml ? `<div class="pt-1">${linksHtml}</div>` : ''}
+            </div>
+          </div>
+
+          <!-- Right: Drawer Trigger & Edit/Delete Mechanical Controls -->
+          <div class="flex items-center gap-1.5 self-end sm:self-center shrink-0">
+            <button type="button" onclick="toggleClassDrawer('${escapeHtml(cls.id)}')" class="mech-btn px-2.5 py-1 font-mono text-[11px] font-semibold flex items-center gap-1.5" title="Open Class Notes & Tasks Drawer">
+              <svg class="w-3.5 h-3.5 text-[#FF5500]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <span>LOG</span>
+              ${pendingTasksCount > 0 ? `<span class="px-1 bg-[#FF5500] text-white text-[10px] font-bold">${pendingTasksCount}</span>` : ''}
+            </button>
+            <div class="${isEditMode ? 'flex' : 'hidden group-hover:flex'} items-center gap-1">
+              <button type="button" onclick="openEditModal('${escapeHtml(cls.id)}')" class="mech-btn p-1.5 text-[var(--text-muted)] hover:text-[var(--text-main)]" title="Configure Slot">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+              </button>
+              <button type="button" onclick="deleteClass('${escapeHtml(cls.id)}', this)" class="mech-btn p-1.5 text-rose-500 hover:bg-rose-500 hover:text-white" title="Delete Slot">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Live Telemetry Progress Bar (Shown only when class is actively in session) -->
+        <div class="js-live-progress-wrap hidden mt-3 pt-2.5 border-t border-[var(--border-hairline)]">
+          <div class="flex items-center justify-between font-mono text-[10px] text-[#CCFF00] mb-1">
+            <span class="font-bold uppercase tracking-wider">● SESSION IN PROGRESS</span>
+            <span class="js-live-time-left font-bold"></span>
+          </div>
+          <div class="w-full h-2 inst-subpanel overflow-hidden p-0.5">
+            <div class="js-live-progress-bar h-full bg-[#CCFF00] transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Expandable Technical Drawer: Scratchpad Notes & Course Tasks -->
+        <div id="drawer_${escapeHtml(cls.id)}" class="${isDrawerOpen ? 'grid' : 'hidden'} mt-3 pt-3 border-t border-[var(--border-hairline)] grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block font-mono text-[10px] uppercase tracking-wider text-[var(--text-muted)] mb-1">FIELD.NOTES // AUTO-SAVE ON BLUR</label>
+            <textarea rows="3" placeholder="Record lecture topics, room changes, or syllabus checkpoints..."
+              onblur="saveClassNote('${escapeHtml(cls.id)}', this.value)"
+              class="w-full inst-subpanel p-2 font-mono text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">${escapeHtml(cls.notes || '')}</textarea>
+          </div>
+          <div>
+            <label class="block font-mono text-[10px] uppercase tracking-wider text-[var(--text-muted)] mb-1">SLOT.TASKS // ASSIGNMENTS</label>
+            <div class="space-y-1.5 mb-2 max-h-28 overflow-y-auto">
+              ${(cls.tasks || []).map(t => `
+                <div class="flex items-center justify-between gap-2 inst-subpanel px-2.5 py-1.5">
+                  <label class="flex items-center gap-2 cursor-pointer truncate">
+                    <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTaskDone('${escapeHtml(cls.id)}', '${escapeHtml(t.id)}')" class="accent-[#FF5500]">
+                    <span class="${t.done ? 'line-through text-[var(--text-faint)]' : 'text-[var(--text-main)] font-medium'} truncate">${escapeHtml(t.title)}</span>
+                  </label>
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    ${t.dueDate ? `<span class="font-mono text-[10px] text-[#FF5500]">${escapeHtml(t.dueDate)}</span>` : ''}
+                    <button type="button" onclick="deleteTask('${escapeHtml(cls.id)}', '${escapeHtml(t.id)}')" class="font-mono text-[var(--text-faint)] hover:text-rose-500">✕</button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            <div class="flex gap-1.5">
+              <input type="text" id="newTaskTitle_${escapeHtml(cls.id)}" placeholder="Add task..." class="flex-1 inst-subpanel px-2 py-1 text-xs text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
+              <input type="date" id="newTaskDue_${escapeHtml(cls.id)}" class="inst-subpanel px-1.5 py-1 font-mono text-[10px] text-[var(--text-main)] focus:outline-none focus:border-[#FF5500]">
+              <button type="button" onclick="addClassTask('${escapeHtml(cls.id)}')" class="mech-btn-orange px-2.5 py-1 font-mono text-xs font-bold">+</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      return card;
     }
 
     /* =====================================================================
@@ -1351,7 +1797,7 @@
 
     function spawnConfettiBurst(targetBtn) {
       targetBtn.classList.add('burst-active');
-      const colors = ['#34d399', '#60a5fa', '#f472b6', '#fbbf24', '#a78bfa'];
+      const colors = ['#CCFF00', '#FF5500', '#00E5FF', '#10B981', '#F59E0B'];
       for (let i = 0; i < 8; i++) {
         const dot = document.createElement('span');
         dot.className = 'confetti-dot';
@@ -1361,7 +1807,7 @@
         dot.style.setProperty('--ty', `${Math.sin(angle) * dist}px`);
         dot.style.backgroundColor = colors[i % colors.length];
         targetBtn.appendChild(dot);
-        setTimeout(() => dot.remove(), 600);
+        setTimeout(() => dot.remove(), 550);
       }
     }
 
@@ -1372,7 +1818,10 @@
         openNotesSet.add(classId);
       }
       const drawer = document.getElementById(`drawer_${classId}`);
-      if (drawer) drawer.classList.toggle('hidden');
+      if (drawer) {
+        drawer.classList.toggle('hidden');
+        drawer.classList.toggle('grid');
+      }
     };
 
     window.saveClassNote = function(classId, text) {
@@ -1380,6 +1829,7 @@
       if (item && item.notes !== text.trim()) {
         item.notes = text.trim();
         saveRoutine();
+        showToast(`Saved notes for ${item.course}`, 'ok');
       }
     };
 
@@ -1399,6 +1849,7 @@
       openNotesSet.add(classId);
       saveRoutine();
       renderSchedule({ animate: false });
+      showToast(`Task logged under ${item.course}`, 'ok');
     };
 
     window.toggleTaskDone = function(classId, taskId) {
@@ -1418,6 +1869,7 @@
       renderSchedule({ animate: false });
     };
 
+    /* --- Hardware Pomodoro Module --- */
     let pomoSecondsLeft = 25 * 60;
     let pomoInterval = null;
     let pomoRunning = false;
@@ -1425,10 +1877,14 @@
     window.startPomodoro = function(minutes = 25) {
       pomoSecondsLeft = minutes * 60;
       pomoRunning = true;
-      document.getElementById('pomoWidget').classList.remove('hidden');
-      document.getElementById('pomoWidget').classList.add('inline-flex');
-      document.getElementById('btnPomoToggle').textContent = 'Pause';
+      document.getElementById('btnQuickPomoStart').classList.add('hidden');
+      const widget = document.getElementById('pomoWidget');
+      widget.classList.remove('hidden');
+      widget.classList.add('inline-flex');
+      document.getElementById('btnPomoToggle').textContent = 'PAUSE';
       updatePomoDisplay();
+      showToast(`Pomodoro Focus Timer initialized (${minutes}:00)`, 'ok');
+
       if (pomoInterval) clearInterval(pomoInterval);
       pomoInterval = setInterval(() => {
         if (!pomoRunning) return;
@@ -1438,10 +1894,9 @@
           clearInterval(pomoInterval);
           pomoRunning = false;
           if ('Notification' in window && Notification.permission === 'granted') {
-            new Notification('Pomodoro Complete! 🍅', { body: 'Great focus session! Take a 5-minute break.' });
-          } else {
-            alert('Pomodoro Complete! 🍅 Take a 5-minute break.');
+            new Notification('POMODORO COMPLETE // 25:00', { body: 'Focus cycle complete. Take a 5-minute recovery break.' });
           }
+          showToast('POMODORO CYCLE COMPLETE! Take a 5-minute break.', 'ok');
         }
       }, 1000);
     };
@@ -1454,22 +1909,24 @@
 
     document.getElementById('btnPomoToggle').onclick = () => {
       pomoRunning = !pomoRunning;
-      document.getElementById('btnPomoToggle').textContent = pomoRunning ? 'Pause' : 'Resume';
+      document.getElementById('btnPomoToggle').textContent = pomoRunning ? 'PAUSE' : 'RESUME';
     };
 
     document.getElementById('btnPomoStop').onclick = () => {
       clearInterval(pomoInterval);
       pomoRunning = false;
       document.getElementById('pomoWidget').classList.add('hidden');
+      document.getElementById('btnQuickPomoStart').classList.remove('hidden');
     };
 
     /* =====================================================================
-       16. PRODUCTIVITY HUB RENDERER (DUE THIS WEEK, EXAMS, ATTENDANCE)
+       16. COMMAND DECK RENDERER (TASKS, EXAM RADAR & 24-CELL ATTENDANCE)
        ===================================================================== */
     function renderProductivityHub() {
       const now = new Date();
       const todayISO = toISODate(now);
 
+      // 1. Pending Assignments
       const allTasks = [];
       routineData.forEach(cls => {
         (cls.tasks || []).forEach(t => {
@@ -1485,87 +1942,119 @@
 
       const tasksContainer = document.getElementById('globalTasksList');
       if (allTasks.length === 0) {
-        tasksContainer.innerHTML = `<div class="text-zinc-500 py-4 text-center">No pending assignments! 🎉</div>`;
+        tasksContainer.innerHTML = `
+          <div class="inst-subpanel p-3 font-mono text-[11px] text-[var(--text-faint)] text-center">
+            QUEUE CLEAR // 0 PENDING TASKS
+          </div>
+        `;
       } else {
         tasksContainer.innerHTML = allTasks.map(t => `
-          <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-slate-100 dark:bg-zinc-900/90 border border-slate-200 dark:border-zinc-800">
+          <div class="inst-subpanel p-2.5 flex items-center justify-between gap-2">
             <label class="flex items-center gap-2 cursor-pointer truncate">
-              <input type="checkbox" onchange="toggleTaskDone('${escapeHtml(t.classId)}', '${escapeHtml(t.id)}')" class="rounded">
-              <span class="font-semibold text-blue-400 shrink-0">${escapeHtml(t.course)}</span>
-              <span class="text-slate-800 dark:text-zinc-200 truncate">${escapeHtml(t.title)}</span>
+              <input type="checkbox" onchange="toggleTaskDone('${escapeHtml(t.classId)}', '${escapeHtml(t.id)}')" class="accent-[#FF5500]">
+              <span class="font-mono font-bold text-[11px] text-[#FF5500] shrink-0">${escapeHtml(t.course)}</span>
+              <span class="text-[var(--text-main)] font-medium truncate">${escapeHtml(t.title)}</span>
             </label>
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 shrink-0">${escapeHtml(t.dueDate || 'No date')}</span>
+            <span class="font-mono text-[10px] px-1.5 py-0.5 inst-panel text-[var(--text-muted)] shrink-0">${escapeHtml(t.dueDate || 'OPEN')}</span>
           </div>
         `).join('');
       }
 
+      // 2. Exam & Quiz Radar
       const examsContainer = document.getElementById('examsListContainer');
       const exams = [...(appMeta.exams || [])].sort((a, b) => a.date.localeCompare(b.date));
       if (exams.length === 0) {
-        examsContainer.innerHTML = `<div class="text-zinc-500 py-4 text-center">No upcoming exams tracked.</div>`;
+        examsContainer.innerHTML = `
+          <div class="inst-subpanel p-3 font-mono text-[11px] text-[var(--text-faint)] text-center">
+            RADAR CLEAR // NO EXAMS LOGGED
+          </div>
+        `;
       } else {
         examsContainer.innerHTML = exams.map(ex => {
           const examDate = new Date(ex.date + 'T00:00:00');
           const todayMidnight = new Date(todayISO + 'T00:00:00');
           const diffDays = Math.round((examDate - todayMidnight) / (1000 * 60 * 60 * 24));
-          let badgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
-          let label = `${diffDays}d left`;
+          let badgeClass = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40';
+          let label = `T-${diffDays}D`;
           if (diffDays < 0) {
-            badgeClass = 'bg-zinc-700/40 text-zinc-400 border-zinc-600/30';
-            label = 'Passed';
+            badgeClass = 'inst-panel text-[var(--text-faint)]';
+            label = 'ARCHIVED';
           } else if (diffDays === 0) {
-            badgeClass = 'bg-rose-500/25 text-rose-300 border-rose-500/50 animate-pulse';
+            badgeClass = 'bg-rose-500 text-white font-bold animate-pulse';
             label = 'TODAY!';
           } else if (diffDays <= 3) {
-            badgeClass = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+            badgeClass = 'bg-rose-500/20 text-rose-400 border-rose-500/50 font-bold';
           } else if (diffDays <= 7) {
-            badgeClass = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+            badgeClass = 'bg-amber-500/20 text-amber-400 border-amber-500/50 font-bold';
           }
 
           return `
-            <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-slate-100 dark:bg-zinc-900/90 border border-slate-200 dark:border-zinc-800">
+            <div class="inst-subpanel p-2.5 flex items-center justify-between gap-2">
               <div class="min-w-0">
                 <div class="flex items-center gap-1.5">
-                  <span class="font-semibold text-slate-900 dark:text-white">${escapeHtml(ex.course)}</span>
-                  <span class="text-slate-700 dark:text-zinc-300 truncate">${escapeHtml(ex.title)}</span>
+                  <span class="font-mono font-bold text-[11px] text-[var(--text-main)]">${escapeHtml(ex.course)}</span>
+                  <span class="text-[var(--text-muted)] truncate">${escapeHtml(ex.title)}</span>
                 </div>
-                <div class="text-[10px] text-zinc-500">${escapeHtml(ex.date)} ${ex.room ? `· Room ${escapeHtml(ex.room)}` : ''}</div>
+                <div class="font-mono text-[10px] text-[var(--text-faint)] mt-0.5">${escapeHtml(ex.date)} ${ex.room ? `// LOC ${escapeHtml(ex.room)}` : ''}</div>
               </div>
               <div class="flex items-center gap-1.5 shrink-0">
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border ${badgeClass}">${escapeHtml(label)}</span>
-                <button type="button" onclick="deleteExam('${escapeHtml(ex.id)}')" class="text-zinc-500 hover:text-rose-400">✕</button>
+                <span class="font-mono px-2 py-0.5 text-[10px] border ${badgeClass}">${escapeHtml(label)}</span>
+                <button type="button" onclick="deleteExam('${escapeHtml(ex.id)}')" class="font-mono text-[var(--text-faint)] hover:text-rose-500 px-1">✕</button>
               </div>
             </div>
           `;
         }).join('');
       }
 
+      // 3. 24-Segment Visual Attendance Matrix
       const attContainer = document.getElementById('attendanceListContainer');
       attContainer.innerHTML = COURSES.map(c => {
         const rec = appMeta.attendance[c.code] || { present: 0, absent: 0, totalClasses: 24, targetPct: 75 };
+        const total = rec.totalClasses || 24;
         const conducted = rec.present + rec.absent;
         const pct = conducted > 0 ? Math.round((rec.present / conducted) * 100) : 100;
-        const maxAllowedMisses = Math.floor(rec.totalClasses * ((100 - rec.targetPct) / 100));
+        const maxAllowedMisses = Math.floor(total * ((100 - rec.targetPct) / 100));
         const canStillMiss = Math.max(0, maxAllowedMisses - rec.absent);
 
+        // Build 24 visual cells
+        let cellsHtml = '';
+        for (let idx = 0; idx < total; idx++) {
+          let cellColor = 'bg-zinc-700/30';
+          if (idx < rec.present) {
+            cellColor = 'bg-emerald-500';
+          } else if (idx < rec.present + rec.absent) {
+            cellColor = 'bg-rose-500';
+          }
+          cellsHtml += `<span class="h-2 flex-1 ${cellColor}"></span>`;
+        }
+
         return `
-          <div class="p-2 rounded-xl bg-slate-100 dark:bg-zinc-900/90 border border-slate-200 dark:border-zinc-800 flex items-center justify-between gap-2">
-            <div>
+          <div class="inst-subpanel p-2.5 space-y-2">
+            <div class="flex items-center justify-between gap-2">
               <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full" style="background-color:${escapeHtml(c.color)}"></span>
-                <span class="font-semibold text-slate-900 dark:text-white">${escapeHtml(c.code)}</span>
-                <span class="text-[11px] font-bold ${pct >= 75 ? 'text-emerald-400' : 'text-rose-400'}">${pct}% (${rec.present}/${conducted})</span>
+                <span class="w-2.5 h-2.5" style="background-color:${escapeHtml(c.color)}"></span>
+                <span class="font-mono font-bold text-xs text-[var(--text-main)]">${escapeHtml(c.code)}</span>
+                <span class="font-mono text-[11px] font-bold ${pct >= 75 ? 'text-emerald-400' : 'text-rose-400'}">${pct}% (${rec.present}P/${rec.absent}A)</span>
               </div>
-              <div class="text-[10px] text-zinc-400 mt-0.5">
-                ${rec.absent > maxAllowedMisses
-                  ? `<span class="text-rose-400">⚠️ Exceeded safe misses (${rec.absent}/${maxAllowedMisses})</span>`
-                  : `Can safely miss: <strong class="text-zinc-200">${canStillMiss}</strong> more`}
+              <div class="flex items-center gap-1 shrink-0 font-mono text-[10px]">
+                <button type="button" onclick="markAttendance('${escapeHtml(c.code)}', 'present')" class="mech-btn px-2 py-0.5 text-emerald-400 font-bold" title="Log Present">+P</button>
+                <button type="button" onclick="markAttendance('${escapeHtml(c.code)}', 'absent')" class="mech-btn px-2 py-0.5 text-rose-400 font-bold" title="Log Absent">+A</button>
+                <button type="button" onclick="markAttendance('${escapeHtml(c.code)}', 'reset')" class="mech-btn px-1.5 py-0.5 text-[var(--text-muted)]" title="Reset Ledger">↺</button>
               </div>
             </div>
-            <div class="flex items-center gap-1 shrink-0">
-              <button type="button" onclick="markAttendance('${escapeHtml(c.code)}', 'present')" class="px-2 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 font-semibold" title="Mark Present">+P</button>
-              <button type="button" onclick="markAttendance('${escapeHtml(c.code)}', 'absent')" class="px-2 py-1 rounded bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 font-semibold" title="Mark Absent">+A</button>
-              <button type="button" onclick="markAttendance('${escapeHtml(c.code)}', 'reset')" class="px-1.5 py-1 rounded text-zinc-500 hover:text-zinc-300" title="Reset Course Attendance">↺</button>
+
+            <!-- 24-Cell Hardware Bar -->
+            <div class="flex items-center gap-0.5 w-full">
+              ${cellsHtml}
+            </div>
+
+            <div class="flex items-center justify-between font-mono text-[10px] text-[var(--text-muted)]">
+              <span>LOGGED: ${conducted}/${total}</span>
+              <span>
+                ${rec.absent > maxAllowedMisses
+                  ? `<strong class="text-rose-400">CRITICAL: EXCEEDED MISS LIMIT (${rec.absent}/${maxAllowedMisses})</strong>`
+                  : `SAFE BUFFER: <strong class="text-[var(--text-main)]">${canStillMiss}</strong> MISSES LEFT`}
+              </span>
             </div>
           </div>
         `;
@@ -1605,6 +2094,7 @@
       e.target.reset();
       e.target.classList.add('hidden');
       renderProductivityHub();
+      showToast('Exam radar target logged.', 'ok');
     };
 
     window.deleteExam = function(examId) {
@@ -1635,7 +2125,7 @@
       const txt = document.getElementById('conflictWarningText');
       if (conflict) {
         box.classList.remove('hidden');
-        txt.textContent = `Time conflict on ${DAY_NAMES[day]} with ${conflict.course} (${conflict.time})!`;
+        txt.textContent = `Overlap on ${DAY_NAMES[day]} with ${conflict.course} (${conflict.time})`;
       } else {
         box.classList.add('hidden');
       }
@@ -1648,7 +2138,7 @@
     window.openEditModal = function(id) {
       const cls = routineData.find(x => x.id === id);
       if (!cls) return;
-      document.getElementById('modalTitle').textContent = 'Edit Class Slot';
+      document.getElementById('modalTitle').textContent = 'Configure Class Slot';
       document.getElementById('formClassId').value = cls.id;
       document.getElementById('formDayCode').value = cls.dayOfWeek;
       document.getElementById('formCourseCode').value = cls.course;
@@ -1665,22 +2155,30 @@
     };
 
     window.deleteClass = function(id, btnEl) {
-      if (!confirm('Remove this class from your weekly routine?')) return;
-      const card = btnEl ? btnEl.closest('.class-card') : null;
-      if (card) {
-        card.style.maxHeight = card.offsetHeight + 'px';
-        void card.offsetWidth;
-        card.classList.add('card-collapsing');
-        setTimeout(() => {
-          routineData = routineData.filter(x => x.id !== id);
-          saveRoutine();
-          renderSchedule({ animate: false });
-        }, 280);
-      } else {
-        routineData = routineData.filter(x => x.id !== id);
-        saveRoutine();
-        renderSchedule({ animate: false });
-      }
+      const targetCls = routineData.find(x => x.id === id);
+      askConfirm(
+        'Decommission Class Slot',
+        `Remove ${targetCls ? targetCls.course + ' (' + targetCls.time + ')' : 'this slot'} from your weekly routine?`,
+        () => {
+          const card = btnEl ? btnEl.closest('.class-card') : null;
+          if (card) {
+            card.style.maxHeight = card.offsetHeight + 'px';
+            void card.offsetWidth;
+            card.classList.add('card-collapsing');
+            setTimeout(() => {
+              routineData = routineData.filter(x => x.id !== id);
+              saveRoutine();
+              renderSchedule({ animate: false });
+              showToast('Slot removed from schedule.', 'info');
+            }, 260);
+          } else {
+            routineData = routineData.filter(x => x.id !== id);
+            saveRoutine();
+            renderSchedule({ animate: false });
+            showToast('Slot removed from schedule.', 'info');
+          }
+        }
+      );
     };
 
     function triggerAddClassModal() {
@@ -1697,12 +2195,7 @@
     document.getElementById('btnCloseModal').onclick = () => closeModalEl(classModal);
     document.getElementById('btnCancelModal').onclick = () => closeModalEl(classModal);
 
-    classForm.onsubmit = (e) => {
-      e.preventDefault();
-      const conflict = checkModalConflictLive();
-      if (conflict && !confirm(`This slot overlaps with ${conflict.course} (${conflict.time}). Save anyway?`)) {
-        return;
-      }
+    function commitClassFormPayload() {
       const id = document.getElementById('formClassId').value;
       const existing = routineData.find(x => x.id === id);
 
@@ -1733,6 +2226,21 @@
       saveRoutine();
       closeModalEl(classModal);
       renderSchedule({ animate: false });
+      showToast(`Committed ${newEntry.course} slot to routine.`, 'ok');
+    }
+
+    classForm.onsubmit = (e) => {
+      e.preventDefault();
+      const conflict = checkModalConflictLive();
+      if (conflict) {
+        askConfirm(
+          'Schedule Time Overlap',
+          `This slot overlaps with ${conflict.course} (${conflict.time}). Commit slot anyway?`,
+          commitClassFormPayload
+        );
+        return;
+      }
+      commitClassFormPayload();
     };
 
     /* =====================================================================
@@ -1743,7 +2251,6 @@
     document.getElementById('mobBtnSync').onclick = () => openModalEl(toolsModal);
     document.getElementById('btnCloseTools').onclick = () => closeModalEl(toolsModal);
 
-    // Initialize Cloud Sync Config Inputs
     (function initCloudSyncUI() {
       const savedCfg = JSON.parse(localStorage.getItem(STORAGE_KEY_SYNC) || '{}');
       const urlInput = document.getElementById('syncDbUrl');
@@ -1755,17 +2262,19 @@
         const dbUrl = urlInput.value.trim() || DEFAULT_FIREBASE_URL;
         const secretKey = keyInput.value.trim();
         if (secretKey.length < 6) {
-          setSyncStatus('Key Too Short', 'err', 'Please enter a Secret Sync Key that is at least 6 characters long.');
+          setSyncStatus('SHORT KEY', 'err', 'Secret Sync Key must be at least 6 characters.');
           return;
         }
         localStorage.setItem(STORAGE_KEY_SYNC, JSON.stringify({ dbUrl, secretKey }));
-        setSyncStatus('Connecting...', 'neutral');
+        setSyncStatus('LINKING...', 'neutral');
         await pullFromCloud(false);
+        showToast('Cloud sync channel established.', 'ok');
       };
 
       document.getElementById('btnForcePush').onclick = () => {
         localStorage.setItem(STORAGE_KEY_UPDATED, String(Date.now()));
         pushToCloud();
+        showToast('Pushing local state to cloud...', 'info');
       };
 
       document.getElementById('btnForcePull').onclick = () => {
@@ -1799,6 +2308,7 @@
       a.download = `class_routine_backup_${toISODate(new Date())}.json`;
       a.click();
       URL.revokeObjectURL(url);
+      showToast('Exported JSON backup file.', 'ok');
     };
 
     document.getElementById('inputImportJSON').onchange = (e) => {
@@ -1814,17 +2324,18 @@
             localStorage.setItem(STORAGE_KEY_CLASSES, JSON.stringify(data.classes));
             if (data.meta) localStorage.setItem(STORAGE_KEY_META, JSON.stringify(data.meta));
           } else {
-            throw new Error('Invalid backup structure');
+            throw new Error('Invalid JSON structure');
           }
           routineData = loadAndMigrateRoutine();
           appMeta = loadAndMigrateMeta();
           scheduleCloudPush();
+          renderCoursePills();
           renderProductivityHub();
           renderSchedule({ animate: true });
           closeModalEl(toolsModal);
-          alert('Routine backup restored and queued for cloud sync!');
+          showToast('Backup restored and queued for cloud sync.', 'ok');
         } catch (err) {
-          alert('Failed to import JSON: ' + err.message);
+          showToast('Import failed: ' + err.message, 'err');
         }
       };
       reader.readAsText(file);
@@ -1886,10 +2397,11 @@
       a.download = 'semester_class_routine.ics';
       a.click();
       URL.revokeObjectURL(url);
+      showToast('Generated 16-week .ICS calendar file.', 'ok');
     };
 
     /* =====================================================================
-       19. NAVIGATION, SEARCH, THEME, NOTIFICATIONS & SHORTCUTS
+       19. NAVIGATION, VIEW SWITCHING, SEARCH, THEME & SHORTCUTS
        ===================================================================== */
     function goPrevWeek() {
       weekOffset--;
@@ -1905,16 +2417,24 @@
       const todayEl = document.getElementById('todayRow');
       if (todayEl) todayEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+    function setViewMode(mode) {
+      viewMode = mode;
+      appMeta.viewMode = mode;
+      saveMeta();
+      renderSchedule({ animate: true });
+    }
     function toggleEditRoutine() {
       isEditMode = !isEditMode;
-      document.getElementById('editBtnText').textContent = isEditMode ? 'Done Editing' : 'Edit Routine';
-      document.getElementById('mobEditLabel').textContent = isEditMode ? 'Done' : 'Edit';
+      document.getElementById('editBtnText').textContent = isEditMode ? 'LOCK EDIT' : 'EDIT';
+      document.getElementById('mobEditLabel').textContent = isEditMode ? 'DONE' : 'EDIT';
+      document.getElementById('btnToggleEdit').classList.toggle('border-[#FF5500]', isEditMode);
+      document.getElementById('btnToggleEdit').classList.toggle('text-[#FF5500]', isEditMode);
       renderSchedule({ animate: false });
+      showToast(isEditMode ? 'Inline Edit Mode ENGAGED. Click text fields to edit.' : 'Inline Edit Mode LOCKED.', 'info');
     }
-    function toggleProductivityHub() {
+    function focusProductivityHub() {
       const hub = document.getElementById('productivityHub');
-      hub.classList.toggle('hidden');
-      renderProductivityHub();
+      if (hub) hub.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     document.getElementById('btnPrevWeek').onclick = goPrevWeek;
@@ -1923,8 +2443,11 @@
     document.getElementById('mobBtnToday').onclick = goToday;
     document.getElementById('btnToggleEdit').onclick = toggleEditRoutine;
     document.getElementById('mobBtnEdit').onclick = toggleEditRoutine;
-    document.getElementById('btnToggleHub').onclick = toggleProductivityHub;
-    document.getElementById('mobBtnHub').onclick = toggleProductivityHub;
+    document.getElementById('btnToggleHub').onclick = focusProductivityHub;
+    document.getElementById('mobBtnHub').onclick = focusProductivityHub;
+
+    document.getElementById('btnViewLedger').onclick = () => setViewMode('ledger');
+    document.getElementById('btnViewMatrix').onclick = () => setViewMode('matrix');
 
     document.getElementById('btnClearFilter').onclick = () => {
       selectedCourse = null;
@@ -1949,12 +2472,16 @@
 
     function applyTheme(theme) {
       const htmlEl = document.documentElement;
+      const iconDot = document.getElementById('themeIcon');
+      const labelEl = document.getElementById('themeLabel');
       if (theme === 'light') {
         htmlEl.classList.remove('dark');
-        document.getElementById('themeIcon').textContent = '☀️';
+        iconDot.className = 'w-2 h-2 rounded-full bg-[#FF4F00]';
+        if (labelEl) labelEl.textContent = 'PAPER';
       } else {
         htmlEl.classList.add('dark');
-        document.getElementById('themeIcon').textContent = '🌙';
+        iconDot.className = 'w-2 h-2 rounded-full bg-[#CCFF00]';
+        if (labelEl) labelEl.textContent = 'CARBON';
       }
     }
     applyTheme(appMeta.theme || 'dark');
@@ -1966,27 +2493,34 @@
     };
 
     function syncNotificationIcon() {
-      document.getElementById('notifIcon').textContent = appMeta.notificationsEnabled ? '🔔' : '🔕';
+      const led = document.getElementById('notifLed');
+      if (led) {
+        led.className = appMeta.notificationsEnabled
+          ? 'w-2 h-2 rounded-full bg-[#CCFF00]'
+          : 'w-2 h-2 rounded-full bg-zinc-500';
+      }
     }
     syncNotificationIcon();
 
     document.getElementById('btnNotifications').onclick = async () => {
       if (!('Notification' in window)) {
-        alert('Browser notifications are not supported on this device.');
+        showToast('Browser notifications are not supported on this device.', 'err');
         return;
       }
       if (!appMeta.notificationsEnabled) {
         const perm = await Notification.requestPermission();
         if (perm === 'granted') {
           appMeta.notificationsEnabled = true;
-          new Notification('Class Notifications Enabled 🔔', {
-            body: 'You will be notified 15 minutes before each class starts.'
+          new Notification('TELEMETRY ALERTS ENABLED', {
+            body: '15-minute pre-class alerts are now active.'
           });
+          showToast('15-minute class notifications enabled.', 'ok');
         } else {
-          alert('Please allow notifications in your browser settings.');
+          showToast('Notification permission denied by browser.', 'err');
         }
       } else {
         appMeta.notificationsEnabled = false;
+        showToast('Class notifications muted.', 'info');
       }
       saveMeta();
       syncNotificationIcon();
@@ -1998,6 +2532,7 @@
       if (e.key === 'Escape') {
         closeModalEl(classModal);
         closeModalEl(toolsModal);
+        closeModalEl(document.getElementById('confirmModal'));
         return;
       }
       if (isTyping) return;
@@ -2014,6 +2549,9 @@
       } else if (e.key === 'n' || e.key === 'N') {
         e.preventDefault();
         triggerAddClassModal();
+      } else if (e.key === 'v' || e.key === 'V') {
+        e.preventDefault();
+        setViewMode(viewMode === 'ledger' ? 'matrix' : 'ledger');
       } else if (e.key === '/') {
         e.preventDefault();
         searchInput.focus();
@@ -2025,14 +2563,14 @@
        ===================================================================== */
     function setupSingleFilePWA() {
       const manifest = {
-        name: 'Live Class Routine',
+        name: 'CHRONO.ROUTINE // Live Class Routine',
         short_name: 'Routine',
         start_url: '.',
         display: 'standalone',
-        background_color: '#000000',
-        theme_color: '#000000',
+        background_color: '#090A0D',
+        theme_color: '#090A0D',
         icons: [{
-          src: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="%231c1c1e"/><circle cx="50" cy="50" r="26" fill="%232563eb"/></svg>',
+          src: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="8" fill="%23090A0D" stroke="%23FF5500" stroke-width="6"/><rect x="24" y="24" width="52" height="52" fill="%23FF5500"/></svg>',
           sizes: '192x192',
           type: 'image/svg+xml'
         }]
@@ -2060,14 +2598,14 @@
       }
     }
 
-    // Initial Boot
+    // Initial System Boot
     renderCoursePills();
     renderProductivityHub();
     renderSchedule({ animate: true });
     setupSingleFilePWA();
 
-    // Zero-Flicker Live Tick every 15 seconds
-    setInterval(updateLiveTick, 15000);
+    // High-Precision 1-Second Clock & Telemetry Tick
+    setInterval(updateLiveTick, 1000);
   </script>
 </body>
 </html>
